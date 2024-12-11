@@ -17,6 +17,3 @@ yarn-error.log
 fresh-dz-firebase-adminsdk-97277-04833114fb.json
 # But not these files...
 !/public/assets/*
-/public/assets/js
-/public/assets/css
-/public/assets/vendor
