@@ -18,7 +18,7 @@ $navbarDetached = ($navbarDetached ?? '');
       <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
         <a href="{{url('/')}}" class="app-brand-link gap-2">
           <span class="app-brand-logo demo">
-            @include('_partials.macros',["width"=>25,"withbg"=>'#696cff'])
+            <img src="{{asset('logo.png')}}" class="w-px-40 h-auto rounded-circle">
           </span>
           <span class="app-brand-text demo menu-text fw-bolder">{{config('variables.templateName')}}</span>
         </a>
@@ -55,7 +55,7 @@ $navbarDetached = ($navbarDetached ?? '');
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
               <div class="avatar {{-- avatar-online --}}">
                 {{-- <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle"> --}}
-                @include('_partials.macros',["width"=>25,"withbg"=>'#696cff'])
+                <img src="{{asset('logo.png')}}" class="w-px-40 h-auto rounded-circle">
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
@@ -65,7 +65,7 @@ $navbarDetached = ($navbarDetached ?? '');
                     <div class="flex-shrink-0 me-3">
                       <div class="avatar {{-- avatar-online --}}">
                         {{-- <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle"> --}}
-                        @include('_partials.macros',["width"=>25,"withbg"=>'#696cff'])
+                        <img src="{{asset('logo.png')}}" class="w-px-40 h-auto rounded-circle">
                       </div>
                     </div>
                     <div class="flex-grow-1">

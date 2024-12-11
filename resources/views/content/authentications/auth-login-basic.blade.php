@@ -17,13 +17,13 @@
           <!-- Logo -->
           <div class="app-brand justify-content-center">
             <a href="{{url('/')}}" class="app-brand-link gap-2">
-              {{-- <span class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'#696cff'])</span> --}}
+              <img src="{{asset('logo-no-bg.png')}}" class="w-px-20 h-auto">
               <span class="app-brand-text demo text-body fw-bolder">{{config('variables.templateName')}}</span>
             </a>
           </div>
           <!-- /Logo -->
           <h4 class="mb-2">{{__('Welcome to') }} {{config('variables.templateName')}}! 👋</h4>
-          <p class="mb-4">{{__('Please sign-in to your account and start the adventure')}}</p>
+          {{-- <p class="mb-4">{{__('Please sign-in to your account and start the adventure')}}</p> --}}
 
           <form id="formAuthentication" class="mb-3" action="{{url('/auth/login-action')}}" method="POST">
             @csrf
@@ -43,14 +43,14 @@
                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
               </div>
             </div>
-            <div class="mb-3">
+            {{-- <div class="mb-3">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="remember-me">
                 <label class="form-check-label" for="remember-me">
                   {{__('Remember Me')}}
                 </label>
               </div>
-            </div>
+            </div> --}}
             <div class="mb-3">
               <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
             </div>

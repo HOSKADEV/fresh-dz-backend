@@ -3,9 +3,7 @@
   <!-- ! Hide app brand if navbar-full -->
   <div class="app-brand demo">
     <a href="{{url('/')}}" class="app-brand-link">
-      {{-- <span class="app-brand-logo">
-        @include('_partials.macros',["width"=>25,"withbg"=>'#696cff'])
-      </span> --}}
+      <img src="{{asset('logo-no-bg.png')}}" class="w-px-20 h-auto">
       <span class="app-brand-text demo menu-text fw-bold ms-2">{{config('variables.templateName')}}</span>
     </a>
 
