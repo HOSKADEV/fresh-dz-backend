@@ -1,0 +1,110 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bxs-home-circle",
+      "slug": "dashboard-analytics"
+    },
+
+    {
+      "url": "/user/browse",
+      "name": "Users",
+      "icon": "menu-icon tf-icons bx bxs-user",
+      "slug": "user-browse"
+    },
+
+    {
+      "url": "/ad/browse",
+      "name": "Ads",
+      "icon": "menu-icon tf-icons bx bxs-badge-dollar",
+      "slug": "ad-browse"
+    },
+
+    {
+      "url": "/category/browse",
+      "name": "Categories",
+      "icon": "menu-icon tf-icons bx bxs-category",
+      "slug": "category-browse"
+    },
+
+    {
+      "url": "/subcategory/browse",
+      "name": "Subcategories",
+      "icon": "menu-icon tf-icons bx bxs-shapes",
+      "slug": "subcategory-browse"
+    },
+
+    {
+      "url": "/family/browse",
+      "name": "Families",
+      "icon": "menu-icon tf-icons bx bxs-collection",
+      "slug": "family-browse"
+    },
+
+    {
+      "url": "/offer/browse",
+      "name": "Offers",
+      "icon": "menu-icon tf-icons bx bxs-offer",
+      "slug": "offer-browse"
+    },
+
+    {
+      "url": "/product/browse",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bxs-package",
+      "slug": "product-browse"
+    },
+
+    {
+      "url": "/driver/browse",
+      "name": "Drivers",
+      "icon": "menu-icon tf-icons bx bxs-truck",
+      "slug": "driver-browse"
+    },
+
+    {
+      "url": "/order/browse",
+      "name": "Orders",
+      "icon": "menu-icon tf-icons bx bxs-spreadsheet",
+      "slug": "order-browse"
+    },
+
+    {
+      "url": "/section/browse",
+      "name": "Sections",
+      "icon": "menu-icon tf-icons bx bxs-layout",
+      "slug": "section-browse"
+    },
+
+    {
+      "url": "/notice/browse",
+      "name": "Notices",
+      "icon": "menu-icon tf-icons bx bxs-bell",
+      "slug": "notice-browse"
+    },
+
+    {
+      "name": "Documentation",
+      "icon": "menu-icon tf-icons bx bxs-info-square",
+      "slug": "documentation",
+      "user": 1,
+      "submenu": [
+        {
+          "url": "/documentation/privacy_policy",
+          "name": "Privacy policy",
+          "slug": "documentation_privacy_policy",
+          "user": 1
+        },
+        {
+          "url": "/documentation/about",
+          "name": "About",
+          "slug": "documentation_about",
+          "user": 1
+        }
+      ]
+    }
+
+
+  ]
+}
