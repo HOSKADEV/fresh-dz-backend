@@ -51,7 +51,7 @@
 "Families" : "العائلات",
 "Browse families" : "تصفح العائلات",
 "Add Family" : "إضافة عائلة",
-"families table" : "جدول العائلات",
+"Families table" : "جدول العائلات",
 "Offers" : "العروض",
 "Browse offers" : "تصفح العروض",
 "Add Offer" : "إضافة عرض",
@@ -259,7 +259,10 @@
 "print_date":"تاريخ الطباعة",
 "notes":"ملاحطات",
 "is_available" : "متوفر حاليا",
-"Availability filter" : "حسب التوفر"
+"Availability filter" : "حسب التوفر",
+
+"Show _MENU_ entries" : "أظهر _MENU_ عناصر",
+"Search..." : "بحث..."
 
 
 }

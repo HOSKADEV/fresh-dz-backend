@@ -66,11 +66,11 @@
     function load_data(category = null) {
         //$.fn.dataTable.moment( 'YYYY-M-D' );
         var table = $('#laravel_datatable').DataTable({
-
+          language:  {!! file_get_contents(base_path('lang/'.session('locale','en').'/datatable.json')) !!},
             responsive: true,
             processing: true,
             serverSide: true,
-            pageLength: 100,
+            pageLength: 10,
 
             ajax: {
                 url: "{{ url('section/list') }}",
@@ -119,14 +119,7 @@
                 {
                     data: 'action',
                     name: 'action',
-                    render:function(data){
-                      if(data == ""){
-                        return null;
-                      }
-                      /* return '<div class="dropdown"><button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button><div class="dropdown-menu">'
-                        +data+'</div></div>' */
-                        return '<span>'+data+'</span>';
-                    }
+                    searchable: false
                 }
 
             ]

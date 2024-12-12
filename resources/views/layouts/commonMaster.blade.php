@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html class="light-style layout-menu-fixed" data-theme="theme-default" data-assets-path="{{ asset('/assets') . '/' }}" data-base-url="{{url('/')}}" data-framework="laravel" data-template="vertical-menu-laravel-template-free">
+<html class="light-style layout-menu-fixed" data-theme="theme-default" data-assets-path="{{ asset('/assets') . '/' }}" data-base-url="{{url('/')}}" data-framework="laravel" data-template="vertical-menu-laravel-template-free"
+@if (Session::get('locale') == 'ar') dir="rtl" lang="ar" @endif>
 
 <head>
   <meta charset="utf-8" />

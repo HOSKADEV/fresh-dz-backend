@@ -10,8 +10,10 @@
 
 <!-- Basic Bootstrap Table -->
 <div class="card">
-  <h5 class="card-header">{{__('Users table')}}</h5>
   <div class="table-responsive text-nowrap">
+    <div class="table-header row justify-content-between">
+      <h5 class="col-md-auto">{{__('Users table')}}</h5>
+    </div>
     <table class="table" id="laravel_datatable">
       <thead>
         <tr>
@@ -37,11 +39,11 @@
     function load_data() {
         //$.fn.dataTable.moment( 'YYYY-M-D' );
         var table = $('#laravel_datatable').DataTable({
-
+          language:  {!! file_get_contents(base_path('lang/'.session('locale','en').'/datatable.json')) !!},
             responsive: true,
             processing: true,
             serverSide: true,
-            pageLength: 100,
+            pageLength: 10,
 
             ajax: {
                 url: "{{ url('user/list') }}",
@@ -93,11 +95,7 @@
                 {
                     data: 'action',
                     name: 'action',
-                    render:function(data){
-                      /* return '<div class="dropdown"><button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button><div class="dropdown-menu">'
-                        +data+'</div></div>' */
-                        return '<span>'+data+'</span>';
-                    }
+                    searchable: false
                 }
 
             ]

@@ -136,14 +136,6 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::post('/version/update','App\Http\Controllers\VersionController@update');
 
-  //language
-  Route::get('/lang', function () {
-  $locale = session()->get('locale') == 'ar' ? 'en' : 'ar';
-  Session::put('locale', $locale);
-  App::setLocale(Session::get('locale'));
-  return redirect()->back();
-});
-
 });
 
 
@@ -162,6 +154,19 @@ Route::get('/auth/login-basic', 'App\Http\Controllers\authentications\LoginBasic
 Route::post('/auth/login-action', 'App\Http\Controllers\authentications\LoginBasic@login');
 Route::get('/auth/forgot-password-basic', 'App\Http\Controllers\authentications\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
 Route::get('/auth/logout', 'App\Http\Controllers\authentications\LogoutBasic@logout')->name('auth-logout');
+
+Route::group(['middleware' => ['auth']], function () {
+  Route::get('/theme/{theme}', function($theme){
+    Session::put('theme',$theme);
+    return redirect()->back();
+  });
+
+  Route::get('/lang/{lang}', function($lang){
+    Session::put('locale', $lang);
+    App::setLocale($lang);
+    return redirect()->back();
+  });
+});
 
 
 

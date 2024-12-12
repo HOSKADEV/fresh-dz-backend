@@ -34,9 +34,10 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-          $btn .= '<a class="dropdown-item-inline update" title="'.__('Edit').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-edit me-2"></i></a>';
 
-          $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-trash me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
+
+          $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
           return $btn;
       })
@@ -74,9 +75,9 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-          $btn .= '<a class="dropdown-item-inline update" title="'.__('Edit').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-edit me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
 
-          $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-trash me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
           return $btn;
       })
@@ -115,17 +116,17 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-          $btn .= '<a class="dropdown-item-inline update" title="'.__('Edit').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-edit me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
 
           if(is_null($row->section())){
 
-            $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-trash me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline add_to_home" title="'.__('Add to Homepage').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-plus-square me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing add_to_home" title="'.__('Add to Homepage').'" table_id="'.$row->id.'"><span class="tf-icons bx bxs-plus-square"></span></button>';
 
           }else{
 
-            $btn .= '<a class="dropdown-item-inline remove_from_home" title="'.__('Remove from Homepage').'" table_id="'.$row->section()->id.'" href="javascript:void(0);"><i class="bx bxs-x-square me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing remove_from_home" title="'.__('Remove from Homepage').'" table_id="'.$row->section()->id.'"><span class="tf-icons bx bxs-x-square"></span></button>';
 
           }
 
@@ -168,17 +169,17 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-          $btn .= '<a class="dropdown-item-inline update" title="'.__('Edit').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-edit me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
 
           if(is_null($row->section())){
 
-            $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-trash me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline add_to_home" title="'.__('Add to Homepage').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-plus-square me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing add_to_home" title="'.__('Add to Homepage').'" table_id="'.$row->id.'"><span class="tf-icons bx bxs-plus-square"></span></button>';
 
           }else{
 
-            $btn .= '<a class="dropdown-item-inline remove_from_home" title="'.__('Remove from Homepage').'" table_id="'.$row->section()->id.'" href="javascript:void(0);"><i class="bx bxs-x-square me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing remove_from_home" title="'.__('Remove from Homepage').'" table_id="'.$row->section()->id.'"><span class="tf-icons bx bxs-x-square"></span></button>';
 
           }
 
@@ -256,21 +257,21 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-          $btn .= '<a class="dropdown-item-inline update" title="'.__('Edit').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-edit me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
 
-          $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-trash me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
-          if(is_null($row->discount())){
+          /* if(is_null($row->discount())){
 
-            $btn .= '<a class="dropdown-item-inline add_discount" title="'.__('Add discount').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-message-alt-add me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing add_discount" title="'.__('Add discount').'" table_id="'.$row->id.'"><span class="tf-icons bx bxs-message-alt-add"></span></button>';
 
           }else{
 
-            $btn .= '<a class="dropdown-item-inline edit_discount" title="'.__('Edit discount').'" table_id="'.$row->discount()->id.'" href="javascript:void(0);"><i class="bx bxs-message-alt-edit me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing edit_discount" title="'.__('Edit discount').'" table_id="'.$row->discount()->id.'"><span class="tf-icons bx bxs-message-alt-edit"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline delete_discount" title="'.__('Delete discount').'" table_id="'.$row->discount()->id.'" href="javascript:void(0);"><i class="bx bxs-message-alt-x me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing delete_discount" title="'.__('Delete discount').'" table_id="'.$row->discount()->id.'"><span class="tf-icons bx bxs-message-alt-x"></span></button>';
 
-          }
+          } */
 
           return $btn;
       })
@@ -337,13 +338,13 @@ class DatatablesController extends Controller
           $btn = '';
 
           if($row->deleteable == 1){
-            $btn .= '<a class="dropdown-item-inline delete" title="'.__('Remove').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-x me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing delete" title="'.__('Remove').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-x"></span></button>';
           }
 
           if($row->moveable == 1){
-            $btn .= '<a class="dropdown-item-inline switch" title="'.__('Switch').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-refresh me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing switch" title="'.__('Switch').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-refresh"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline insert" title="'.__('Insert').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-redo me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing insert" title="'.__('Insert').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-redo"></span></button>';
 
           }
 
@@ -378,7 +379,7 @@ class DatatablesController extends Controller
     $orders = Order::orderBy('created_at','DESC');
 
     if(!empty($request->status)){
-      if($request->status = 'default'){
+      if($request->status == 'default'){
         $orders = $orders->whereNotIn('status',['delivered','canceled']);
       }else{
         $orders = $orders->where('status',$request->status);
@@ -395,21 +396,25 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-          $btn .= '<a class="dropdown-item-inline note" title="'.__('Note').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-note me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-secondary inline-spacing note" title="'.__('Note').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-note"></span></button>';
 
-          $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-trash me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+          $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing" title="'.__('Location').'" href="'.$row->address().'" target="_blank" ><span class="tf-icons bx bx-map"></span></button>';
+
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing" title="'.__('Cart').'" href="'.url('order/'.$row->id.'/items').'"><span class="tf-icons bx bx-cart"></span></button>';
 
           if($row->status == 'pending'){
 
-            $btn .= '<a class="dropdown-item-inline accept" title="'.__('Approve').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-check me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing accept" title="'.__('Approve').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-check"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline refuse" title="'.__('Cancel').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-x me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing refuse" title="'.__('Cancel').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-x"></span></button>';
 
           }
 
           if($row->status == 'accepted'){
 
-            $btn .= '<a class="dropdown-item-inline ship" title="'.__('Ship').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-truck me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing ship" title="'.__('Ship').'" table_id="'.$row->id.'"><span class="tf-icons bx bxs-truck"></span></button>';
 
           }
 
@@ -417,21 +422,16 @@ class DatatablesController extends Controller
           if(!in_array($row->status,['pending','canceled'])){
             if(!is_null($row->invoice)){
 
-                $btn .= '<a class="dropdown-item-inline invoice" title="'.__('Invoice').'" table_id="'.$row->invoice->id.'" href="javascript:void(0);"><i class="bx bx-file me-2"></i></a>';
+                $btn .= '<button class="btn btn-icon btn-label-dark inline-spacing invoice" title="'.__('Invoice').'" table_id="'.$row->invoice->id.'"><span class="tf-icons bx bx-file"></span></button>';
 
               if($row->status == 'ongoing' && $row->invoice->is_paid == 'no'){
 
-                $btn .= '<a class="dropdown-item-inline payment" title="'.__('Payment').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-money me-2"></i></a>';
+                $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing payment" title="'.__('Payment').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-money"></span></button>';
 
               }
 
             }
           }
-
-          $btn .= '<a class="dropdown-item-inline" title="'.__('Location').'" href="'.$row->address().'" target="_blank" ><i class="bx bx-map me-2"></i></a>';
-
-          $btn .= '<a class="dropdown-item-inline" title="'.__('Cart').'" href="'.url('order/'.$row->id.'/items').'"><i class="bx bx-cart me-2"></i></a>';
-
 
           return $btn;
       })
@@ -508,9 +508,9 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-            $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-trash me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline edit" title="'.__('Edit').'" table_id="'.$row->id.'" quantity="'.$row->quantity.'"href="javascript:void(0);"><i class="bx bx-edit me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing edit" title="'.__('Edit').'" table_id="'.$row->id.'" quantity="'.$row->quantity.'"><span class="tf-icons bx bx-edit"></span></button>';
 
           return $btn;
       })
@@ -567,9 +567,9 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-          $btn .= '<a class="dropdown-item-inline update" title="'.__('Edit').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-edit me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
 
-          $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bxs-trash me-2"></i></a>';
+          $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
           return $btn;
       })
@@ -614,9 +614,9 @@ class DatatablesController extends Controller
           $btn = '';
 
           if($row->status == 1){
-            $btn .= '<a class="dropdown-item-inline delete" title="'.__('Block').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-x-circle me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing delete" title="'.__('Block').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-x-circle"></span></button>';
           }else{
-            $btn .= '<a class="dropdown-item-inline restore" title="'.__('Activate').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-check-circle me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing restore" title="'.__('Activate').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-check-circle"></span></button>';
           }
 
 
@@ -674,9 +674,9 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-            $btn .= '<a class="dropdown-item-inline view" title="'.__('View').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-show me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing view" title="'.__('View').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-show"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-trash me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
           return $btn;
       })
@@ -717,9 +717,9 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-            $btn .= '<a class="dropdown-item-inline update" title="'.__('Edit').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-edit me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
 
-            $btn .= '<a class="dropdown-item-inline delete" title="'.__('Delete').'" table_id="'.$row->id.'" href="javascript:void(0);"><i class="bx bx-trash me-2"></i></a>';
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
           return $btn;
       })

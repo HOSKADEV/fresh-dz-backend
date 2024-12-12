@@ -50,6 +50,56 @@ $navbarDetached = ($navbarDetached ?? '');
             <a class="github-button" href="https://github.com/themeselection/sneat-html-laravel-admin-template-free" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star themeselection/sneat-html-laravel-admin-template-free on GitHub">Star</a>
           </li> --}}
 
+          <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
+            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+              <i class='bx bx-globe bx-sm'></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item {{Session::get('locale') == 'en' ? 'active' :''}}" href="{{url('lang/en')}}" data-language="en">
+                  <span class="align-middle">English</span>
+                </a>
+              </li>
+              {{-- <li>
+                <a class="dropdown-item " href="{{url('lang/fr')}}" data-language="fr">
+                  <span class="align-middle">French</span>
+                </a>
+              </li>
+              <li> --}}
+                <a class="dropdown-item {{Session::get('locale') == 'ar' ? 'active' :''}}" href="{{url('lang/ar')}}" data-language="de">
+                  <span class="align-middle">Arabic</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
+            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+              @if (Session::get('theme') == 'dark')
+              <i class='bx bx-moon bx-sm'></i>
+              @else
+              <i class='bx bx-sun bx-sm'></i>
+              @endif
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
+              <li>
+                <a class="dropdown-item {{Session::get('theme') == 'light' ? 'active' :''}}" href="{{url('theme/light')}}" data-theme="light">
+                  <span class="align-middle"><i class='bx bx-sun me-2'></i>Light</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item {{Session::get('theme') == 'dark' ? 'active' :''}}" href="{{url('theme/dark')}}" data-theme="dark">
+                  <span class="align-middle"><i class="bx bx-moon me-2"></i>Dark</span>
+                </a>
+              </li>
+              {{-- <li>
+                <a class="dropdown-item" href="javascript:void(0);" data-theme="system">
+                  <span class="align-middle"><i class="bx bx-desktop me-2"></i>System</span>
+                </a>
+              </li> --}}
+            </ul>
+          </li>
+
           <!-- User -->
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -85,12 +135,6 @@ $navbarDetached = ($navbarDetached ?? '');
                 </a>
               </li> --}}
 
-              <li>
-                <a class="dropdown-item" href="{{ url('/lang')}}">
-                  <i class='bx bx-refresh me-2'></i>
-                  <span class="align-middle">{{__('Switch language')}}</span>
-                </a>
-              </li>
               <li>
                 <a class="dropdown-item" href="{{url('/version')}}">
                   <i class='bx bx-cog me-2'></i>
