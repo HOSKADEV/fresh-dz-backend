@@ -103,7 +103,7 @@ h1,
   margin: 0 0.5rem 0 0.5rem !important;
 }
 
-.row {
+.dataTable .row {
   --bs-gutter-x: 0 !important;
   --bs-gutter-y: 0 !important;
 }

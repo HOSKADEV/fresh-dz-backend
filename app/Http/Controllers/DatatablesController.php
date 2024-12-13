@@ -400,9 +400,9 @@ class DatatablesController extends Controller
 
           $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
-          $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing" title="'.__('Location').'" href="'.$row->address().'" target="_blank" ><span class="tf-icons bx bx-map"></span></button>';
+          $btn .= '<i class="btn btn-icon btn-label-primary inline-spacing" title="'.__('Location').'" href="'.$row->address().'" target="_blank" ><span class="tf-icons bx bx-map"></span></i>';
 
-          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing" title="'.__('Cart').'" href="'.url('order/'.$row->id.'/items').'"><span class="tf-icons bx bx-cart"></span></button>';
+          $btn .= '<i class="btn btn-icon btn-label-info inline-spacing" title="'.__('Cart').'" href="'.url('order/'.$row->id.'/items').'"><span class="tf-icons bx bx-cart"></span></i>';
 
           if($row->status == 'pending'){
 
