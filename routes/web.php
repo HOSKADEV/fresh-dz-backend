@@ -27,6 +27,8 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/family/browse', 'App\Http\Controllers\FamilyController@index')->name('family-browse');
   Route::get('/offer/browse', 'App\Http\Controllers\OfferController@index')->name('offer-browse');
   Route::get('/product/browse', 'App\Http\Controllers\ProductController@index')->name('product-browse');
+  Route::get('/product/{id}/images', 'App\Http\Controllers\ProductImageController@index')->name('product-images');
+  Route::get('/product/{id}/videos', 'App\Http\Controllers\ProductVideoController@index')->name('product-videos');
   Route::get('/section/browse', 'App\Http\Controllers\SectionController@index')->name('section-browse');
   Route::get('/order/browse', 'App\Http\Controllers\OrderController@index')->name('order-browse');
   Route::get('/order/{id}/items', 'App\Http\Controllers\ItemController@index')->name('order-items');
@@ -46,6 +48,8 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/user/list', 'App\Http\Controllers\DatatablesController@users')->name('user-list');
   Route::get('/notice/list', 'App\Http\Controllers\DatatablesController@notices')->name('notice-list');
   Route::get('/ad/list', 'App\Http\Controllers\DatatablesController@ads')->name('ad-list');
+  Route::post('/image/list', 'App\Http\Controllers\DatatablesController@images')->name('image-list');
+  Route::post('/video/list', 'App\Http\Controllers\DatatablesController@videos')->name('video-list');
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -113,6 +117,12 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/item/edit','App\Http\Controllers\ItemController@edit');
   Route::post('/item/delete','App\Http\Controllers\ItemController@delete');
   Route::post('/item/restore','App\Http\Controllers\ItemController@restore');
+
+  Route::post('/image/add','App\Http\Controllers\ProductImageController@add');
+  Route::post('/image/delete','App\Http\Controllers\ProductImageController@delete');
+
+  Route::post('/video/add','App\Http\Controllers\ProductVideoController@add');
+  Route::post('/video/delete','App\Http\Controllers\ProductVideoController@delete');
 
   Route::post('/order/update','App\Http\Controllers\OrderController@update');
   Route::post('/order/delete','App\Http\Controllers\OrderController@delete');

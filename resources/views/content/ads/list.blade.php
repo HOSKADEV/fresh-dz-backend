@@ -55,7 +55,7 @@
                             <div class="button-wrapper" style="text-align: center;">
                                 <br>
                                 <label for="image" class="btn btn-primary" tabindex="0">
-                                    <span class="d-none d-sm-block">{{ __('Upload new image') }}</span>
+                                    <span class="d-none d-sm-block">{{ __('New image') }}</span>
                                     <i class="bx bx-upload d-block d-sm-none"></i>
                                     <input class="image-input" type="file" id="image" name="image" hidden
                                         accept="image/png, image/jpeg" />

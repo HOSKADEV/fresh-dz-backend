@@ -66,7 +66,7 @@
 
     {{-- product modal --}}
     <div class="modal fade" id="modal" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="fw-bold py-1 mb-1">{{ __('Add product') }}</h4>
@@ -77,88 +77,98 @@
                     <input type="text" class="form-control" id="id" name="id" hidden />
                     <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
                         enctype="multipart/form-data" id="form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                        <div hidden><img src="{{ asset('assets/img/icons/file-not-found.jpg') }}"
+                                                alt="image" class="d-block rounded" height="100" width="100"
+                                                id="old-image" /> </div>
+                                        <img src="{{ asset('assets/img/icons/file-not-found.jpg') }}" alt="image"
+                                            class="d-block rounded" height="100" width="100" id="uploaded-image" />
+                                        <div class="button-wrapper">
+                                            <label for="image" class="btn btn-primary" tabindex="0">
+                                                <span class="d-none d-sm-block">{{ __('New image') }}</span>
+                                                <i class="bx bx-upload d-block d-sm-none"></i>
+                                                <input class="image-input" type="file" id="image" name="image"
+                                                    hidden accept="image/png, image/jpeg" />
+                                            </label>
+                                            <button type="button" class="btn btn-outline-secondary image-reset">
+                                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                                <span class="d-none d-sm-block">{{ __('Reset') }}</span>
+                                            </button>
+                                            {{-- <small class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</small> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-0">
 
-                        <div class="card-body">
-                            <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <div hidden><img src="{{ asset('assets/img/icons/file-not-found.jpg') }}" alt="image"
-                                        class="d-block rounded" height="100" width="100" id="old-image" /> </div>
-                                <img src="{{ asset('assets/img/icons/file-not-found.jpg') }}" alt="image"
-                                    class="d-block rounded" height="100" width="100" id="uploaded-image" />
-                                <div class="button-wrapper">
-                                    <label for="image" class="btn btn-primary" tabindex="0">
-                                        <span class="d-none d-sm-block">{{ __('Upload new image') }}</span>
-                                        <i class="bx bx-upload d-block d-sm-none"></i>
-                                        <input class="image-input" type="file" id="image" name="image" hidden
-                                            accept="image/png, image/jpeg" />
-                                    </label>
-                                    <button type="button" class="btn btn-outline-secondary image-reset">
-                                        <i class="bx bx-reset d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">{{ __('Reset') }}</span>
-                                    </button>
-                                    <br>
-                                    {{-- <small class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</small> --}}
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">{{ __('Name') }}</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="text" class="form-control" id="unit_name" name="unit_name"
+                                            placeholder="{{ __('Unit name') }}" />
+                                        <input type="text" class="form-control" id="pack_name" name="pack_name"
+                                            placeholder="{{ __('Pack name') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">{{ __('Price') }}</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="text" class="form-control" id="unit_price" name="unit_price"
+                                            placeholder="{{ __('Unit price') }}" />
+                                        <input type="text" class="form-control" id="pack_price" name="pack_price"
+                                            placeholder="{{ __('Pack price') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">{{ __('Subcategory') }}</label>
+                                    <div class="input-group input-group-merge">
+                                        <select class="form-select" id="category_id">
+                                            <option value=""> {{ __('Select category') }}</option>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}"> {{ $category->name }} </option>
+                                            @endforeach
+                                        </select>
+                                        <select class="form-select" id="subcategory_id" name="subcategory_id">
+                                            <option value=""> {{ __('Select category first') }} </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">{{ __('Pack units') }}</label>
+                                    <input type="number" class="form-control" id="pack_units" name="pack_units" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="unit_type">{{ __('Unit type') }}</label>
+                                    <select class="form-select" id="unit_type" name="unit_type">
+                                        <option value="1"> {{ __('Piece') }}</option>
+                                        <option value="2"> {{ __('100 gram') }}</option>
+                                        <option value="3"> {{ __('1 kilogram') }}</option>
+                                    </select>
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="name">{{ __('Status') }}</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="1"> {{ __('Available') }}</option>
+                                        <option value="2"> {{ __('Unavailable') }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">{{ __('Description') }}</label>
+                                    <textarea name="description" id="description" class="form-control" rows="4"></textarea>
                                 </div>
                             </div>
-                        </div>
-                        <hr class="my-0">
-
-                        <div class="mb-3">
-                            <label class="form-label" for="name">{{ __('Name') }}</label>
-                            <div class="input-group input-group-merge">
-                                <input type="text" class="form-control" id="unit_name" name="unit_name"
-                                    placeholder="{{ __('Unit name') }}" />
-                                <input type="text" class="form-control" id="pack_name" name="pack_name"
-                                    placeholder="{{ __('Pack name') }}" />
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="name">{{ __('Price') }}</label>
-                            <div class="input-group input-group-merge">
-                                <input type="text" class="form-control" id="unit_price" name="unit_price"
-                                    placeholder="{{ __('Unit price') }}" />
-                                <input type="text" class="form-control" id="pack_price" name="pack_price"
-                                    placeholder="{{ __('Pack price') }}" />
-                            </div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label class="form-label" for="name">{{ __('Pack units') }}</label>
-                            <input type="number" class="form-control" id="pack_units" name="pack_units" />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="unit_type">{{ __('Unit type') }}</label>
-                            <select class="form-select" id="unit_type" name="unit_type">
-                                <option value="1"> {{ __('Piece') }}</option>
-                                <option value="2"> {{ __('100 gram') }}</option>
-                                <option value="3"> {{ __('1 kilogram') }}</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="name">{{ __('Subcategory') }}</label>
-                            <div class="input-group input-group-merge">
-                                <select class="form-select" id="category_id">
-                                    <option value=""> {{ __('Select category') }}</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}"> {{ $category->name }} </option>
-                                    @endforeach
-                                </select>
-                                <select class="form-select" id="subcategory_id" name="subcategory_id">
-                                    <option value=""> {{ __('Select category first') }} </option>
-                                </select>
-                            </div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label class="form-label" for="name">{{ __('Status') }}</label>
-                            <select class="form-select" id="status" name="status">
-                                <option value="1"> {{ __('Available') }}</option>
-                                <option value="2"> {{ __('Unavailable') }}</option>
-                            </select>
                         </div>
 
 
@@ -401,7 +411,11 @@
 
                 var unit_name = document.getElementById('unit_name').value;
 
-                document.getElementById('pack_name').value = ' (حزمة) ' + unit_name;
+                if(unit_name){
+                  document.getElementById('pack_name').value = unit_name + " ({{__('pack')}}) ";
+                }
+
+
 
 
             });
@@ -451,6 +465,8 @@
                                 .unit_type;
                             document.getElementById('status').value = response.data.status ==
                                 'available' ? 1 : 2;
+                            document.getElementById('description').value = response.data
+                                .description;
 
                             var image = response.data.image == null ?
                                 "{{ asset('assets/img/icons/file-not-found.jpg') }}" : response

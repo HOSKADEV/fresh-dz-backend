@@ -4649,7 +4649,7 @@ fieldset:disabled .btn {
   color: var(--bs-card-color);
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
-  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x)
+  padding: 1.5rem 1.5rem;
 }
 
 .card-title {

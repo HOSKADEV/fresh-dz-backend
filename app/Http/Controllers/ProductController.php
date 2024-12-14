@@ -34,7 +34,8 @@ class ProductController extends Controller
       'unit_type' => 'required|in:1,2,3',
       'pack_price' => 'required_with:pack_units|nullable|numeric',
       'pack_units' => 'required_with:pack_price|nullable|integer',
-      'status' => 'required|in:1,2'
+      'status' => 'required|in:1,2',
+      'description'=> 'sometimes|string',
     ]);
 
     if ($validator->fails()) {
@@ -90,7 +91,8 @@ class ProductController extends Controller
       'unit_type' => 'sometimes|in:1,2,3',
       'pack_price' => 'required_with:pack_units|nullable|numeric',
       'pack_units' => 'required_with:pack_price|nullable|integer',
-      'status' => 'sometimes|in:1,2'
+      'status' => 'sometimes|in:1,2',
+      'description'=> 'sometimes|string',
     ]);
 
     if ($validator->fails()){

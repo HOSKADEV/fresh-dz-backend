@@ -23,6 +23,7 @@ class Product extends Model
       'pack_units',
       'unit_type',
       'status',
+      'description'
     ];
 
     protected $casts = [

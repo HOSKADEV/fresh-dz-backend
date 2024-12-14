@@ -33,7 +33,8 @@ class ProductResource extends JsonResource
           'start_date' => is_null($discount) ? null : $discount->start_date,
           'end_date' => is_null($discount) ? null : $discount->end_date,
           'in_cart' => empty($this->in_cart()) ? false : true,
-          'quantity' => $this->in_cart()
+          'quantity' => $this->in_cart(),
+          'description' => $this->description,
         ];
     }
 }
