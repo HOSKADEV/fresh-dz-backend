@@ -44,6 +44,14 @@ class Product extends Model
       return $this->hasMany(Item::class);
     }
 
+    public function images(){
+      return $this->hasMany(ProductImage::class);
+    }
+
+    public function videos(){
+      return $this->hasMany(ProductVideo::class);
+    }
+
     public function category(){
       return $this->subcategory->category;
     }

@@ -45,7 +45,8 @@ class ProductImageController extends Controller
       array_walk($images, function(&$item, $key) use ($request){
         $item = [
         'path' => $item->store('/uploads/products/images','upload'),
-        'product_id' => $request->product_id
+        'product_id' => $request->product_id,
+        'created_at' => now()
         ];
       });
 

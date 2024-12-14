@@ -15,6 +15,10 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         $discount = $this->discount();
+        /* $images = $this->images()->get('path')->pluck('path')->toArray();
+        $videos = $this->videos()->get('path')->pluck('path')->toArray();
+
+        array_walk($images, function ) */
 
         return [
           'id' => $this->id,
@@ -35,6 +39,8 @@ class ProductResource extends JsonResource
           'in_cart' => empty($this->in_cart()) ? false : true,
           'quantity' => $this->in_cart(),
           'description' => $this->description,
+          'images' => $this->images()->get('path')->pluck('path')->toArray(),
+          'videos' => $this->videos()->get('path')->pluck('path')->toArray(),
         ];
     }
 }

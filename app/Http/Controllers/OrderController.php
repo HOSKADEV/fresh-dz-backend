@@ -88,6 +88,7 @@ class OrderController extends Controller
       'phone' => 'required|numeric|digits:10',
       'longitude' => 'required|string',
       'latitude' => 'required|string',
+      'delivery_time' => 'required|date|after:now',
       //'products' => 'required|array',
       //'products.*.id' => 'required|distinct|exists:products,id',
       //'products.*.quantity' => 'required|numeric'

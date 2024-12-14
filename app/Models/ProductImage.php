@@ -17,4 +17,9 @@ class ProductImage extends Model
     public function product(){
       return $this->belongs(Product::class);
     }
+
+    public function getPathAttribute($value)
+    {
+        return url($value);
+    }
 }

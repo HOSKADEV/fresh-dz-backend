@@ -258,7 +258,7 @@
                                 icon: 'success',
                                 confirmButtonText: 'Ok'
                             }).then((result) => {
-                                location.reload();
+                                $('#laravel_datatable').DataTable().ajax.reload();
                             });
                         } else {
                             console.log(response.message);
@@ -316,7 +316,7 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        location.reload();
+                                        $('#laravel_datatable').DataTable().ajax.reload();
                                     });
                                 }
                             }
@@ -362,7 +362,7 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        location.reload();
+                                        $('#laravel_datatable').DataTable().ajax.reload();
                                     });
                                 }
                             }
@@ -407,7 +407,7 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        location.reload();
+                                        $('#laravel_datatable').DataTable().ajax.reload();
                                     });
                                 }
                             }

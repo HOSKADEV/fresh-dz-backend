@@ -17,6 +17,7 @@ class Order extends Model
       'status',
       'longitude',
       'latitude',
+      'delivery_time',
       'note',
     ];
 

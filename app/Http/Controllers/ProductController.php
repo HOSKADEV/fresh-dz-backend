@@ -35,7 +35,7 @@ class ProductController extends Controller
       'pack_price' => 'required_with:pack_units|nullable|numeric',
       'pack_units' => 'required_with:pack_price|nullable|integer',
       'status' => 'required|in:1,2',
-      'description'=> 'sometimes|string',
+      'description'=> 'sometimes|nullable|string',
     ]);
 
     if ($validator->fails()) {
@@ -92,7 +92,7 @@ class ProductController extends Controller
       'pack_price' => 'required_with:pack_units|nullable|numeric',
       'pack_units' => 'required_with:pack_price|nullable|integer',
       'status' => 'sometimes|in:1,2',
-      'description'=> 'sometimes|string',
+      'description'=> 'sometimes|nullable|string',
     ]);
 
     if ($validator->fails()){

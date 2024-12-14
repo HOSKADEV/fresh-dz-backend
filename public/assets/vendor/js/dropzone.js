@@ -31,6 +31,8 @@ var e = `<div class="dz-preview dz-file-preview">
                 var myDropzone = this;
 
                 document.getElementById("video_submit_btn").addEventListener("click", function(e) {
+                  $('#video_submit_btn').attr('disabled', true);
+                $('#video_close_btn').attr('disabled', true);
                     e.preventDefault();
                     e.stopPropagation();
                     myDropzone.processQueue();
@@ -38,7 +40,11 @@ var e = `<div class="dz-preview dz-file-preview">
 
                 this.on("complete", function (file) {
                   if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                    //
+                    $('#modal').modal('hide');
+                  myDropzone.removeAllFiles();
+                  $('#video_submit_btn').attr('disabled', false);
+                  $('#video_close_btn').attr('disabled', false);
+                  $('#laravel_datatable').DataTable().ajax.reload();
                   }
                 });
             }
@@ -60,6 +66,8 @@ var e = `<div class="dz-preview dz-file-preview">
               var myDropzone = this;
 
               document.getElementById("images_submit_btn").addEventListener("click", function(e) {
+                $('#images_submit_btn').attr('disabled', true);
+                $('#images_close_btn').attr('disabled', true);
                   e.preventDefault();
                   e.stopPropagation();
                   myDropzone.processQueue();
@@ -67,7 +75,11 @@ var e = `<div class="dz-preview dz-file-preview">
 
               this.on("complete", function (file) {
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                  //
+                  $('#modal').modal('hide');
+                  myDropzone.removeAllFiles();
+                  $('#images_submit_btn').attr('disabled', false);
+                  $('#images_close_btn').attr('disabled', false);
+                  $('#laravel_datatable').DataTable().ajax.reload();
                 }
               });
 

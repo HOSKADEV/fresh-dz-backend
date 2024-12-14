@@ -743,5 +743,67 @@ class DatatablesController extends Controller
       ->make(true);
   }
 
+  public function images(Request $request){
+
+    $images = Product::find($request->product_id)->images()->latest()->get();
+
+    return datatables()
+      ->of($images)
+      ->addIndexColumn()
+
+      ->addColumn('action', function ($row) {
+          $btn = '';
+
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+          return $btn;
+      })
+
+      ->addColumn('image', function ($row) {
+        return $row->path;
+      })
+
+
+      ->addColumn('created_at', function ($row) {
+
+        return date('Y-m-d',strtotime($row->created_at));
+
+      })
+
+
+      ->make(true);
+  }
+
+  public function videos(Request $request){
+
+    $videos = Product::find($request->product_id)->videos()->latest()->get();
+
+    return datatables()
+      ->of($videos)
+      ->addIndexColumn()
+
+      ->addColumn('action', function ($row) {
+          $btn = '';
+
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+          return $btn;
+      })
+
+      ->addColumn('video', function ($row) {
+        return $row->path;
+      })
+
+
+      ->addColumn('created_at', function ($row) {
+
+        return date('Y-m-d',strtotime($row->created_at));
+
+      })
+
+
+      ->make(true);
+  }
+
 
 }

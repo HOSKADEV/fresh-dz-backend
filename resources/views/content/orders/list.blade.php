@@ -339,7 +339,7 @@
                     "{{ __('success') }}",
                     'success'
                   ).then((result)=>{
-                    location.reload();
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   });
                 }
               }
@@ -387,7 +387,7 @@
                     "{{ __('success') }}",
                     'success'
                   ).then((result)=>{
-                    location.reload();
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   });
                 }
               }
@@ -492,7 +492,7 @@
                     "{{ __('success') }}",
                     'success'
                   ).then((result)=>{
-                    location.reload();
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   });
                 }
               }
@@ -532,7 +532,7 @@ Swal.fire({
               "{{ __('success') }}",
               'success'
             ).then((result)=>{
-              location.reload();
+              $('#laravel_datatable').DataTable().ajax.reload();
             });
           }
         }
@@ -566,7 +566,7 @@ Swal.fire({
                     "{{ __('success') }}",
                     'success'
                   ).then((result)=>{
-                    location.reload();
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   });
                 }
               }
@@ -597,7 +597,7 @@ Swal.fire({
                     "{{ __('success') }}",
                     'success'
                   ).then((result)=>{
-                    location.reload();
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   });
                 }
               }
@@ -621,7 +621,7 @@ Swal.fire({
             //processData: false,
             success:function(response){
                 if(response.status==1){
-                  location.reload();
+                  $('#laravel_datatable').DataTable().ajax.reload();
                 }
               }
           });

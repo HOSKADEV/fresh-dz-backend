@@ -9,80 +9,92 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Pion\Laravel\ChunkUpload\Handler\DropZoneUploadHandler;
+use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 
 class ProductVideoController extends Controller
 {
-  public function index($id){
+  public function index($id)
+  {
     $product = Product::findOrFail($id);
 
     return view('content.products.videos')
-    ->with('product',$product);
+      ->with('product', $product);
   }
 
-  public function add(Request $request){
-    //dd($request->all());
+  public function add(Request $request)
+  {
+    try {
 
-    $validator = Validator::make($request->all(), [
-      'videos' => 'required|array',
-      'videos.*.product_id' => 'required|exists:products,id',
-      'videos.*.path' => 'required|mimetypes:video/*',
-    ]);
+      // create the file receiver
+      $receiver = new FileReceiver($request->video, $request, DropZoneUploadHandler::class);
 
-    if ($validator->fails()) {
-      return response()->json([
-        'status'=> 0,
-        'message' => $validator->errors()->first()
-      ]);
-    }
+      // check if the upload is success, throw exception or return response you need
+      if ($receiver->isUploaded() === false) {
+        throw new UploadMissingFileException();
+      }
 
-    try{
+      // receive the file
+      $save = $receiver->receive();
 
-      DB::beginTransaction();
+      // check if the upload has finished (in chunk mode it will send smaller files)
+      if ($save->isFinished()) {
+        $video = $save->getFile();
+        /* $extension = $video->getClientOriginalExtension();
+        $filename = $video->getClientOriginalName();
+        $basename = basename($filename, '.' . $extension);
+        $video_url = $video->move('videos/posts/video', $basename . time() . '.' . $extension); */
 
-      $videos = $request->videos;
+        $path = $video->store('/uploads/products/videos', 'upload');
+        ProductVideo::create([
+          'product_id' => $request->product_id,
+          'path' => $path,
+        ]);
 
-      array_walk($videos, function(&$item, $key){
-        $item['path'] = $item['path']->store('/uploads/products/videos','upload');
-      });
 
-      ProductVideo::insert($videos);
+        return response()->json([
+          'status' => 1,
+          'message' => 'success',
+        ]);
 
-      DB::commit();
+      } else {
+        throw new Exception();
+      }
 
-      return response()->json([
-        'status'=> 1,
-        'message' => 'success',
-      ]);
 
-    }catch(Exception $e){
+
+    } catch (Exception $e) {
       DB::rollBack();
       return response()->json([
-        'status'=> 0,
+        'status' => 0,
         'message' => $e->getMessage(),
       ]);
 
     }
   }
 
-  public function delete(Request $request){
+  public function delete(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'video_id' => 'required|exists:product_videos,id',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $video = ProductVideo::findOrFail($request->video_id);
 
-      if(File::exists($video->path)) {
+      if (File::exists($video->path)) {
         File::delete($video->path);
       }
 
@@ -93,12 +105,13 @@ class ProductVideoController extends Controller
         'message' => 'success',
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }

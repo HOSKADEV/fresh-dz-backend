@@ -263,7 +263,26 @@
 "Availability filter" : "حسب التوفر",
 
 "Show _MENU_ entries" : "أظهر _MENU_ عناصر",
-"Search..." : "بحث..."
+"Search..." : "بحث...",
+
+"Videos": "مقاطع الفيديو",
+"Images": "الصور",
+"Videos of": "مقاطع فيديو عن",
+"Images of": "صور عن",
+"Add video": "إضافة فيديو",
+"Add images": "إضافة صور",
+"Close": "إغلاق",
+"Url": "الرابط",
+"Image": "الصورة",
+"Video": "فيديو",
+"Images table": "جدول الصور",
+"Videos table": "جدول مقاطع الفيديو",
+"video_dropzone_note": "ملف واحد مسموح به بحد أقصى 2 جيجابايت",
+"images_dropzone_note": "مسموح بـ 15 ملف كحد أقصى",
+"video_dropzone_message": "أسقط الفيديو هنا أو انقر للاختيار",
+"images_dropzone_message": "أسقط الصور هنا أو انقر للاختيار",
+"Show image" : "أظهر الصورة",
+"Show video" : "أظهر الفيديو"
 
 
 }

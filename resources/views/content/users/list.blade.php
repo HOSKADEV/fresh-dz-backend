@@ -137,7 +137,7 @@
                     "{{ __('success') }}",
                     'success'
                   ).then((result)=>{
-                    location.reload();
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   });
                 }
               }
@@ -183,7 +183,7 @@
                     "{{ __('success') }}",
                     'success'
                   ).then((result)=>{
-                    location.reload();
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   });
                 }
               }

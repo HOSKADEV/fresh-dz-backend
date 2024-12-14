@@ -81,7 +81,7 @@
                   "{{ __('success') }}",
                   'success'
               ).then(function(){
-                location.reload();
+                $('#laravel_datatable').DataTable().ajax.reload();
               });
             } else {
               console.log(response.message);
