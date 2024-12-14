@@ -22,7 +22,7 @@ var e = `<div class="dz-preview dz-file-preview">
             paramName: "video", // The name that will be used to transfer the file
             maxFilesize: 2048, // MB
             maxFiles: 1,
-            parallelUploads: 5,
+            //parallelUploads: 5,
             autoProcessQueue: false,
             chunking: true,
             //chunkSize: 5,
@@ -41,10 +41,10 @@ var e = `<div class="dz-preview dz-file-preview">
                 this.on("complete", function (file) {
                   if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                     $('#modal').modal('hide');
-                  myDropzone.removeAllFiles();
-                  $('#video_submit_btn').attr('disabled', false);
-                  $('#video_close_btn').attr('disabled', false);
-                  $('#laravel_datatable').DataTable().ajax.reload();
+                    myDropzone.removeAllFiles();
+                    $('#video_submit_btn').attr('disabled', false);
+                    $('#video_close_btn').attr('disabled', false);
+                    $('#laravel_datatable').DataTable().ajax.reload();
                   }
                 });
             }
@@ -57,7 +57,7 @@ var e = `<div class="dz-preview dz-file-preview">
           paramName: "images", // The name that will be used to transfer the file
           maxFilesize: 2048, // MB
           maxFiles: 15,
-          parallelUploads: 5,
+          parallelUploads: 15,
           autoProcessQueue: false,
           //chunking: true,
           //chunkSize: 5,

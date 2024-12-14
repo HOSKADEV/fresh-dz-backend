@@ -43,7 +43,7 @@
     {{-- add modal --}}
     <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal" aria-hidden="true"
         data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal">{{ __('Add video') }}</h5>
