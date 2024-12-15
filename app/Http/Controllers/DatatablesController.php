@@ -3,22 +3,23 @@
 namespace App\Http\Controllers;
 
 
+use Session;
 use App\Models\Ad;
 use App\Models\Cart;
-use App\Models\Category;
-use App\Models\Discount;
+use App\Models\User;
+use App\Models\Offer;
+use App\Models\Order;
+use App\Models\Coupon;
 use App\Models\Driver;
 use App\Models\Family;
 use App\Models\Notice;
-use App\Models\Offer;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\Section;
+use App\Models\Category;
+use App\Models\Discount;
 use App\Models\Subcategory;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Session;
 
 
 class DatatablesController extends Controller
@@ -792,6 +793,47 @@ class DatatablesController extends Controller
 
       ->addColumn('video', function ($row) {
         return $row->path;
+      })
+
+
+      ->addColumn('created_at', function ($row) {
+
+        return date('Y-m-d',strtotime($row->created_at));
+
+      })
+
+
+      ->make(true);
+  }
+
+  public function coupons(){
+
+    $coupons = Coupon::latest()->get();
+
+    return datatables()
+      ->of($coupons)
+      ->addIndexColumn()
+
+      ->addColumn('action', function ($row) {
+          $btn = '';
+
+            $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
+
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+          return $btn;
+      })
+
+      ->addColumn('name', function ($row) {
+        return $row->name;
+      })
+
+      ->addColumn('code', function ($row) {
+        return $row->code;
+      })
+
+      ->addColumn('discount', function ($row) {
+        return $row->discount . '%';
       })
 
 

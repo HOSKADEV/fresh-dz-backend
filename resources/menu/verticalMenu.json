@@ -64,6 +64,13 @@
     },
 
     {
+      "url": "/coupon/browse",
+      "name": "Coupons",
+      "icon": "menu-icon tf-icons bx bxs-coupon",
+      "slug": "coupon-browse"
+    },
+
+    {
       "url": "/order/browse",
       "name": "Orders",
       "icon": "menu-icon tf-icons bx bxs-spreadsheet",

@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/user/browse', 'App\Http\Controllers\UserController@index')->name('user-browse');
   Route::get('/notice/browse', 'App\Http\Controllers\NoticeController@index')->name('notice-browse');
   Route::get('/ad/browse', 'App\Http\Controllers\AdController@index')->name('ad-browse');
+  Route::get('/coupon/browse', 'App\Http\Controllers\CouponController@index')->name('coupon-browse');
   Route::get('/category/list', 'App\Http\Controllers\DatatablesController@categories')->name('category-list');
   Route::post('/subcategory/list', 'App\Http\Controllers\DatatablesController@subcategories')->name('subcategory-list');
   Route::get('/family/list', 'App\Http\Controllers\DatatablesController@families')->name('family-list');
@@ -50,6 +51,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/ad/list', 'App\Http\Controllers\DatatablesController@ads')->name('ad-list');
   Route::post('/image/list', 'App\Http\Controllers\DatatablesController@images')->name('image-list');
   Route::post('/video/list', 'App\Http\Controllers\DatatablesController@videos')->name('video-list');
+  Route::get('/coupon/list', 'App\Http\Controllers\DatatablesController@coupons')->name('coupon-list');
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -123,6 +125,12 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::post('/video/add','App\Http\Controllers\ProductVideoController@add');
   Route::post('/video/delete','App\Http\Controllers\ProductVideoController@delete');
+
+  Route::post('/coupon/create','App\Http\Controllers\CouponController@create');
+  Route::post('/coupon/update','App\Http\Controllers\CouponController@update');
+  Route::post('/coupon/delete','App\Http\Controllers\CouponController@delete');
+  Route::post('/coupon/restore','App\Http\Controllers\CouponController@restore');
+  Route::get('/coupon/generate','App\Http\Controllers\CouponController@generate');
 
   Route::post('/order/update','App\Http\Controllers\OrderController@update');
   Route::post('/order/delete','App\Http\Controllers\OrderController@delete');
