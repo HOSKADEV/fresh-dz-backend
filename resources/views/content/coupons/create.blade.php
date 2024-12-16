@@ -20,7 +20,7 @@
                             <div class="mb-3">
                                 <label class="form-label" for="code">{{ __('Code') }}</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="create-code" name="code" />
+                                    <input type="text" class="form-control" name="code" />
                                     <span id="refresh-code" class="input-group-text cursor-pointer"><i
                                             class="bx bx-revision"></i></span>
                                 </div>
@@ -49,6 +49,7 @@
                                 <input type="text" class="form-control" name="max_uses" />
                             </div>
                         </div>
+                    </div>
 
 
                         <div class="mb-3" style="text-align: center">

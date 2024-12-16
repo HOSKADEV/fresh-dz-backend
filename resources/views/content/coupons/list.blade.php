@@ -105,7 +105,7 @@
 
 
             $(document.body).on('click', '.update', function() {
-                document.getElementById('update-form').reset();
+
                 var coupon_id = $(this).attr('table_id');
                 $('#coupon_id').val(coupon_id);
 
