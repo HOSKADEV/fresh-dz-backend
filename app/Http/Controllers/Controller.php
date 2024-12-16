@@ -85,22 +85,6 @@ class Controller extends BaseController
     return $actual_price;
   }
 
-  public function get_user_from_token($api_token)
-  {
-
-    $api_token = explode('|', $api_token, 2);
-    $id = $api_token[0];
-    $token = $api_token[1];
-
-    $token = hash('sha256', $token);
-
-    $token = PersonalAccessToken::where('id', $id)->where('token', $token)->first();
-
-    $user = is_null($token) ? null : $token->tokenable;
-
-    return ($user);
-  }
-
   public function send_fcm_device($title, $content, $fcm_token)
   {
     try {

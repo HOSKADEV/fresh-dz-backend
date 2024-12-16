@@ -229,11 +229,6 @@ class ProductController extends Controller
 
     try{
 
-
-    if(!is_null($request->bearerToken())){
-      Session::put('user_id', $this->get_user_from_token($request->bearerToken())->id);
-    }
-
     $products = Product::where('status','available')->orderBy('created_at','DESC');
 
     if($request->has('category_id')){

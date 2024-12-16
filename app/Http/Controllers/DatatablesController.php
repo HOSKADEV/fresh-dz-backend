@@ -266,17 +266,7 @@ class DatatablesController extends Controller
 
           $btn .= '<a class="btn btn-icon btn-label-warning inline-spacing" title="'.__('Videos').'" href="'.url('product/'.$row->id.'/videos').'"><span class="tf-icons bx bx-movie-play"></span></a>';
 
-          /* if(is_null($row->discount())){
-
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing add_discount" title="'.__('Add discount').'" table_id="'.$row->id.'"><span class="tf-icons bx bxs-message-alt-add"></span></button>';
-
-          }else{
-
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing edit_discount" title="'.__('Edit discount').'" table_id="'.$row->discount()->id.'"><span class="tf-icons bx bxs-message-alt-edit"></span></button>';
-
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing delete_discount" title="'.__('Delete discount').'" table_id="'.$row->discount()->id.'"><span class="tf-icons bx bxs-message-alt-x"></span></button>';
-
-          } */
+          $btn .= '<a class="btn btn-icon btn-label-success inline-spacing" title="'.__('Discounts').'" href="'.url('product/'.$row->id.'/discounts').'"><span class="tf-icons bx bxs-discount"></span></a>';
 
           return $btn;
       })
@@ -840,6 +830,48 @@ class DatatablesController extends Controller
       ->addColumn('created_at', function ($row) {
 
         return date('Y-m-d',strtotime($row->created_at));
+
+      })
+
+
+      ->make(true);
+  }
+
+  public function discounts(Request $request){
+
+    $discounts = Product::find($request->product_id)->discounts()->latest()->get();
+
+    return datatables()
+      ->of($discounts)
+      ->addIndexColumn()
+
+      ->addColumn('action', function ($row) {
+          $btn = '';
+
+            $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
+
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+          return $btn;
+      })
+
+      ->addColumn('name', function ($row) {
+        return $row->name;
+      })
+
+      ->addColumn('amount', function ($row) {
+        return $row->amount . '%';
+      })
+
+
+      ->addColumn('start_date', function ($row) {
+        return date('Y-m-d',strtotime($row->start_date));
+      })
+
+
+      ->addColumn('end_date', function ($row) {
+
+        return date('Y-m-d',strtotime($row->end_date));
 
       })
 

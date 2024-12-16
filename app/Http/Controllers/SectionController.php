@@ -276,11 +276,6 @@ class SectionController extends Controller
 
       Session::put('lang', $request->header('Accept-language','ar'));
 
-      if(!is_null($request->bearerToken())){
-        Session::put('user_id', $this->get_user_from_token($request->bearerToken())->id);
-      }
-
-
       return response()->json([
         'status' => 1,
         'message' => 'success',

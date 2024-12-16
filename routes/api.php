@@ -18,20 +18,17 @@ $controller_path = 'App\Http\Controllers';
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/v1/version','App\Http\Controllers\VersionController@get');
-Route::post('/v1/distance','App\Http\Controllers\OrderController@distance');
-Route::post('/v1/register','App\Http\Controllers\AuthController@register');
-Route::post('/v1/login','App\Http\Controllers\AuthController@login');
-Route::post('/v1/home','App\Http\Controllers\SectionController@get');
-Route::post('/v1/discounts','App\Http\Controllers\DiscountController@get');
-Route::get('/v1/privacy_policy','App\Http\Controllers\DocumentationController@privacy_policy');
-Route::get('/v1/about','App\Http\Controllers\DocumentationController@about');
 
-/* Route::group(['middleware' => ['auth:sanctum']], function () {
-
-
-}); */
-
+Route::group(['middleware' => ['sometimes.auth']], function () {
+  Route::get('/v1/version','App\Http\Controllers\VersionController@get');
+  Route::post('/v1/distance','App\Http\Controllers\OrderController@distance');
+  Route::post('/v1/register','App\Http\Controllers\AuthController@register');
+  Route::post('/v1/login','App\Http\Controllers\AuthController@login');
+  Route::post('/v1/home','App\Http\Controllers\SectionController@get');
+  Route::post('/v1/discounts','App\Http\Controllers\DiscountController@get');
+  Route::get('/v1/privacy_policy','App\Http\Controllers\DocumentationController@privacy_policy');
+  Route::get('/v1/about','App\Http\Controllers\DocumentationController@about');
+  Route::get('/v1/settings','App\Http\Controllers\SetController@get');
 
   Route::post('/v1/category/get','App\Http\Controllers\CategoryController@get');
   Route::post('/v1/subcategory/get','App\Http\Controllers\SubcategoryController@get');
@@ -39,7 +36,8 @@ Route::get('/v1/about','App\Http\Controllers\DocumentationController@about');
   Route::post('/v1/product/get','App\Http\Controllers\ProductController@get');
   Route::post('/v1/ad/get','App\Http\Controllers\AdController@get');
   Route::post('/v1/offer/get','App\Http\Controllers\OfferController@get');
- // Route::post('/v1/driver/get','App\Http\Controllers\DriverController@get');
+  // Route::post('/v1/driver/get','App\Http\Controllers\DriverController@get');
+});
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/v1/logout','App\Http\Controllers\AuthController@logout');

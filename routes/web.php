@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/product/browse', 'App\Http\Controllers\ProductController@index')->name('product-browse');
   Route::get('/product/{id}/images', 'App\Http\Controllers\ProductImageController@index')->name('product-images');
   Route::get('/product/{id}/videos', 'App\Http\Controllers\ProductVideoController@index')->name('product-videos');
+  Route::get('/product/{id}/discounts', 'App\Http\Controllers\DiscountController@index')->name('product-discounts');
   Route::get('/section/browse', 'App\Http\Controllers\SectionController@index')->name('section-browse');
   Route::get('/order/browse', 'App\Http\Controllers\OrderController@index')->name('order-browse');
   Route::get('/order/{id}/items', 'App\Http\Controllers\ItemController@index')->name('order-items');
@@ -52,6 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/image/list', 'App\Http\Controllers\DatatablesController@images')->name('image-list');
   Route::post('/video/list', 'App\Http\Controllers\DatatablesController@videos')->name('video-list');
   Route::get('/coupon/list', 'App\Http\Controllers\DatatablesController@coupons')->name('coupon-list');
+  Route::post('/discount/list', 'App\Http\Controllers\DatatablesController@discounts')->name('discount-list');
 });
 
 Route::group(['middleware' => ['auth']], function () {

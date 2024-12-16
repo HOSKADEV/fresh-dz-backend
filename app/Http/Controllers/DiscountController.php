@@ -23,6 +23,14 @@ use Session;
 class DiscountController extends Controller
 {
 
+  public function index($id)
+  {
+    $product = Product::findOrFail($id);
+
+    return view('content.products.discounts')
+      ->with('product', $product);
+  }
+
   public function create(Request $request){
 
     $product = Product::findOrFail($request->product_id);
@@ -35,7 +43,7 @@ class DiscountController extends Controller
 
     $validator = Validator::make($request->all(), [
       'product_id' => 'required|exists:products,id',
-      //'name' => 'required|string',
+      'name' => 'sometimes|nullable|string',
       'type' => 'required|in:1,2',
       'amount' => 'required|numeric|min:0|max:100',
       'start_date' => 'required|date_equals:today',
@@ -205,10 +213,6 @@ class DiscountController extends Controller
     }
 
     try{
-
-      if(!is_null($request->bearerToken())){
-        Session::put('user_id', $this->get_user_from_token($request->bearerToken())->id);
-      }
 
       if($request->has('category_id')){
 

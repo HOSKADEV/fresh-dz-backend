@@ -11,6 +11,6 @@ class Set extends Model
 
     protected $fillable = [
       'name',
-      'status',
+      'value',
     ];
 }

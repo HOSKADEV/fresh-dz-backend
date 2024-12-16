@@ -76,21 +76,15 @@ class Product extends Model
 
     public function in_cart(){
 
-      $user = User::find(Session::get('user_id'));
-      //dd($user);
+      $user = auth()->user();
 
-      if(is_null($user)){
-        return 0;
-      }
+      $item = Item::whereHas('cart',function($query) use ($user){
+        $query->where('user_id',$user?->id)->where('type','current');
+      })->where('product_id',$this->id)->first();
 
-      $cart = $user->cart();
-      $item = $cart->items()->where('product_id',$this->id)->first();
 
-      if(is_null($item)){
-        return 0;
-      }
+      return $item?->quantity ?? 0;
 
-      return $item->quantity;
     }
 
 
