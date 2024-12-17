@@ -14,7 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
-          $table->dropColumn('payment_method');
+          $table->double('discount_amount')->after('tax_amount')->default(0);
+          $table->string('discount_code')->after('total_amount')->nullable()->default(null);
+          $table->enum('payment_method',['cash','ccp','baridi','chargily'])->default('cash')->after('file');
+          $table->string('payment_account')->after('payment_method')->nullable()->default(null);
+          $table->string('payment_receipt')->after('payment_account')->nullable()->default(null);
         });
     }
 
