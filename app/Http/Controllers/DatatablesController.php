@@ -473,6 +473,14 @@ class DatatablesController extends Controller
 
       })
 
+      ->addColumn('discount_amount', function ($row) {
+
+        if(!is_null($row->invoice)){
+          return number_format($row->invoice->discount_amount,2,'.',',');
+        }
+
+      })
+
       ->addColumn('total_amount', function ($row) {
 
         if(!is_null($row->invoice)){

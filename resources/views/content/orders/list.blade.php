@@ -41,6 +41,7 @@
           <th>{{__('Status')}}</th>
           <th>{{__('Driver')}}</th>
           <th>{{__('Purchase amount')}}</th>
+          <th>{{__('Discount amount')}}</th>
           <th>{{__('Tax amount')}}</th>
           <th>{{__('Total amount')}}</th>
           <th>{{__('Actions')}}</th>
@@ -270,6 +271,12 @@
                 {
                     data: 'purchase_amount',
                     name: 'purchase_amount'
+                },
+
+
+                {
+                    data: 'discount_amount',
+                    name: 'discount_amount'
                 },
 
                 {
