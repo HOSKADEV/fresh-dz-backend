@@ -17,11 +17,15 @@ class InvoiceResource extends JsonResource
         return [
           'purchase_amount' => $this->purchase_amount,
           'tax_amount' => $this->tax_amount,
+          'discount_amount' => $this->discount_amount,
           'total_amount' => $this->total_amount,
+          'discount_code' => $this->discount_code,
           'file' => is_null($this->file) ? null : url($this->file),
           'is_paid' => $this->is_paid,
           'paid_at' => $this->paid_at,
           'payment_method' => $this->payment_method,
+          'payment_account' => $this->payment_account,
+          'payment_receipt' => $this->payment_receipt,
         ];
     }
 }

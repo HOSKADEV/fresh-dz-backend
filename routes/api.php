@@ -108,5 +108,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('/v1/cart/delete','App\Http\Controllers\CartController@delete');
   Route::get('/v1/cart/get','App\Http\Controllers\CartController@get');
   Route::get('/v1/cart/products','App\Http\Controllers\CartController@products');
+  Route::get('/v1/cart/total','App\Http\Controllers\CartController@total');
 
 });

@@ -66,9 +66,13 @@ class Product extends Model
     }
 
     public function discount(){
-      return Discount::where('product_id',$this->id)
+      /* return Discount::where('product_id',$this->id)
       ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
-      ->first();
+      ->first(); */
+      return $this->discounts()->where([
+        ['start_date', '<=', now()],
+        ['end_date', '>=', now()]
+    ])->first();
     }
 
     public function has_pack(){

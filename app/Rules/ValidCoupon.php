@@ -26,9 +26,9 @@ class ValidCoupon implements Rule
      */
     public function passes($attribute, $value)
     {
-        $coupon = Coupon::withTrashed()->where('code',$value)->first();
+        $coupon = Coupon::where('code',$value)->first();
 
-        if($coupon->trashed()){
+        if(empty($coupon)){
           return false;
         }
 

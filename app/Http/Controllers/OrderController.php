@@ -2,35 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\OrderDetailResource;
-use App\Http\Resources\OrderResource;
-use App\Http\Resources\PaginatedOrderCollection;
-use App\Models\Cart;
-use App\Models\Delivery;
-use App\Models\Driver;
-use App\Models\Invoice;
-use App\Models\Item;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\Set;
-use App\Models\User;
 use Auth;
 use Exception;
+use App\Models\Set;
+use App\Models\Cart;
+use App\Models\Item;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Driver;
+use App\Models\Invoice;
+use App\Models\Product;
+use App\Models\Delivery;
+use App\Rules\ValidCoupon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
+use App\Http\Resources\OrderResource;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\OrderDetailResource;
+use App\Http\Resources\PaginatedOrderCollection;
 use Kreait\Firebase\Exception\FirebaseException;
 
 class OrderController extends Controller
 {
 
-  public function index(){
+  public function index()
+  {
     $drivers = Driver::all();
-    $shipping = Set::where('name','shipping')->first();
+    $shipping = Set::where('name', 'shipping')->first();
     return view('content.orders.list')
-    ->with('drivers',$drivers)
-    ->with('shipping',$shipping);
+      ->with('drivers', $drivers)
+      ->with('shipping', $shipping);
   }
 
   public function distance(Request $request)
@@ -58,7 +61,7 @@ class OrderController extends Controller
         'lat' => floatval($request->latitude)
       ];
 
-      $distance = $this->calc_distance($start_point,$end_point);
+      $distance = $this->calc_distance($start_point, $end_point);
       /* $true_price = ($distance/1000) * 20;
       $actual_price = min(max($true_price,100),500); */
       $price = $this->delivery_price($distance);
@@ -67,10 +70,11 @@ class OrderController extends Controller
         [
           'status' => 1,
           'data' => [
-            'distance' => number_format($distance/1000,2,'.',','),
-            'price' => number_format($price,2,'.',',')
+            'distance' => number_format($distance / 1000, 2, '.', ','),
+            'price' => number_format($price, 2, '.', ',')
           ]
-        ]);
+        ]
+      );
 
     } catch (Exception $e) {
       return response()->json(
@@ -89,7 +93,10 @@ class OrderController extends Controller
       'longitude' => 'required|string',
       'latitude' => 'required|string',
       'delivery_time' => 'required|date|after_or_equal:now',
-      'code' => 'sometimes|nullable|string',
+      'discount_code' => ['sometimes', 'nullable', 'string', new ValidCoupon()],
+      'payment_method' => 'required|in:ccp,baridi,chargily,cash',
+      'payment_account' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
+      'payment_receipt' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi']))
       //'products' => 'required|array',
       //'products.*.id' => 'required|distinct|exists:products,id',
       //'products.*.quantity' => 'required|numeric'`
@@ -107,17 +114,17 @@ class OrderController extends Controller
 
       $items = $user->cart()->items;
 
-      if($items->count() == 0){
+      if ($items->count() == 0) {
         throw new Exception('empty cart');
       }
 
-      $cart = Cart::create(['user_id' => $user->id , 'type' => 'order']);
+      $cart = Cart::create(['user_id' => $user->id, 'type' => 'order']);
 
       foreach ($items as $item) {
         $quantity = $item->quantity;
         $product = Product::find($item->product_id);
         $discount = is_null($product->discount()) ? 0 : $product->discount()->amount;
-        $product->add_to_cart($cart->id,$quantity,$discount);
+        $product->add_to_cart($cart->id, $quantity, $discount);
       }
 
       $request->merge(['user_id' => $user->id, 'cart_id' => $cart->id]);
@@ -134,16 +141,26 @@ class OrderController extends Controller
         'lat' => floatval($request->latitude)
       ];
 
-      $distance = $this->calc_distance($start_point,$end_point);
+      $distance = $this->calc_distance($start_point, $end_point);
       /* $true_price = ($distance/1000) * 20;
       $actual_price = min(max($true_price,100),500); */
       $price = $this->delivery_price($distance);
+
+
 
       $invoice = Invoice::create([
         'order_id' => $order->id,
         //'tax_type' => $request->tax_type,
         'tax_amount' => $price,
+        'discount_code' => $request->discount_code,
+        'payment_method' => $request->payment_method,
+        'payment_account' => $request->payment_account
       ]);
+
+      if ($request->payment_receipt) {
+        $invoice->payment_receipt = $request->payment_receipt->store('uploads/receipts', 'upload');
+        $invoice->save();
+      }
 
       $invoice->total();
 
@@ -151,9 +168,9 @@ class OrderController extends Controller
 
       $cart->delete();
 
-      $admin_tokens = User::where('role',0)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+      $admin_tokens = User::where('role', 0)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
 
-      $this->send_fcm_multi(__('New order'),__('There is a new order pending'),$admin_tokens);
+      $this->send_fcm_multi(__('New order'), __('There is a new order pending'), $admin_tokens);
 
       return response()->json([
         'status' => 1,
@@ -172,7 +189,8 @@ class OrderController extends Controller
   }
 
 
-  public function update(Request $request){
+  public function update(Request $request)
+  {
 
     //dd($request->only(['status','note']));
 
@@ -196,9 +214,9 @@ class OrderController extends Controller
 
       $order = Order::find($request->order_id);
 
-      if($request->has('status')){
+      if ($request->has('status')) {
 
-        if($request->status == 'ongoing'){
+        if ($request->status == 'ongoing') {
 
           Delivery::create([
             'order_id' => $request->order_id,
@@ -210,7 +228,7 @@ class OrderController extends Controller
           $invoice->pdf();
         }
 
-        if($request->status == 'delivered'){
+        if ($request->status == 'delivered') {
 
           $now = Carbon::now()->toDateString();
           $invoice = $order->invoice;
@@ -233,7 +251,7 @@ class OrderController extends Controller
 
         $this->send_fcm_device(
           __('Order status update'),
-          __('Your order is '.$request->status),
+          __('Your order is ' . $request->status),
           $order->user->fcm_token
         );
 
@@ -241,7 +259,7 @@ class OrderController extends Controller
 
       //dd($request->only(['status','note']));
 
-      $order->update($request->only(['status','note']));
+      $order->update($request->only(['status', 'note']));
 
 
       return response()->json([
@@ -262,21 +280,23 @@ class OrderController extends Controller
   }
 
 
-  public function delete(Request $request){
+  public function delete(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'order_id' => 'required',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $order = Order::findOrFail($request->order_id);
       $cart = $order->cart;
@@ -289,31 +309,34 @@ class OrderController extends Controller
         'message' => 'success',
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function restore(Request $request){
+  public function restore(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'order_id' => 'required',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $order = Order::withTrashed()->findOrFail($request->order_id);
 
@@ -325,62 +348,66 @@ class OrderController extends Controller
         'data' => new OrderResource($order)
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function get(Request $request){
+  public function get(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'order_id' => 'sometimes',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-  try{
+    try {
 
-    $user = Auth::user();
+      $user = Auth::user();
 
-    if($request->has('order_id')){
+      if ($request->has('order_id')) {
 
-      $order = Order::where('id',$request->order_id)->where('user_id',$user->id)->first();
+        $order = Order::where('id', $request->order_id)->where('user_id', $user->id)->first();
+
+        return response()->json([
+          'status' => 1,
+          'message' => 'success',
+          'data' => new OrderDetailResource($order)
+        ]);
+
+      }
+
+      $orders = $user->orders()->orderBy('updated_at', 'DESC')->paginate(10);
 
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new OrderDetailResource($order)
+        'data' => new PaginatedOrderCollection($orders)
       ]);
 
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
-
-    $orders = $user->orders()->orderBy('updated_at','DESC')->paginate(10);
-
-    return response()->json([
-      'status' => 1,
-      'message' => 'success',
-      'data' => new PaginatedOrderCollection($orders)
-    ]);
-
-  }catch(Exception $e){
-    return response()->json([
-      'status' => 0,
-      'message' => $e->getMessage()
-    ]
-  );
   }
-}
 
 
 

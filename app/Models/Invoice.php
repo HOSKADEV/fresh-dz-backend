@@ -22,19 +22,22 @@ class Invoice extends Model
       'tax_amount',
       'discount_amount',
       'total_amount',
-      'code',
+      'discount_code',
       'file',
       'is_paid',
       'paid_at',
       'payment_method',
-      'account',
-      'receipt',
+      'payment_account',
+      'payment_receipt',
     ];
 
     public function order(){
       return $this->belongsTo(Order::class);
     }
 
+    public function coupon(){
+      return $this->belongsTo(Coupon::class, 'discount_code', 'code');
+    }
 
     public function total(){
 
@@ -46,9 +49,11 @@ class Invoice extends Model
         $this->total_amount = $this->purchase_amount * (1 + ($this->tax_amount/100));
       } */
 
-      $this->total_amount = $this->purchase_amount + $this->tax_amount;
+      if($this->discount_code){
+        $this->discount_amount = $this->purchase_amount * ($this->coupon->discount / 100);
+      }
 
-
+      $this->total_amount = $this->purchase_amount + $this->tax_amount - $this->discount_amount;
 
       $this->save();
 
@@ -78,9 +83,10 @@ class Invoice extends Model
         (new InvoiceItem())
           ->title($item->name())
           //->description('Your product or service description')
-          ->pricePerUnit($item->price()*(1-($item->discount/100)))
+          //->pricePerUnit($item->price()*(1-($item->discount/100)))
+          ->pricePerUnit($item->price())
           ->quantity($item->quantity)
-          //->discountByPercent($item->discount)
+          ->discountByPercent($item->discount)
       );
       }
 
@@ -100,6 +106,7 @@ class Invoice extends Model
         ->date($order->created_at)
         ->dateFormat('Y-m-d')
         ->totalTaxes($this->tax_amount)
+        ->totalDiscount($this->discount_amount)
         //->payUntilDays(14)
         ->currencySymbol(__(''))
         ->currencyCode(__(''))
@@ -108,12 +115,15 @@ class Invoice extends Model
         ->currencyDecimalPoint('.')
         ->filename($filename)
         ->addItems($items)
-        ->logo(public_path('logo.jpeg'));
+        //->logo(public_path('logo.jpeg'))
+        ;
         // You can additionally save generated invoice to configured disk
 
         if(!is_null($order->note)){
           $invoice->notes($order->note);
         }
+
+        //dd($invoice->render());
 
         $invoice->save('invoice');
 

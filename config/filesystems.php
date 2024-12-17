@@ -45,9 +45,14 @@ return [
           'root' => public_path(),
         ],
 
-        'invoice' => [
+        /* 'invoice' => [
           'driver' => 'local',
           'root' => base_path('public_html/uploads/invoices'),
+        ], */
+
+        'invoice' => [
+          'driver' => 'local',
+          'root' => public_path('uploads/invoices'),
         ],
 
         'public' => [

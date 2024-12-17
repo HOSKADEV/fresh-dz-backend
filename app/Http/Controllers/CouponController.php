@@ -190,7 +190,7 @@ class CouponController extends Controller
   public function check(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      'code' => ['required','exists:coupons', new ValidCoupon()],
+      'code' => ['required', new ValidCoupon()],
     ]);
 
     if ($validator->fails()) {
@@ -200,12 +200,23 @@ class CouponController extends Controller
           'message' => $validator->errors()->first()
         ]
       );
-    } else {
-
-      return response()->json([
-        'status' => 1,
-        'message' => 'valid',
-      ]);
     }
+
+    $user = auth()->user();
+    $cart = $user->cart();
+
+    $coupon = Coupon::where('code', $request->code)->first();
+
+    $price = $cart->total() * ($coupon->discount / 100);
+
+    return response()->json([
+      'status' => 1,
+      'message' => 'valid',
+      'data' => [
+        'discount' => number_format($coupon->discount,2,'.',','),
+        'price' => number_format($price,2,'.',',')
+      ]
+    ]);
+
   }
 }

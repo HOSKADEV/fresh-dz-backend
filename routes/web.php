@@ -183,7 +183,6 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::get('/lang/{lang}', function($lang){
     Session::put('locale', $lang);
-    App::setLocale($lang);
     return redirect()->back();
   });
 });
