@@ -35,55 +35,112 @@
 
 
     {{-- discount modal --}}
-    <div class="modal fade" id="discount_modal" aria-hidden="true">
-      <div class="modal-dialog modal-sm" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h4 class="fw-bold py-1 mb-1">{{ __('Add discount') }}</h4>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <input type="text" id="discount_form_type" hidden />
-                  <input type="text" class="form-control" id="discount_id" name="discount_id" hidden />
-                  <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
-                      enctype="multipart/form-data" id="discount_form">
+    <div class="modal fade" id="create_modal" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="fw-bold py-1 mb-1">{{ __('Add discount') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
 
-                      <input type="text" class="form-control" id="product_id" name="product_id" value="{{$product->id}}" hidden />
+                    <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
+                        enctype="multipart/form-data" id="create_form">
 
-                      <div class="mb-3">
+                        <input type="hidden" name="product_id" value="{{$product->id}}" />
+
+                        {{-- <div class="mb-3">
                           <label class="form-label" for="type">{{ __('Type') }}</label>
                           <select class="form-select" id="type" name="type">
                               <option value="1"> {{ __('Fixed') }}</option>
                               <option value="2"> {{ __('Percentage') }}</option>
                           </select>
-                      </div>
+                      </div> --}}
 
-                      <div class="mb-3">
-                          <label class="form-label" for="name">{{ __('Discount amount') }}</label>
-                          <input type="text" class="form-control" id="amount" name="amount" />
-                      </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('Name') }}</label>
+                            <input type="text" class="form-control" name="name" />
+                        </div>
 
-                      <div class="mb-3">
-                          <label class="form-label" for="name">{{ __('Start date') }}</label>
-                          <input type="date" class="form-control" id="start_date" name="start_date" />
-                      </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('Discount amount') }}</label>
+                            <input type="number" class="form-control" name="amount" />
+                        </div>
 
-                      <div class="mb-3">
-                          <label class="form-label" for="name">{{ __('End date') }}</label>
-                          <input type="date" class="form-control" id="end_date" name="end_date" />
-                      </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('Start date') }}</label>
+                            <input type="date" class="form-control" name="start_date" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('End date') }}</label>
+                            <input type="date" class="form-control" name="end_date" />
+                        </div>
 
 
-                      <div class="mb-3" style="text-align: center">
-                          <button type="submit" id="submit_discount" name="submit_discount"
-                              class="btn btn-primary">{{ __('Send') }}</button>
-                      </div>
+                        <div class="mb-3" style="text-align: center">
+                            <button type="submit" id="create_submit" class="btn btn-primary">{{ __('Send') }}</button>
+                        </div>
 
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- update modal --}}
+    <div class="modal fade" id="update_modal" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="fw-bold py-1 mb-1">{{ __('edit discount') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
+                        enctype="multipart/form-data" id="update_form">
+
+                        <input type="hidden" class="form-control" id="discount_id" name="discount_id" />
+
+                        {{-- <div class="mb-3">
+                            <label class="form-label" for="type">{{ __('Type') }}</label>
+                            <select class="form-select" id="type" name="type">
+                                <option value="1"> {{ __('Fixed') }}</option>
+                                <option value="2"> {{ __('Percentage') }}</option>
+                            </select>
+                        </div> --}}
+
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('Name') }}</label>
+                            <input type="text" class="form-control" id="name" name="name" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('Discount amount') }}</label>
+                            <input type="number" class="form-control" id="amount" name="amount" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('Start date') }}</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" disabled />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="name">{{ __('End date') }}</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" disabled />
+                        </div>
+
+
+                        <div class="mb-3" style="text-align: center">
+                            <button type="submit" id="update_submit"
+                                class="btn btn-primary">{{ __('Send') }}</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -155,15 +212,13 @@
             }
 
             $('#create').on('click', function() {
-                document.getElementById('discount_form').reset();
-                document.getElementById('discount_form_type').value = "create";
-                $("#discount_modal").modal('show');
+                document.getElementById('create_form').reset();
+                $("#create_modal").modal('show');
             });
 
 
             $(document.body).on('click', '.update', function() {
-                document.getElementById('discount_form').reset();
-                document.getElementById('discount_form_type').value = "update";
+                document.getElementById('update_form').reset();
                 var discount_id = $(this).attr('table_id');
                 $("#discount_id").val(discount_id);
 
@@ -180,40 +235,77 @@
                     success: function(response) {
                         if (response.status == 1) {
 
-                            document.getElementById('product_id').value = response.data
-                                .product_id;
+                            document.getElementById('name').value = response.data.name;
                             document.getElementById('amount').value = response.data.amount;
-                            document.getElementById('start_date').value = response.data
-                                .start_date;
+                            document.getElementById('start_date').value = response.data.start_date;
                             document.getElementById('end_date').value = response.data.end_date;
                             document.getElementById('start_date').readOnly = true;
-                            document.getElementById('type').value = 2;
+                            //document.getElementById('type').value = 2;
 
-                            $("#discount_modal").modal("show");
+                            $("#update_modal").modal("show");
                         }
                     }
                 });
             });
 
-            $('#submit_discount').on('click', function() {
+            $('#create_submit').on('click', function() {
 
-                var formdata = new FormData($("#discount_form")[0]);
-                var formtype = document.getElementById('discount_form_type').value;
-                console.log(formtype);
-                if (formtype == "create") {
-                    url = "{{ url('discount/create') }}";
-                }
+                var formdata = new FormData($("#create_form")[0]);
 
-                if (formtype == "update") {
-                    url = "{{ url('discount/update') }}";
-                    formdata.append("discount_id", document.getElementById('discount_id').value)
-                }
-
-                $("#discount_modal").modal("hide");
+                $("#create_modal").modal("hide");
 
 
                 $.ajax({
-                    url: url,
+                    url: "{{ url('discount/create') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'POST',
+                    data: formdata,
+                    dataType: 'JSON',
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.status == 1) {
+                            Swal.fire({
+                                title: "{{ __('Success') }}",
+                                text: "{{ __('success') }}",
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
+                            }).then((result) => {
+                                $('#laravel_datatable').DataTable().ajax.reload();
+                            });
+                        } else {
+                            console.log(response.message);
+                            Swal.fire(
+                                "{{ __('Error') }}",
+                                response.message,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(data) {
+                        var errors = data.responseJSON;
+                        console.log(errors);
+                        Swal.fire(
+                            "{{ __('Error') }}",
+                            errors.message,
+                            'error'
+                        );
+                        // Render the errors with js ...
+                    }
+                });
+            });
+
+            $('#update_submit').on('click', function() {
+
+                var formdata = new FormData($("#update_form")[0]);
+
+                $("#update_modal").modal("hide");
+
+
+                $.ajax({
+                    url: "{{ url('discount/update') }}",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -288,7 +380,8 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        $('#laravel_datatable').DataTable().ajax.reload();
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
                                     });
                                 }
                             }

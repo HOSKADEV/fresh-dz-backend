@@ -44,7 +44,7 @@ class DiscountController extends Controller
     $validator = Validator::make($request->all(), [
       'product_id' => 'required|exists:products,id',
       'name' => 'sometimes|nullable|string',
-      'type' => 'required|in:1,2',
+      //'type' => 'required|in:1,2',
       'amount' => 'required|numeric|min:0|max:100',
       'start_date' => 'required|date_equals:today',
       'end_date' => 'required|after:start_date'
@@ -90,8 +90,8 @@ class DiscountController extends Controller
     $validator = Validator::make($request->all(), [
       'discount_id' => 'required',
       'product_id' => 'sometimes|exists:products,id',
-      //'name' => 'sometimes|string',
-      'type' => 'sometimes|in:1,2',
+      'name' => 'sometimes|string',
+      //'type' => 'sometimes|in:1,2',
       'amount' => 'sometimes|numeric|min:0|max:100',
       'start_date' => 'required_with:end_date',
       'end_date' => 'required_with:start_date|after:today'

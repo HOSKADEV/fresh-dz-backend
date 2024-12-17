@@ -17,6 +17,7 @@ class DiscountResource extends JsonResource
         return [
           'id' => $this->id,
           'product_id' => $this->product_id,
+          'name' => $this->name,
           //'type' => $this->type,
           'amount' => $this->amount,
           'start_date' => date('Y-m-d',strtotime($this->start_date)),
