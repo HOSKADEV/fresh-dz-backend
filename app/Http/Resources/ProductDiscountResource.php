@@ -15,6 +15,11 @@ class ProductDiscountResource extends JsonResource
     public function toArray($request)
     {
 
+      $images = $this->images()->get('path')->pluck('path')->toArray();
+      $videos = $this->videos()->get('path')->pluck('path')->toArray();
+
+      $this->image ? array_unshift($images,$this->image) : $images;
+
         return [
           'product_id' => $this->id,
           'subcategory_id' => $this->subcategory_id,
@@ -32,7 +37,10 @@ class ProductDiscountResource extends JsonResource
           'start_date' => $this->start_date,
           'end_date' => $this->end_date,
           'in_cart' => empty($this->in_cart()) ? false : true,
-          'quantity' => $this->in_cart()
+          'quantity' => $this->in_cart(),
+          'description' => $this->description,
+          'images' => $images,
+          'videos' => $videos,
         ];
     }
 }

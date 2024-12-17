@@ -36,6 +36,11 @@ class Product extends Model
 
     protected $softCascade = ['discounts'];
 
+    public function getImageAttribute($value)
+    {
+      return $value ? url($value) : null;
+    }
+
     public function subcategory(){
       return $this->belongsTo(Subcategory::class);
     }

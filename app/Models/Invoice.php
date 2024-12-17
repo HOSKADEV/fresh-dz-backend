@@ -20,11 +20,15 @@ class Invoice extends Model
       'purchase_amount',
       //'tax_type',
       'tax_amount',
+      'discount_amount',
       'total_amount',
+      'code',
       'file',
       'is_paid',
       'paid_at',
-      'payment_method'
+      'payment_method',
+      'account',
+      'receipt',
     ];
 
     public function order(){

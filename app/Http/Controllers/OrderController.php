@@ -89,6 +89,7 @@ class OrderController extends Controller
       'longitude' => 'required|string',
       'latitude' => 'required|string',
       'delivery_time' => 'required|date|after_or_equal:now',
+      'code' => 'sometimes|nullable|string',
       //'products' => 'required|array',
       //'products.*.id' => 'required|distinct|exists:products,id',
       //'products.*.quantity' => 'required|numeric'`

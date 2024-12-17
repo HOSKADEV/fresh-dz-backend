@@ -18,4 +18,8 @@ class Coupon extends Model
       'end_date',
       'max_uses'
   ];
+
+  public function uses(){
+    return 0;
+  }
 }

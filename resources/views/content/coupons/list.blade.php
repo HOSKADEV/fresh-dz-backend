@@ -125,8 +125,7 @@
                             document.getElementById('name').value = response.data.name;
                             document.getElementById('code').value = response.data.code;
                             document.getElementById('discount').value = response.data.discount;
-                            document.getElementById('start_date').value = response.data
-                                .start_date;
+                            document.getElementById('start_date').value = response.data.start_date;
                             document.getElementById('end_date').value = response.data.end_date;
                             document.getElementById('max_uses').value = response.data.max_uses;
 

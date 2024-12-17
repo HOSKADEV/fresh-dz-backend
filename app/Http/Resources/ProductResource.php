@@ -15,10 +15,11 @@ class ProductResource extends JsonResource
     public function toArray($request)
     {
         $discount = $this->discount();
-        /* $images = $this->images()->get('path')->pluck('path')->toArray();
+
+        $images = $this->images()->get('path')->pluck('path')->toArray();
         $videos = $this->videos()->get('path')->pluck('path')->toArray();
 
-        array_walk($images, function ) */
+        $this->image ? array_unshift($images,$this->image) : $images;
 
         return [
           'id' => $this->id,
@@ -31,7 +32,7 @@ class ProductResource extends JsonResource
           'pack_units' => $this->pack_units,
           'unit_type' => $this->unit_type,
           'status' => $this->status,
-          'image' => empty($this->image) ? null : url($this->image),
+          'image' => $this->image,
           'is_discounted' => is_null($discount) ? false : true,
           'discount_amount' => is_null($discount) ? 0 : $discount->amount,
           'start_date' => is_null($discount) ? null : $discount->start_date,
@@ -39,8 +40,8 @@ class ProductResource extends JsonResource
           'in_cart' => empty($this->in_cart()) ? false : true,
           'quantity' => $this->in_cart(),
           'description' => $this->description,
-          'images' => $this->images()->get('path')->pluck('path')->toArray(),
-          'videos' => $this->videos()->get('path')->pluck('path')->toArray(),
+          'images' => $images,
+          'videos' => $videos,
         ];
     }
 }
