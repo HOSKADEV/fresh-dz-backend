@@ -66,7 +66,7 @@
 
     {{-- product modal --}}
     <div class="modal fade" id="modal" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="fw-bold py-1 mb-1">{{ __('Add product') }}</h4>

@@ -22,15 +22,15 @@ Route::get('/privacy_policy','App\Http\Controllers\DocumentationController@publi
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/version', 'App\Http\Controllers\VersionController@index')->name('version');
   Route::get('/stats', 'App\Http\Controllers\dashboard\Analytics@stats')->name('stats');
-  Route::get('/category/browse', 'App\Http\Controllers\CategoryController@index')->name('category-browse');
-  Route::get('/subcategory/browse', 'App\Http\Controllers\SubcategoryController@index')->name('subcategory-browse');
-  Route::get('/family/browse', 'App\Http\Controllers\FamilyController@index')->name('family-browse');
-  Route::get('/offer/browse', 'App\Http\Controllers\OfferController@index')->name('offer-browse');
+  Route::get('/category/browse', 'App\Http\Controllers\CategoryController@index')->name('settings-category-browse');
+  Route::get('/subcategory/browse', 'App\Http\Controllers\SubcategoryController@index')->name('settings-subcategory-browse');
+  Route::get('/family/browse', 'App\Http\Controllers\FamilyController@index')->name('settings-family-browse');
+  Route::get('/offer/browse', 'App\Http\Controllers\OfferController@index')->name('settings-offer-browse');
   Route::get('/product/browse', 'App\Http\Controllers\ProductController@index')->name('product-browse');
   Route::get('/product/{id}/images', 'App\Http\Controllers\ProductImageController@index')->name('product-images');
   Route::get('/product/{id}/videos', 'App\Http\Controllers\ProductVideoController@index')->name('product-videos');
   Route::get('/product/{id}/discounts', 'App\Http\Controllers\DiscountController@index')->name('product-discounts');
-  Route::get('/section/browse', 'App\Http\Controllers\SectionController@index')->name('section-browse');
+  Route::get('/section/browse', 'App\Http\Controllers\SectionController@index')->name('settings-section-browse');
   Route::get('/order/browse', 'App\Http\Controllers\OrderController@index')->name('order-browse');
   Route::get('/order/{id}/items', 'App\Http\Controllers\ItemController@index')->name('order-items');
   Route::get('/driver/browse', 'App\Http\Controllers\DriverController@index')->name('driver-browse');
