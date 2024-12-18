@@ -27,6 +27,6 @@ class Offer extends Model
     }
 
     public function section(){
-      return Section::where('type','offer')->where('element',$this->id)->first();
+      return Section::withTrashed()->where('type','offer')->where('element',$this->id)->first();
     }
 }

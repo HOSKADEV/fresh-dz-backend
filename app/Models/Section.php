@@ -42,6 +42,13 @@ class Section extends Model
 
     }
 
+    if ($this->type == 'group') {
+
+      $family = Group::find($this->element);
+      return $lang == 'en' && !empty($family->name_en) ? $family->name_en : $family->name;
+
+    }
+
     if ($this->type == 'offer') {
 
       if ($this->element == 'popular') {
@@ -74,6 +81,15 @@ class Section extends Model
       $family = Family::find($this->element);
       $categories = $family->categories()->inRandomOrder()->get();
       return new CategoryCollection($categories);
+
+    }
+
+    if ($this->type == 'group') {
+
+      $group = Group::find($this->element);
+      $products = Product::whereIn('subcategory_id',  $group->subcategories()->pluck('subcategories.id')->toArray())
+      ->inRandomOrder()->take(10)->get();
+      return new ProductCollection($products);
 
     }
 

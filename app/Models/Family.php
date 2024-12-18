@@ -28,6 +28,6 @@ class Family extends Model
     }
 
     public function section(){
-      return Section::where('type','family')->where('element',$this->id)->first();
+      return Section::withTrashed()->where('type','family')->where('element',$this->id)->first();
     }
 }

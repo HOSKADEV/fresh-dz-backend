@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AdResource extends JsonResource
+class GroupResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,12 +14,6 @@ class AdResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-          'name' => $this->name,
-          'type' => $this->type,
-          'url' => $this->url,
-          'image' => empty($this->image) ? null : url($this->image),
-          'product_id' => $this->product?->id
-        ];
+        return parent::toArray($request);
     }
 }

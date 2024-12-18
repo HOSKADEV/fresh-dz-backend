@@ -164,6 +164,7 @@ class SubcategoryController extends Controller
   public function get(Request $request){  //paginated
     $validator = Validator::make($request->all(), [
       'category_id' => 'sometimes',
+      'group_id' => 'sometimes',
       'search' => 'sometimes|string',
 
     ]);
@@ -185,6 +186,12 @@ class SubcategoryController extends Controller
       $category = Category::findOrFail($request->category_id);
       $category_subs = $category->subcategories()->pluck('id')->toArray();
       $subcategories = $subcategories->whereIn('id',$category_subs);
+    }
+
+    if($request->has('group_id')){
+      $subcategories = $subcategories->whereHas('elements', function($query) use ($request){
+        $query->where('group_id', $request->group_id);
+      });
     }
 
     if($request->has('search')){

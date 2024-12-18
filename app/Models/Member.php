@@ -19,7 +19,7 @@ class Member extends Model
       return $this->belongsTo(Family::class);
     }
 
-    public function categoryy(){
+    public function category(){
       return $this->belongsTo(Category::class);
     }
 }

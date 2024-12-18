@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('families', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('name_en')->nullable()->default(null);
-            $table->string('image')->nullable()->default(null);
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('ads', function (Blueprint $table) {
+          $table->dropColumn('url');
         });
     }
 
@@ -30,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('families');
+        Schema::table('ads', function (Blueprint $table) {
+            //
+        });
     }
 };

@@ -3,30 +3,30 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\Ad;
-use App\Models\Product;
-use App\Models\ProductAd;
+use App\Models\Group;
+use App\Models\Element;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
-use App\Http\Resources\AdResource;
-use App\Http\Resources\AdCollection;
+use App\Models\Subsubcategory;
+use Illuminate\Support\Facades\DB;
+use App\Http\Resources\GroupResource;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\PaginatedAdCollection;
+use App\Http\Resources\PaginatedGroupCollection;
 
-class AdController extends Controller
+class GroupController extends Controller
 {
-
   public function index(){
-    $products = Product::pluck('unit_name','id');
-    return view('content.ads.list')->with('products',$products);
+    $subcategories = Subcategory::all();
+    return view('content.groups.list')
+    ->with('subcategories',$subcategories);
   }
-
   public function create(Request $request){
+
     $validator = Validator::make($request->all(), [
       'name' => 'required|string',
-      'image' => 'sometimes|mimetypes:image/*',
-      'type' => 'required|in:url,product',
-      'url' => 'required_if:type,url|nullable|string',
-      'product_id' => 'required_if:type,product|nullable|exists:products,id',
+      'name_en' => 'sometimes|string',
+      'subcategories' => ['required', 'array'],
+      'subcategories.*' => 'distinct'
     ]);
 
     if ($validator->fails()) {
@@ -35,34 +35,28 @@ class AdController extends Controller
         'message' => $validator->errors()->first()
       ]);
     }
+
     try{
 
+      DB::beginTransaction();
 
-      $ad = Ad::create($request->only('name','type'));
+        $group = Group::create($request->except('subcategories'));
 
-      if($request->type == 'product'){
-        ProductAd::create([
-            'product_id' => $request->product_id,
-            'ad_id' => $ad->id
-        ]);
-      }else if($request->type == 'url'){
-        $ad->url = $request->url;
-      }
+        foreach($request->subcategories as $subcategory){
+          $subcategory = Subcategory::findOrfail($subcategory);
+          Element::create(['group_id' => $group->id, 'subcategory_id' => $subcategory->id]);
+        }
 
-      if($request->hasFile('image')){
-        $path = $request->image->store('/uploads/ads/images','upload');
-        $ad->image = $path;
-      }
-
-      $ad->save();
+      DB::commit();
 
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new AdResource($ad)
+        'data' => new GroupResource($group)
       ]);
 
     }catch(Exception $e){
+      DB::rollBack();
       return response()->json([
         'status' => 0,
         'message' => $e->getMessage()
@@ -74,12 +68,11 @@ class AdController extends Controller
   public function update(Request $request){
 
     $validator = Validator::make($request->all(), [
-      'ad_id' => 'required',
+      'group_id' => 'required',
       'name' => 'sometimes|string',
-      'image' => 'sometimes|mimetypes:image/*',
-      'type' => 'sometimes|in:url,product',
-      'url' => 'required_if:type,url|nullable|string',
-      'product_id' => 'required_if:type,product|nullable|exists:products,id',
+      'name_en' => 'sometimes|string',
+      'subcategories' => ['sometimes', 'array'],
+      'subcategories.*' => 'distinct'
     ]);
 
     if ($validator->fails()){
@@ -92,35 +85,32 @@ class AdController extends Controller
 
     try{
 
-      $ad = Ad::findOrFail($request->ad_id);
+      $group = Group::findOrFail($request->group_id);
 
-      $ad->update($request->only('name','type'));
+      DB::beginTransaction();
 
-      if($request->type == 'product'){
-        $ad->url = null;
-        ProductAd::updateOrInsert(
-          ['ad_id' => $ad->id],
-            ['product_id' => $request->product_id]
-          );
-      }else if($request->type == 'url'){
-        $ad->product_ad()->delete();
-        $ad->url = $request->url;
-      }
+        $group->update($request->except('group_id' ));
 
-      if($request->hasFile('image')){
-        $path = $request->image->store('/uploads/ads/images','upload');
-        $ad->image = $path;
-      }
+        if($request->has('subcategories')){
+          foreach($group->members as $member){
+            $member->forceDelete();
+          }
+          foreach($request->subcategories as $subcategory){
+            $subcategory = Subcategory::findOrfail($subcategory);
+            Element::create(['group_id' => $group->id, 'subcategory_id' => $subcategory->id]);
+          }
+        }
 
-      $ad->save();
+      DB::commit();
 
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new AdResource($ad)
+        'data' => new GroupResource($group)
       ]);
 
     }catch(Exception $e){
+      DB::rollBack();
       return response()->json([
         'status' => 0,
         'message' => $e->getMessage()
@@ -133,7 +123,7 @@ class AdController extends Controller
   public function delete(Request $request){
 
     $validator = Validator::make($request->all(), [
-      'ad_id' => 'required',
+      'group_id' => 'required',
     ]);
 
     if ($validator->fails()){
@@ -146,9 +136,9 @@ class AdController extends Controller
 
     try{
 
-      $ad = Ad::findOrFail($request->ad_id);
+      $group = Group::findOrFail($request->group_id);
 
-      $ad->delete();
+      $group->delete();
 
       return response()->json([
         'status' => 1,
@@ -168,7 +158,7 @@ class AdController extends Controller
   public function restore(Request $request){
 
     $validator = Validator::make($request->all(), [
-      'ad_id' => 'required',
+      'group_id' => 'required',
     ]);
 
     if ($validator->fails()){
@@ -181,14 +171,14 @@ class AdController extends Controller
 
     try{
 
-      $ad = Ad::withTrashed()->findOrFail($request->ad_id);
+      $group = Group::withTrashed()->findOrFail($request->group_id);
 
-      $ad->restore();
+      $group->restore();
 
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new AdResource($ad)
+        'data' => new GroupResource($group)
       ]);
 
     }catch(Exception $e){
@@ -216,21 +206,19 @@ class AdController extends Controller
 
     try{
 
-    $ads = Ad::orderBy('created_at','DESC');
+    $groups = Group::orderBy('created_at','DESC');
 
     if($request->has('search')){
-
-      $ads = $ads->where('name', 'like', '%' . $request->search . '%');
+      $groups = $groups->where('name', 'like', '%' . $request->search . '%')
+                          ->orwhere('name_en', 'like', '%' . $request->search . '%');
     }
 
-    $ads = $ads->paginate(5);
-
-    //return($ads);
+    $groups = $groups->paginate(10);
 
     return response()->json([
       'status' => 1,
       'message' => 'success',
-      'data' => new PaginatedAdCollection($ads)
+      'data' => new PaginatedGroupCollection($groups)
     ]);
 
   }catch(Exception $e){

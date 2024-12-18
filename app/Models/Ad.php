@@ -13,6 +13,15 @@ class Ad extends Model
     protected $fillable = [
       'name',
       'image',
+      'type',
       'url',
     ];
+
+    public function product_ad(){
+      return $this->hasOne(ProductAd::class);
+    }
+
+    public function product(){
+      return $this->hasOneThrough(Product::class, ProductAd::class, 'ad_id', 'id', 'id', 'product_id');
+    }
 }

@@ -7,6 +7,7 @@ use Session;
 use App\Models\Ad;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Group;
 use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Coupon;
@@ -212,6 +213,59 @@ class DatatablesController extends Controller
       ->make(true);
   }
 
+  public function groups(){
+
+    $groups = Group::orderBy('created_at','DESC')->get();
+
+    return datatables()
+      ->of($groups)
+      ->addIndexColumn()
+
+      ->addColumn('action', function ($row) {
+          $btn = '';
+
+          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
+
+          if(is_null($row->section())){
+
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing add_to_home" title="'.__('Add to Homepage').'" table_id="'.$row->id.'"><span class="tf-icons bx bxs-plus-square"></span></button>';
+
+          }else{
+
+            $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing remove_from_home" title="'.__('Remove from Homepage').'" table_id="'.$row->section()->id.'"><span class="tf-icons bx bxs-x-square"></span></button>';
+
+          }
+
+          return $btn;
+      })
+
+      ->addColumn('subcategories', function ($row) {
+
+          return $row->subcategories()->count();
+
+      })
+
+      ->addColumn('is_published', function ($row) {
+
+        if(is_null($row->section())){
+         return false ;
+        }
+        return true;
+
+      })
+
+      ->addColumn('created_at', function ($row) {
+
+        return date('Y-m-d',strtotime($row->created_at));
+
+      })
+
+
+      ->make(true);
+  }
+
   public function products(Request $request){
 
     $products = Product::orderBy('created_at','DESC');
@@ -323,7 +377,7 @@ class DatatablesController extends Controller
 
   public function sections(Request $request){
 
-    $sections = Section::orderBy('rank','ASC')->get();
+    $sections = Section::withTrashed()->orderBy('deleted_at','ASC')->orderBy('rank','ASC')->get();
 
     return datatables()
       ->of($sections)
@@ -333,15 +387,24 @@ class DatatablesController extends Controller
           $btn = '';
 
           if($row->deleteable == 1){
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing delete" title="'.__('Remove').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-x"></span></button>';
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing remove" title="'.__('Remove').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-x"></span></button>';
           }
 
-          if($row->moveable == 1){
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing switch" title="'.__('Switch').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-refresh"></span></button>';
+          if($row->trashed()){
 
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing insert" title="'.__('Insert').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-redo"></span></button>';
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing restore" title="'.__(key: 'Show').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-show"></span></button>';
 
+          }else{
+            if($row->moveable == 1){
+              $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing switch" title="'.__('Switch').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-refresh"></span></button>';
+
+              $btn .= '<button class="btn btn-icon btn-label-info inline-spacing insert" title="'.__('Insert').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-redo"></span></button>';
+
+              $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing delete" title="'.__('Hide').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-hide"></span></button>';
+            }
           }
+
+
 
           return $btn;
       })
@@ -357,6 +420,12 @@ class DatatablesController extends Controller
           return $row->name();
 
       })
+
+      ->addColumn('status', function ($row) {
+
+        return $row->trashed();
+
+    })
 
       ->addColumn('created_at', function ($row) {
 
@@ -731,6 +800,9 @@ class DatatablesController extends Controller
         return $row->name;
       })
 
+      ->addColumn('type', function ($row) {
+        return $row->type;
+      })
 
       ->addColumn('created_at', function ($row) {
 

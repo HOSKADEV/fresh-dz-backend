@@ -16,14 +16,15 @@
     <!-- Basic Bootstrap Table -->
     <div class="card">
         <div class="table-responsive text-nowrap">
-          <div class="table-header row justify-content-between">
-            <h5 class="col-md-auto">{{ __('Ads table') }}</h5>
-          </div>
+            <div class="table-header row justify-content-between">
+                <h5 class="col-md-auto">{{ __('Ads table') }}</h5>
+            </div>
             <table class="table" id="laravel_datatable">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>{{ __('Name') }}</th>
+                        <th>{{ __('Type') }}</th>
                         <th>{{ __('Created at') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
@@ -75,9 +76,33 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label" for="type">{{ __('Type') }}</label>
+                            <select class="form-select" id="type" name="type">
+                                <option value="url"> {{ __('Off-App ad') }} </option>
+                                <option value="product"> {{ __('Product ad') }} </option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="url-div">
                             <label class="form-label" for="name">{{ __('URL') }}</label>
                             <input type="text" class="form-control" id="url" name="url" />
                         </div>
+
+                        <div class="mb-3" id="product-id-div">
+                            <label class="form-label" for="product_id">{{ __('Product') }}</label>
+                            <select class="selectpicker form-control" id="product_id" name="product_id" data-size="5"
+                                data-live-search="true">
+                                <option value=""> {{ __('Not selected') }} </option>
+                                @foreach ($products as $key => $value)
+                                    <option value="{{ $key }}"> {{ $value }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{--  <div class="mb-3" id="product-name-div">
+                        <label class="form-label" for="name">{{ __('Product') }}</label>
+                        <input type="text" class="form-control" id="product_name"/>
+                    </div> --}}
 
 
                         <div class="mb-3" style="text-align: center">
@@ -101,7 +126,7 @@
                 //$.fn.dataTable.moment( 'YYYY-M-D' );
                 var table = $('#laravel_datatable').DataTable({
 
-                    language:  {!! file_get_contents(base_path('lang/'.session('locale','en').'/datatable.json')) !!},
+                    language: {!! file_get_contents(base_path('lang/' . session('locale', 'en') . '/datatable.json')) !!},
                     responsive: true,
                     processing: true,
                     serverSide: true,
@@ -123,6 +148,18 @@
                         {
                             data: 'name',
                             name: 'name'
+                        },
+
+                        {
+                            data: 'type',
+                            name: 'type',
+                            render: function(data) {
+                                if (data == 'product') {
+                                    return '<span class="badge bg-warning">{{ __('Product ad') }}</span>';
+                                } else {
+                                    return '<span class="badge bg-info">{{ __('Off-App ad') }}</span>';
+                                }
+                            }
                         },
 
                         {
@@ -148,7 +185,23 @@
                     "{{ asset('assets/img/icons/ad-not-found.jpg') }}";
                 document.getElementById('old-image').src =
                     "{{ asset('assets/img/icons/ad-not-found.jpg') }}";
+                $('#type').trigger("change");
                 $("#modal").modal('show');
+            });
+
+            $('#type').on('change', function() {
+                var type = $(this).val();
+
+                if (type == 'product') {
+                    $('#product-id-div').show();
+                    $('#url-div').hide();
+                } else {
+                    $('#product-id-div').hide();
+                    $('#url-div').show();
+                }
+
+                $('#product_id').selectpicker('refresh');
+
             });
 
 
@@ -173,8 +226,11 @@
 
                             document.getElementById('name').value = response.data.name;
                             document.getElementById('url').value = response.data.url;
+                            //var type = response.data.type;
+                            document.getElementById('type').value = response.data.type;
+                            document.getElementById('product_id').value = response.data.product_id;
 
-                            //console.log(response.data.image);
+                            $('#type').trigger("change");
 
                             var image = response.data.image == null ?
                                 "{{ asset('assets/img/icons/ad-not-found.jpg') }}" : response
@@ -282,7 +338,8 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        $('#laravel_datatable').DataTable().ajax.reload();
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
                                     });
                                 }
                             }

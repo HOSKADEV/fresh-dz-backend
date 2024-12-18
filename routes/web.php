@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/subcategory/browse', 'App\Http\Controllers\SubcategoryController@index')->name('settings-subcategory-browse');
   Route::get('/family/browse', 'App\Http\Controllers\FamilyController@index')->name('settings-family-browse');
   Route::get('/offer/browse', 'App\Http\Controllers\OfferController@index')->name('settings-offer-browse');
+  Route::get('/group/browse', 'App\Http\Controllers\GroupController@index')->name('settings-group-browse');
   Route::get('/product/browse', 'App\Http\Controllers\ProductController@index')->name('product-browse');
   Route::get('/product/{id}/images', 'App\Http\Controllers\ProductImageController@index')->name('product-images');
   Route::get('/product/{id}/videos', 'App\Http\Controllers\ProductVideoController@index')->name('product-videos');
@@ -42,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/subcategory/list', 'App\Http\Controllers\DatatablesController@subcategories')->name('subcategory-list');
   Route::get('/family/list', 'App\Http\Controllers\DatatablesController@families')->name('family-list');
   Route::get('/offer/list', 'App\Http\Controllers\DatatablesController@offers')->name('offer-list');
+  Route::get('/group/list', 'App\Http\Controllers\DatatablesController@groups')->name('group-list');
   Route::post('/product/list', 'App\Http\Controllers\DatatablesController@products')->name('product-list');
   Route::get('/section/list', 'App\Http\Controllers\DatatablesController@sections')->name('section-list');
   Route::post('/order/list', 'App\Http\Controllers\DatatablesController@orders')->name('order-list');
@@ -79,6 +81,11 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/family/delete','App\Http\Controllers\FamilyController@delete');
   Route::post('/family/restore','App\Http\Controllers\FamilyController@restore');
 
+  Route::post('/group/create','App\Http\Controllers\GroupController@create');
+  Route::post('/group/update','App\Http\Controllers\GroupController@update');
+  Route::post('/group/delete','App\Http\Controllers\GroupController@delete');
+  Route::post('/group/restore','App\Http\Controllers\GroupController@restore');
+
 
   Route::post('/product/create','App\Http\Controllers\ProductController@create');
   Route::post('/product/update','App\Http\Controllers\ProductController@update');
@@ -107,9 +114,11 @@ Route::group(['middleware' => ['auth']], function () {
 
 
   Route::post('/section/add','App\Http\Controllers\SectionController@add');
-  Route::post('/section/delete','App\Http\Controllers\SectionController@delete');
+  Route::post('/section/remove','App\Http\Controllers\SectionController@remove');
   Route::post('/section/switch','App\Http\Controllers\SectionController@switch');
   Route::post('/section/insert','App\Http\Controllers\SectionController@insert');
+  Route::post('/section/delete','App\Http\Controllers\SectionController@delete');
+  Route::post('/section/restore','App\Http\Controllers\SectionController@restore');
 
 
   Route::post('/driver/create','App\Http\Controllers\DriverController@create');

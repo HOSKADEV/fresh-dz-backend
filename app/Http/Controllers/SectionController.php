@@ -26,7 +26,7 @@ class SectionController extends Controller
     }
     public function add(Request $request){
       $validator = Validator::make($request->all(), [
-        'type' => 'required|in:offer,family',
+        'type' => 'required|in:offer,family,group',
         'element' => ['numeric', Rule::exists(Pluralizer::plural($request->type),'id')],
       ]);
 
@@ -60,7 +60,7 @@ class SectionController extends Controller
 
   }
 
-  public function delete(Request $request){
+  public function remove(Request $request){
 
     $validator = Validator::make($request->all(), [
       'section_id' => ['required','numeric',Rule::exists('sections','id')->where(function (Builder $query) {
@@ -80,17 +80,19 @@ class SectionController extends Controller
 
       DB::beginTransaction();
 
-      $section = Section::findOrFail($request->section_id);
+      $section = Section::withTrashed()->findOrFail($request->section_id);
 
       $rank = $section->rank;
 
       $section->forceDelete();
 
-      $sections = Section::where('rank','>',$rank)->orderBy('rank','ASC')->get();
+      if($rank){
+        $sections = Section::where('rank','>',$rank)->orderBy('rank','ASC')->get();
 
-      foreach($sections as $section){
-        $section->rank -= 1;
-        $section->save();
+        foreach($sections as $section){
+          $section->rank -= 1;
+          $section->save();
+        }
       }
 
       DB::commit();
@@ -232,10 +234,12 @@ class SectionController extends Controller
 
   }
 
-  public function restore(Request $request){
+  public function delete(Request $request){
 
     $validator = Validator::make($request->all(), [
-      'product_id' => 'required',
+      'section_id' => ['required','numeric',Rule::exists('sections','id')->where(function (Builder $query) {
+        return $query->where('moveable', 1);
+      }),],
     ]);
 
     if ($validator->fails()){
@@ -248,14 +252,66 @@ class SectionController extends Controller
 
     try{
 
-      $product = Section::withTrashed()->findOrFail($request->product_id);
+      DB::beginTransaction();
 
-      $product->restore();
+      $section = Section::findOrFail($request->section_id);
+
+      $rank = $section->rank;
+
+      $sections = Section::where('rank','>',$rank)->orderBy('rank','ASC')->get();
+
+      $section->update(['rank' => null]);
+
+      $section->delete();
+
+      foreach($sections as $section){
+        $section->rank -= 1;
+        $section->save();
+      }
+
+      DB::commit();
 
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new SectionResource($product)
+      ]);
+
+    }catch(Exception $e){
+      DB::rollBack();
+      return response()->json([
+        'status' => 0,
+        'message' => $e->getMessage()
+      ]
+    );
+    }
+
+  }
+
+  public function restore(Request $request){
+
+    $validator = Validator::make($request->all(), [
+      'section_id' => 'required',
+    ]);
+
+    if ($validator->fails()){
+      return response()->json([
+          'status' => 0,
+          'message' => $validator->errors()->first()
+        ]
+      );
+    }
+
+    try{
+
+      $section = Section::withTrashed()->findOrFail($request->section_id);
+
+      $section->update([ 'rank' => Section::all()->count() + 1]);
+
+      $section->restore();
+
+      return response()->json([
+        'status' => 1,
+        'message' => 'success',
       ]);
 
     }catch(Exception $e){

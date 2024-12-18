@@ -15,7 +15,7 @@
     "guzzlehttp/guzzle": "^7.2",
     "khaled.alshamaa/ar-php": "^6.3",
     "kreait/firebase-tokens": "*",
-    "kreait/laravel-firebase": "5.3.0",
+    "kreait/laravel-firebase": "=5.5.0",
     "laravel/framework": "^9.0",
     "laravel/sanctum": "^2.14",
     "laravel/tinker": "^2.7",

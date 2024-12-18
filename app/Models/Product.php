@@ -65,6 +65,10 @@ class Product extends Model
       return $this->hasMany(Discount::class);
     }
 
+    public function ads(){
+      return $this->hasManyThrough(Ad::class, ProductAd::class);
+    }
+
     public function discount(){
       /* return Discount::where('product_id',$this->id)
       ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
