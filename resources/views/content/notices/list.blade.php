@@ -71,9 +71,9 @@
                         <div class="mb-3">
                             <label class="form-label" for="type">{{ __('Notice type') }}</label>
                             <select class="form-select" name="type">
-                                <option value="0">{{ __('Select type') }}</option>
-                                <option value="1">{{ __('Offer Notice') }}</option>
-                                <option value="2">{{ __('Update Notice') }}</option>
+                                <option value="0">{{ __('Normal notice') }}</option>
+                                <option value="1">{{ __('Urgent notice') }}</option>
+{{--                                 <option value="2">{{ __('Update Notice') }}</option> --}}
                             </select>
                         </div>
                         <br>
@@ -170,11 +170,9 @@
                             name: 'type',
                             render: function(data) {
                                 if (data == 1) {
-                                    return '<span class="badge bg-success">{{ __('Offer Notice') }}</span>';
-                                } else if (data == 2) {
-                                    return '<span class="badge bg-info">{{ __('Update Notice') }}</span>';
-                                } else {
-                                    return '<span class="badge bg-secondary">{{ __('Other') }}</span>';
+                                    return '<span class="badge bg-success">{{ __('Urgent notice') }}</span>';
+                                }else {
+                                    return '<span class="badge bg-secondary">{{ __('Normal notice') }}</span>';
                                 }
                             }
                         },

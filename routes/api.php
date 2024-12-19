@@ -46,6 +46,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('/v1/user/change_password','App\Http\Controllers\UserController@change_password');
   Route::get('/v1/user/deactivate','App\Http\Controllers\UserController@deactivate');
 
+  Route::post('/v1/notification/get','App\Http\Controllers\NotificationController@get');
+  Route::post('/v1/notification/read','App\Http\Controllers\NotificationController@read');
+
   Route::post('/v1/category/create','App\Http\Controllers\CategoryController@create');
   Route::post('/v1/category/update','App\Http\Controllers\CategoryController@update');
   Route::post('/v1/category/delete','App\Http\Controllers\CategoryController@delete');

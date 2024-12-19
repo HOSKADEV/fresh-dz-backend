@@ -229,7 +229,7 @@ class ProductController extends Controller
 
     try{
 
-    $products = Product::where('status','available')->orderBy('created_at','DESC');
+    $products = Product::orderBy('created_at','DESC');
 
     if($request->has('category_id')){
 

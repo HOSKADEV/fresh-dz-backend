@@ -87,6 +87,9 @@ class OrderController extends Controller
   }
   public function create(Request $request)
   {
+
+    $request->mergeIfMissing(['delivery_time' => now()]);
+
     $validator = Validator::make($request->all(), [
 
       'phone' => 'required|numeric|digits:10',

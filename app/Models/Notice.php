@@ -25,4 +25,20 @@ class Notice extends Model
   public function notifications(){
     return $this->hasMany(Notification::class);
   }
+
+  public function title($lang = 'ar'){
+    return match($lang){
+      'ar' => $this->title_ar,
+      'en' => $this->title_en,
+      default => $this->title_ar,
+    };
+  }
+
+  public function content($lang = 'ar'){
+    return match($lang){
+      'ar' => $this->content_ar,
+      'en' => $this->content_en,
+      default => $this->content_ar,
+    };
+  }
 }
