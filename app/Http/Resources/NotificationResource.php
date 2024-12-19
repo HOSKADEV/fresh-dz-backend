@@ -20,7 +20,7 @@ class NotificationResource extends JsonResource
           'content' => $this->notice?->content($request->header('Accept-Language', 'ar')),
           'type' => $this->notice->type,
           'created_at' => $this->created_at,
-          'is_read' => $this->is_read == 'yes' ? true : false,
+          'is_read' => $this->is_read,
           'read_at' => $this->read_at,
         ];
     }
