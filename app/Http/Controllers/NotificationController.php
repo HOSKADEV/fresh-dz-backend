@@ -31,7 +31,7 @@ class NotificationController extends Controller
 
       $notification = Notification::find($request->notification_id);
 
-      $notification->is_read = 'yes';
+      $notification->is_read = 1;
       $notification->read_at = now();
       $notification->save();
 
