@@ -53,7 +53,7 @@ class NotificationController extends Controller
   public function get(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      'is_read' => 'sometimes|in:yes,no',
+      'is_read' => 'sometimes|in:0,1',
       'type' => 'sometimes|in:0,1',
       'all' => 'sometimes',
     ]);
