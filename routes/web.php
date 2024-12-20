@@ -17,7 +17,8 @@ $controller_path = 'App\Http\Controllers';
 
 // Main Page Route
 Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('auth');
-Route::get('/privacy_policy','App\Http\Controllers\DocumentationController@public');
+Route::get('/privacy_policy','App\Http\Controllers\DocumentationController@privacy');
+Route::get('/delete_account','App\Http\Controllers\DocumentationController@delete_account');
 
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/version', 'App\Http\Controllers\VersionController@index')->name('version');

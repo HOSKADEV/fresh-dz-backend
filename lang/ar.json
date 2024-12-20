@@ -304,7 +304,21 @@
 "video_dropzone_message": "أسقط الفيديو هنا أو انقر للاختيار",
 "images_dropzone_message": "أسقط الصور هنا أو انقر للاختيار",
 "Show image" : "أظهر الصورة",
-"Show video" : "أظهر الفيديو"
-
+"Show video" : "أظهر الفيديو",
+"Copyright" : "حقوق النشر",
+"All rights reserved" : "كل الحقوق محفوظة",
+"Fresh Dz" : "فريش ديزاد",
+"Delete Your Account": "حذف الحساب",
+"Important": "مهم",
+"Deleting your account will permanently remove all your personal information from our databases and any pending cart items. This action cannot be undone.": "حذف حسابك سيؤدي إلى إزالة جميع معلوماتك الشخصية من قواعد بياناتنا وأي عناصر معلقة في سلة التسوق بشكل نهائي. لا يمكن التراجع عن هذا الإجراء.",
+"To delete your account, follow these steps:": "لحذف حسابك، اتبع الخطوات التالية:",
+"Step 1: On the home page, press the three lines to reveal the side menu": "الخطوة 1: في الصفحة الرئيسية، اضغط على الخطوط الثلاثة لإظهار القائمة الجانبية",
+"Step 2: In the side menu, click on Edit Profile": "الخطوة 2: في القائمة الجانبية، انقر على تعديل البروفايل",
+"Step 3: On the Edit Profile page, press Delete Account": "الخطوة 3: في صفحة تعديل البروفايل، اضغط على حذف الحساب",
+"Step 4: When the pop-up appears, click Confirm to delete your account": "الخطوة 4: عندما تظهر النافذة المنبثقة، انقر على تأكيد لحذف حسابك",
+"Open side menu": "فتح القائمة الجانبية",
+"Select Edit Profile": "اختر تعديل البروفايل",
+"Press Delete Account": "اضغط على حذف الحساب",
+"Confirm deletion": "تأكيد الحذف"
 
 }

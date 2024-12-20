@@ -23,10 +23,20 @@ class DocumentationController extends Controller
 
     }
 
-    public function public(){
-      $privacy_policy = Documentation::privacy_policy()->content_ar;
+    public function privacy()
+    {
+      $privacy_policy = Documentation::privacy_policy();
 
-      return view('content.pages.pages-misc-privacy-policy')->with('privacy_policy',$privacy_policy);
+      $data = $privacy_policy->content(session('locale'));
+
+      $title = __($privacy_policy->name);
+
+      return view('content.pages.privacy-policy',compact('data','title'));
+    }
+
+    public function delete_account()
+    {
+      return view('content.pages.delete-account');
     }
 
     public function update(Request $request){

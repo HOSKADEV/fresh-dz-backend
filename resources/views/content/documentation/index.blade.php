@@ -2,6 +2,15 @@
 
 @section('title', __($documentation->name))
 
+@section('vendor-script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/vendor/js/quill.js') }}"></script>
+@endsection
+
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/quill.css') }}" />
+@endsection
+
 @section('content')
 
 <h4 class="fw-bold py-3 mb-3">
@@ -18,17 +27,17 @@
           enctype="multipart/form-data" id="form">
 
         <div class="row mb-3">
-            <textarea id="documentation" name="{{Session::get('locale') == 'en' ? 'content_en' : 'content_ar'}}" class="form-control" rows="15" style="height: 375;" dir="rtl" disabled>{{Session::get('locale') == 'en' ? $documentation->content_en : $documentation->content_ar}}</textarea>
-            <input type="text" id='name' name="name" value="{{$documentation->name}}" hidden/>
+          <div id="snow-editor">
+          </div>
+          <div id="documentation" hidden>{!! $documentation->content(session('locale')) !!}</div>
+            {{-- <textarea id="documentation" name="{{Session::get('locale') == 'en' ? 'content_en' : 'content_ar'}}" class="form-control" rows="15" style="height: 375;" dir="rtl">{{Session::get('locale') == 'en' ? $documentation->content_en : $documentation->content_ar}}</textarea> --}}
+            <input type="hidden" id='name' name="name" value="{{$documentation->name}}" />
+            <input type="hidden" id="key" name="{{session('locale') == 'en' ? 'content_en' : 'content_ar'}}"/>
         </div>
     </form>
 
     <div class="col" style="text-align: center">
-      <button id='edit' class="btn btn-primary">{{__('Edit')}}</button>
-      <div id="submit_cancel_div" hidden>
-        <button id='submit' class="btn btn-primary">{{__('Submit')}}</button>
-        <button id='cancel' class="btn btn-secondary">{{__('Cancel')}}</button>
-      </div>
+      <button id='submit' class="btn btn-primary">{{__('Submit')}}</button>
     </div>
 
 
@@ -41,17 +50,21 @@
 
   $(document).ready(function(){
 
-    $('#edit').on('click', function() {
-      document.getElementById('edit').hidden = true;
-      document.getElementById('submit_cancel_div').hidden = false;
-      document.getElementById('documentation').disabled = false;
-    });
+    /* tinymce.init({
+        selector: '#documentation',
+        directionality: "rtl",
+        menubar:''
+      }); */
 
-    $('#cancel').on('click', function() {
-      document.getElementById('edit').hidden = false;
-      document.getElementById('submit_cancel_div').hidden = true;
-      document.getElementById('documentation').disabled = true;
-    });
+      const quill = new Quill("#snow-editor", {
+                    theme: "snow",
+                });
+      quill.clipboard.dangerouslyPasteHTML($('#documentation').html());
+
+      if("{{session('locale')}}" != "en"){
+        quill.format('align', 'right');
+        quill.format('direction', 'rtl');
+      }
 
     $('#submit').on('click', function() {
 
@@ -62,7 +75,17 @@
       formdata.append('name',document.getElementById('name').value);
       formdata.append(documentation.getAttribute("name"),html.body.innerHTML); */
 
-      var formdata = new FormData($("#form")[0]);
+      //var formdata = new FormData($("#form")[0]);
+      var formdata = new FormData();
+
+      var key = document.getElementById('key').getAttribute("name");
+      //var value = tinymce.get("documentation").getContent();
+      var value = quill.getSemanticHTML();
+      var name = document.getElementById('name').value;
+
+      formdata.append('name',name);
+      formdata.append(key,value);
+
 
       $.ajax({
         url: '{{ url('documentation/update') }}',
@@ -81,7 +104,7 @@
                   "{{ __('success') }}",
                   'success'
               ).then(function(){
-                $('#laravel_datatable').DataTable().ajax.reload();
+                location.reload();
               });
             } else {
               console.log(response.message);
