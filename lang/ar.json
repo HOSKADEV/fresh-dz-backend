@@ -238,6 +238,7 @@
 "privacy_policy" : "سياسة الخصوصية",
 "about" : "حول التطبيق",
 "Privacy policy" : "سياسة الخصوصية",
+"privacy policy" : "سياسة الخصوصية",
 "About" : "حول التطبيق",
 "Submit" : "إرسال",
 
@@ -319,6 +320,9 @@
 "Open side menu": "فتح القائمة الجانبية",
 "Select Edit Profile": "اختر تعديل البروفايل",
 "Press Delete Account": "اضغط على حذف الحساب",
-"Confirm deletion": "تأكيد الحذف"
+"Confirm deletion": "تأكيد الحذف",
+"Delete Your Account on Fresh Dz" : "حذف حسابك على تطبيق fresh Dz",
+"Fresh Dz is committed to protecting your private data in accordance with the" : "تلتزم fresh Dz بحماية بياناتك الخاصة وفقًا لـ",
+"mentioned in our application. We are currently explaining to you how to permanently delete your account from our database through the application." : "المذكورة في تطبيقنا. نقوم حاليًا بشرح كيفية حذف حسابك بشكل نهائي  من قاعدة البيانات الخاصة بنا من خلال التطبيق."
 
 }

@@ -100,8 +100,14 @@
     <section id="account-deletion" class="account-deletion"   @if (Session::get('locale') == 'ar') dir="rtl" lang="ar" @endif>
         <div class="container">
             <div class="section-title">
-                <h2>{{ __('Delete Your Account') }}</h2>
+                <h2>{{ __('Delete Your Account on Fresh Dz') }}</h2>
             </div>
+
+            <div class="row">
+              <div class="col-12">
+                  <h4 class="mt-4">{{ __('Fresh Dz is committed to protecting your private data in accordance with the')}} <a href="{{url('/privacy_policy')}}"> {{__('privacy policy')}} </a>{{ __('mentioned in our application. We are currently explaining to you how to permanently delete your account from our database through the application.') }}</h4>
+              </div>
+          </div>
 
             <div class="row">
                 <div class="col-12">
