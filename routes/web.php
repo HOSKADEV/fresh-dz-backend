@@ -185,17 +185,16 @@ Route::post('/auth/login-action', 'App\Http\Controllers\authentications\LoginBas
 Route::get('/auth/forgot-password-basic', 'App\Http\Controllers\authentications\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
 Route::get('/auth/logout', 'App\Http\Controllers\authentications\LogoutBasic@logout')->name('auth-logout');
 
-Route::group(['middleware' => ['auth']], function () {
-  Route::get('/theme/{theme}', function($theme){
-    Session::put('theme',$theme);
-    return redirect()->back();
-  });
-
-  Route::get('/lang/{lang}', function($lang){
-    Session::put('locale', $lang);
-    return redirect()->back();
-  });
+Route::get('/theme/{theme}', function($theme){
+  Session::put('theme',$theme);
+  return redirect()->back();
 });
+
+Route::get('/lang/{lang}', function($lang){
+  Session::put('locale', $lang);
+  return redirect()->back();
+});
+
 
 
 
