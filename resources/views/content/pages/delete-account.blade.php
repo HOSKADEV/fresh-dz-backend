@@ -123,8 +123,8 @@
             <div class="row justify-content-center mt-4">
                 <div class="col-xl-5 text-center">
                     <div class="deletion-step">
-                        <img src="{{ asset('pages/assets/img/delete/1.jpg') }}" class="img-fluid" alt="{{ __('Open side menu') }}">
                         <h4 class="my-3">{{ __('Step 1: On the home page, press the three lines to reveal the side menu') }}</h4>
+                        <img src="{{ asset('pages/assets/img/delete/1.jpg') }}" class="img-fluid" alt="{{ __('Open side menu') }}">
                     </div>
                 </div>
             </div>
@@ -132,8 +132,8 @@
             <div class="row justify-content-center mt-5">
                 <div class="col-xl-5 text-center">
                     <div class="deletion-step">
-                        <img src="{{ asset('pages/assets/img/delete/2.jpg') }}" class="img-fluid" alt="{{ __('Select Edit Profile') }}">
                         <h4 class="my-3">{{ __('Step 2: In the side menu, click on Edit Profile') }}</h4>
+                        <img src="{{ asset('pages/assets/img/delete/2.jpg') }}" class="img-fluid" alt="{{ __('Select Edit Profile') }}">
                     </div>
                 </div>
             </div>
@@ -141,8 +141,8 @@
             <div class="row justify-content-center mt-5">
                 <div class="col-xl-5 text-center">
                     <div class="deletion-step">
-                        <img src="{{ asset('pages/assets/img/delete/3.jpg') }}" class="img-fluid" alt="{{ __('Press Delete Account') }}">
                         <h4 class="my-3">{{ __('Step 3: On the Edit Profile page, press Delete Account') }}</h4>
+                        <img src="{{ asset('pages/assets/img/delete/3.jpg') }}" class="img-fluid" alt="{{ __('Press Delete Account') }}">
                     </div>
                 </div>
             </div>
@@ -150,8 +150,8 @@
             <div class="row justify-content-center mt-5">
                 <div class="col-xl-5 text-center">
                     <div class="deletion-step">
-                        <img src="{{ asset('pages/assets/img/delete/4.jpg') }}" class="img-fluid" alt="{{ __('Confirm deletion') }}">
                         <h4 class="my-3">{{ __('Step 4: When the pop-up appears, click Confirm to delete your account') }}</h4>
+                        <img src="{{ asset('pages/assets/img/delete/4.jpg') }}" class="img-fluid" alt="{{ __('Confirm deletion') }}">
                     </div>
                 </div>
             </div>
