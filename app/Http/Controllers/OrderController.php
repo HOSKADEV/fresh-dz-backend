@@ -99,7 +99,8 @@ class OrderController extends Controller
       'discount_code' => ['sometimes', 'nullable', 'string', new ValidCoupon()],
       'payment_method' => 'required|in:ccp,baridi,chargily,cash',
       'payment_account' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
-      'payment_receipt' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi']))
+      'payment_receipt' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
+      'checkout_id' => 'required_if:payment_method,chargily',
       //'products' => 'required|array',
       //'products.*.id' => 'required|distinct|exists:products,id',
       //'products.*.quantity' => 'required|numeric'`
@@ -157,7 +158,8 @@ class OrderController extends Controller
         'tax_amount' => $price,
         'discount_code' => $request->discount_code,
         'payment_method' => $request->payment_method,
-        'payment_account' => $request->payment_account
+        'payment_account' => $request->payment_account,
+        'checkout_id' => $request->checkout_id,
       ]);
 
       if ($request->payment_receipt) {
