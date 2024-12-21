@@ -15,5 +15,6 @@ yarn-error.log
 /.vscode
 /public/uploads
 fresh-dz-firebase-adminsdk-97277-04833114fb.json
+chargily-pay-credentials.json
 # But not these files...
 !/public/assets/*

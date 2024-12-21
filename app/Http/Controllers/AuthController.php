@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
-use App\Models\User;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Kreait\Firebase\Auth\UserQuery;
-use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
-use Kreait\Laravel\Firebase\Facades\Firebase;
-use Kreait\Firebase\JWT\Error\IdTokenVerificationFailed;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
+use Chargily\ChargilyPay\ChargilyPay;
 use Kreait\Firebase\JWT\IdTokenVerifier;
+use Illuminate\Support\Facades\Validator;
+use Chargily\ChargilyPay\Auth\Credentials;
+use Kreait\Laravel\Firebase\Facades\Firebase;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
+use Kreait\Firebase\JWT\Error\IdTokenVerificationFailed;
 
 class AuthController extends Controller
 {
@@ -88,54 +90,39 @@ class AuthController extends Controller
 
       try {
 
-        //$firebase_user = $auth->getUser($request->uid);
-
-        //$firebase_token = $auth->verifyIdToken(request()->bearerToken());
-
-        //$uid = $firebase_token->claims()->get('sub');
-
         $firebase_user = $auth->getUser($request->uid);
 
-        $user = User::where('email',$firebase_user->email)->first();
-
-        if(is_null($user)){
-          $user = User::create([
-            'name' => $firebase_user->displayName,
-            'email' => $firebase_user->email,
-            'phone' => $firebase_user->phoneNumber,
-            'image' => $firebase_user->photoUrl,
-          ]);
-        }
-
-        /* User::withTrashed()->updateOrInsert(
+        $user = User::firstOrCreate(
           ['email' => $firebase_user->email],
           [
-              'name' => $firebase_user->displayName,
-              'email' => $firebase_user->email,
-              'phone' => $firebase_user->phoneNumber,
-              'image' => $firebase_user->photoUrl,
-              'deleted_at' => null
+            'name' => $firebase_user->displayName ?? 'user#'.uuid_create(),
+            'phone' => $firebase_user->phoneNumber,
+            'image' => $firebase_user->photoUrl,
           ]
-      ); */
+        );
 
-      $user = User::where('email',$firebase_user->email)->first();
+        switch($user->status){
+          case 0 : throw new Exception('blocked account');
+          case 2 : throw new Exception('deactivated account');
+        }
 
-      switch($user->status){
-        case 0 : throw new Exception('blocked account');
-        case 2 : throw new Exception('deactivated account');
-      }
+        if (empty($user->customer_id) && $user->phone) {
+          $chargily_pay = new ChargilyPay(new Credentials(config('chargily.credentials')));
+          $customer = $chargily_pay->customers()->create([
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone
+          ]);
 
-      if($request->has('fcm_token')){
-        $user->fcm_token = $request->fcm_token;
+          $user->customer_id = $customer->getId();
+        }
+
+        if($request->has('fcm_token')){
+          $user->fcm_token = $request->fcm_token;
+        }
+
+        $token = $user->createToken($this->random())->plainTextToken;
         $user->save();
-      }
-
-      if(empty($user->name)){
-        $user->name = 'user#'.$user->id;
-        $user->save();
-      }
-
-      $token = $user->createToken($this->random())->plainTextToken;
 
         return response()->json([
           'status'=> 1,
