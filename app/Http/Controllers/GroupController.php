@@ -15,12 +15,14 @@ use App\Http\Resources\PaginatedGroupCollection;
 
 class GroupController extends Controller
 {
-  public function index(){
+  public function index()
+  {
     $subcategories = Subcategory::all();
     return view('content.groups.list')
-    ->with('subcategories',$subcategories);
+      ->with('subcategories', $subcategories);
   }
-  public function create(Request $request){
+  public function create(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'name' => 'required|string',
@@ -31,21 +33,21 @@ class GroupController extends Controller
 
     if ($validator->fails()) {
       return response()->json([
-        'status'=> 0,
+        'status' => 0,
         'message' => $validator->errors()->first()
       ]);
     }
 
-    try{
+    try {
 
       DB::beginTransaction();
 
-        $group = Group::create($request->except('subcategories'));
+      $group = Group::create($request->except('subcategories'));
 
-        foreach($request->subcategories as $subcategory){
-          $subcategory = Subcategory::findOrfail($subcategory);
-          Element::create(['group_id' => $group->id, 'subcategory_id' => $subcategory->id]);
-        }
+      foreach ($request->subcategories as $subcategory) {
+        $subcategory = Subcategory::findOrfail($subcategory);
+        Element::create(['group_id' => $group->id, 'subcategory_id' => $subcategory->id]);
+      }
 
       DB::commit();
 
@@ -55,17 +57,19 @@ class GroupController extends Controller
         'data' => new GroupResource($group)
       ]);
 
-    }catch(Exception $e){
+    } catch (Exception $e) {
       DB::rollBack();
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
   }
 
-  public function update(Request $request){
+  public function update(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'group_id' => 'required',
@@ -75,31 +79,35 @@ class GroupController extends Controller
       'subcategories.*' => 'distinct'
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $group = Group::findOrFail($request->group_id);
 
       DB::beginTransaction();
 
-        $group->update($request->except('group_id' ));
+      $group->update($request->except('group_id'));
 
-        if($request->has('subcategories')){
-          foreach($group->members as $member){
-            $member->forceDelete();
-          }
-          foreach($request->subcategories as $subcategory){
-            $subcategory = Subcategory::findOrfail($subcategory);
-            Element::create(['group_id' => $group->id, 'subcategory_id' => $subcategory->id]);
-          }
-        }
+      if ($request->has('subcategories')) {
+        $group->elements()->delete();
+        $elements = $request->subcategories;
+        array_walk($elements, function (&$item, $key) use ($group) {
+          $item = [
+            'group_id' => $group->id,
+            'subcategory_id' => $item
+          ];
+        });
+
+        Element::insert($elements);
+      }
 
       DB::commit();
 
@@ -109,32 +117,35 @@ class GroupController extends Controller
         'data' => new GroupResource($group)
       ]);
 
-    }catch(Exception $e){
+    } catch (Exception $e) {
       DB::rollBack();
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function delete(Request $request){
+  public function delete(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'group_id' => 'required',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $group = Group::findOrFail($request->group_id);
 
@@ -145,31 +156,34 @@ class GroupController extends Controller
         'message' => 'success',
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function restore(Request $request){
+  public function restore(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'group_id' => 'required',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $group = Group::withTrashed()->findOrFail($request->group_id);
 
@@ -181,53 +195,57 @@ class GroupController extends Controller
         'data' => new GroupResource($group)
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function get(Request $request){  //paginated
+  public function get(Request $request)
+  {  //paginated
     $validator = Validator::make($request->all(), [
       'search' => 'sometimes|string',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
-    $groups = Group::orderBy('created_at','DESC');
+      $groups = Group::orderBy('created_at', 'DESC');
 
-    if($request->has('search')){
-      $groups = $groups->where('name', 'like', '%' . $request->search . '%')
-                          ->orwhere('name_en', 'like', '%' . $request->search . '%');
+      if ($request->has('search')) {
+        $groups = $groups->where('name', 'like', '%' . $request->search . '%')
+          ->orwhere('name_en', 'like', '%' . $request->search . '%');
+      }
+
+      $groups = $groups->paginate(10);
+
+      return response()->json([
+        'status' => 1,
+        'message' => 'success',
+        'data' => new PaginatedGroupCollection($groups)
+      ]);
+
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
-
-    $groups = $groups->paginate(10);
-
-    return response()->json([
-      'status' => 1,
-      'message' => 'success',
-      'data' => new PaginatedGroupCollection($groups)
-    ]);
-
-  }catch(Exception $e){
-    return response()->json([
-      'status' => 0,
-      'message' => $e->getMessage()
-    ]
-  );
-  }
 
   }
 }

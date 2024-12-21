@@ -94,14 +94,17 @@ class FamilyController extends Controller
 
         $family->update($request->except('family_id' ));
 
-        if($request->has('categories')){
-          foreach($family->members as $member){
-            $member->forceDelete();
-          }
-          foreach($request->categories as $category){
-            $category = Category::findOrfail($category);
-            Member::create(['family_id' => $family->id, 'category_id' => $category->id]);
-          }
+        if ($request->has('categories')) {
+          $family->members()->forceDelete();
+          $members = $request->categories;
+          array_walk($members, function (&$item, $key) use ($family) {
+            $item = [
+              'family_id' => $family->id,
+              'category_id' => $item
+            ];
+          });
+
+          Member::insert($members);
         }
 
       DB::commit();
