@@ -16,6 +16,7 @@ class Invoice extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+      'checkout_id',
       'order_id',
       'purchase_amount',
       //'tax_type',
