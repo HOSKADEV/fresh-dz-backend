@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\InvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -116,7 +117,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::post('/test', function(Request $request){
-  $chargily_pay = new \Chargily\ChargilyPay\ChargilyPay(new \Chargily\ChargilyPay\Auth\Credentials(config('chargily.credentials')));
-  $checkout = $chargily_pay->checkouts()->get($request->checkout_id);
-  dd($checkout);
+ $invoice = \App\Models\Invoice::find($request->id);
+ return $invoice->pdf();
 });

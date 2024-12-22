@@ -221,16 +221,19 @@ class OrderController extends Controller
 
       if ($request->has('status')) {
 
+        if ($request->status == 'accepted') {
+
+          $invoice = $order->invoice;
+
+          $invoice->pdf();
+        }
+
         if ($request->status == 'ongoing') {
 
           Delivery::create([
             'order_id' => $request->order_id,
             'driver_id' => $request->driver_id,
           ]);
-
-          $invoice = $order->invoice;
-
-          $invoice->pdf();
         }
 
         if ($request->status == 'delivered') {

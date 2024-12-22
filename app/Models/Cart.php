@@ -26,8 +26,8 @@ class Cart extends Model
       return $this->hasMany(Item::class);
     }
 
-    public function order(){
-      return $this->hasOne(Order::class);
+    public function orders(){
+      return $this->hasMany(Order::class);
     }
 
     public function total(){

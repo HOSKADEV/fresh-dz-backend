@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
 use Illuminate\Support\Carbon;
-use LaravelDaily\Invoices\Invoice as Bill;
+use App\Services\InvoiceService;
+use Illuminate\Database\Eloquent\Model;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\Party;
+use LaravelDaily\Invoices\Invoice as Bill;
+use App\Http\Resources\Invoice\UserResource;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Http\Resources\Invoice\ItemCollection;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
+use App\Http\Resources\Invoice\InvoiceResource;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Invoice extends Model
 {
@@ -67,77 +72,21 @@ class Invoice extends Model
       $user = $order->user;
       $cart = $order->cart;
 
-
-      $seller = new Party([
-          'name'          => __('Fresh'),
-      ]);
-
-      $buyer = new Party([
-          'name' => $user->fullname(),
-          'phone' => $order->phone(),
-      ]);
-
-      $items = [];
-
-      foreach($cart->items as $item){
-        array_push($items,
-        (new InvoiceItem())
-          ->title($item->name())
-          //->description('Your product or service description')
-          //->pricePerUnit($item->price()*(1-($item->discount/100)))
-          ->pricePerUnit($item->price())
-          ->quantity($item->quantity)
-          ->discountByPercent($item->discount)
+      $invoice = new InvoiceService(
+        (new UserResource(new User(['name' => 'Fresh', 'phone' => '1234567890'])))->toArray(request()),
+        (new UserResource($user))->toArray(request()),
+        (new ItemCollection($cart->items))->toArray(request()),
+        (new InvoiceResource($this))->toArray(request()),
+        $order->note,
+        Carbon::now(),
       );
-      }
 
 
-
-    $filename = $this->id.'-'. Carbon::now()->toDateString();
-
-    $invoice = Bill::make(__('receipt'))
-        ->series('ID')
-        // ability to include translated invoice status
-        // in case it was paid
-        //->status(__('invoices::invoice.paid'))
-        ->sequence($order->id)
-        ->serialNumberFormat('{SERIES}/{SEQUENCE}')
-        ->seller($seller)
-        ->buyer($buyer)
-        ->date($order->created_at)
-        ->dateFormat('Y-m-d')
-        ->totalTaxes($this->tax_amount)
-        ->totalDiscount($this->discount_amount)
-        //->payUntilDays(14)
-        ->currencySymbol(__(''))
-        ->currencyCode(__(''))
-        ->currencyFormat('{SYMBOL}{VALUE}')
-        ->currencyThousandsSeparator(',')
-        ->currencyDecimalPoint('.')
-        ->filename($filename)
-        ->addItems($items)
-        //->logo(public_path('logo.jpeg'))
-        ;
-        // You can additionally save generated invoice to configured disk
-
-        if(!is_null($order->note)){
-          $invoice->notes($order->note);
-        }
-
-        //dd($invoice->render());
-
-        $invoice->save('invoice');
-
-        //dd($invoice->toHtml());
-
-        $this->file = 'uploads/invoices/'.$filename.'.pdf';
+        $this->file = $invoice->generatePdf();
 
         $this->save();
 
-
-        return;
-
-
+        return url($this->file);
 
     }
 

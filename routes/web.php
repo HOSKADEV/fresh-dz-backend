@@ -19,6 +19,9 @@ $controller_path = 'App\Http\Controllers';
 Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('auth');
 Route::get('/privacy_policy','App\Http\Controllers\DocumentationController@privacy');
 Route::get('/delete_account','App\Http\Controllers\DocumentationController@delete_account');
+Route::get('/chargily/callback', 'App\Http\Controllers\ChargilyController@callback')->name('chargily-callback');
+Route::get('/chargily/success', 'App\Http\Controllers\ChargilyController@success')->name('chargily-success');
+Route::get('/chargily/failed', 'App\Http\Controllers\ChargilyController@failed')->name('chargily-failed');
 
 Route::group(['middleware' => ['auth']], function () {
   Route::get('/version', 'App\Http\Controllers\VersionController@index')->name('version');

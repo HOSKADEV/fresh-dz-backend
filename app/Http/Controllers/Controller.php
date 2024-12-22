@@ -96,11 +96,9 @@ class Controller extends BaseController
         //'image' => $imageUrl,
       ]);
 
-      $deviceToken = $fcm_token;
+      if($fcm_token){
 
-      if(!empty($deviceToken)){
-
-        $message = CloudMessage::withTarget('token', $deviceToken)
+        $message = CloudMessage::withTarget('token', $fcm_token)
           ->withNotification($notification) // optional
           //->withData($data) // optional
         ;
@@ -126,14 +124,12 @@ class Controller extends BaseController
         //'image' => $imageUrl,
       ]);
 
-      $deviceTokens = $fcm_tokens;
-
       $message = CloudMessage::new()
         ->withNotification($notification) // optional
         //->withData($data) // optional
       ;
 
-      $messaging->sendMulticast($message, $deviceTokens);
+      $messaging->sendMulticast($message, $fcm_tokens);
 
       return;
     } catch (FirebaseException $e) {
