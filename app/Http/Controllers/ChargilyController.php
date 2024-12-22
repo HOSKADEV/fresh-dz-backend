@@ -67,7 +67,7 @@ class ChargilyController extends Controller
 
       } else {
 
-        $cart->status = 'current';
+        $cart->type = 'current';
         $order->status = 'canceled';
         $cart->save();
         $order->save();

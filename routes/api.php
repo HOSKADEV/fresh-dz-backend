@@ -115,8 +115,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/v1/cart/total','App\Http\Controllers\CartController@total');
 
 });
-
-Route::post('/test', function(Request $request){
- $invoice = \App\Models\Invoice::find($request->id);
- return $invoice->pdf();
-});
