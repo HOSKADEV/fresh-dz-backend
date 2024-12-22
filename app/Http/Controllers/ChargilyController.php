@@ -42,6 +42,8 @@ class ChargilyController extends Controller
 
       $user = $order->user;
 
+      $cart = $order->cart;
+
       if ($user->customer_id != $checkout->getCustomerId()) {
         throw new Exception('conflicted informations');
       }
