@@ -49,7 +49,7 @@ class ChargilyController extends Controller
       }
 
 
-      if ($checkout->getStatus() == 'success') {
+      if ($checkout->getStatus() == 'paid') {
 
 
         $invoice->is_paid = 'yes';
