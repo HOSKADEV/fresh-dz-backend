@@ -42,15 +42,7 @@ class ChargilyController extends Controller
 
       $user = $order->user;
 
-      $cart = $order->cart;
-
-      $diff_customer = $user->customer_id != $checkout->getCustomerId();
-
-      $diff_cart = $cart->id != json_decode($checkout->getMetadata()[0])->cart_id;
-
-      //dd($checkout);
-
-      if ($diff_customer || $diff_cart) {
+      if ($user->customer_id != $checkout->getCustomerId()) {
         throw new Exception('conflicted informations');
       }
 
