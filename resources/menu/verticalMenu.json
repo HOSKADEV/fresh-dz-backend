@@ -54,6 +54,11 @@
       "slug": "settings",
       "submenu": [
         {
+          "url": "/region/browse",
+          "name": "Regions",
+          "slug": "settings-region-browse"
+        },
+        {
           "url": "/category/browse",
           "name": "Categories",
           "slug": "settings-category-browse"

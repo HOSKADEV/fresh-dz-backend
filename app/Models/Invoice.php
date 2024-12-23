@@ -6,13 +6,9 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use App\Services\InvoiceService;
 use Illuminate\Database\Eloquent\Model;
-use LaravelDaily\Invoices\Classes\Buyer;
-use LaravelDaily\Invoices\Classes\Party;
-use LaravelDaily\Invoices\Invoice as Bill;
 use App\Http\Resources\Invoice\UserResource;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Resources\Invoice\ItemCollection;
-use LaravelDaily\Invoices\Classes\InvoiceItem;
 use App\Http\Resources\Invoice\InvoiceResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -77,8 +73,8 @@ class Invoice extends Model
         (new UserResource($user))->toArray(request()),
         (new ItemCollection($cart->items))->toArray(request()),
         (new InvoiceResource($this))->toArray(request()),
-        $order->note,
         Carbon::now(),
+        $order->note,
       );
 
 

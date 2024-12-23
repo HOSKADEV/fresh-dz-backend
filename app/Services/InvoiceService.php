@@ -22,15 +22,15 @@ class InvoiceService
         array $buyer,
         array $items,
         array $invoice,
-        ?string $note = null,
         \DateTimeInterface $date,
+        ?string $note = null,
     ) {
         $this->seller = $seller;
         $this->buyer = $buyer;
         $this->items = $items;
         $this->invoice = $invoice;
-        $this->note = $note;
         $this->date = $date;
+        $this->note = $note;
         $this->currency = __('Dzd');
         $this->locale = session('locale');
     }

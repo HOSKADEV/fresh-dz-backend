@@ -14,6 +14,7 @@ use App\Models\Coupon;
 use App\Models\Driver;
 use App\Models\Family;
 use App\Models\Notice;
+use App\Models\Region;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Category;
@@ -952,6 +953,38 @@ class DatatablesController extends Controller
       ->addColumn('end_date', function ($row) {
 
         return date('Y-m-d',strtotime($row->end_date));
+
+      })
+
+
+      ->make(true);
+  }
+
+  public function regions(){
+
+    $regions = Region::orderBy('created_at','DESC')->get();
+
+    return datatables()
+      ->of($regions)
+      ->addIndexColumn()
+
+      ->addColumn('action', function ($row) {
+          $btn = '';
+
+            $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
+
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+          return $btn;
+      })
+
+      ->addColumn('name', function ($row) {
+        return $row->name;
+      })
+
+      ->addColumn('created_at', function ($row) {
+
+        return date('Y-m-d',strtotime($row->created_at));
 
       })
 

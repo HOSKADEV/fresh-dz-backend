@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/notice/browse', 'App\Http\Controllers\NoticeController@index')->name('notice-browse');
   Route::get('/ad/browse', 'App\Http\Controllers\AdController@index')->name('ad-browse');
   Route::get('/coupon/browse', 'App\Http\Controllers\CouponController@index')->name('coupon-browse');
+  Route::get('/region/browse', 'App\Http\Controllers\RegionController@index')->name('settings-region-browse');
   Route::get('/category/list', 'App\Http\Controllers\DatatablesController@categories')->name('category-list');
   Route::post('/subcategory/list', 'App\Http\Controllers\DatatablesController@subcategories')->name('subcategory-list');
   Route::get('/family/list', 'App\Http\Controllers\DatatablesController@families')->name('family-list');
@@ -60,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/video/list', 'App\Http\Controllers\DatatablesController@videos')->name('video-list');
   Route::get('/coupon/list', 'App\Http\Controllers\DatatablesController@coupons')->name('coupon-list');
   Route::post('/discount/list', 'App\Http\Controllers\DatatablesController@discounts')->name('discount-list');
+  Route::get('/region/list', 'App\Http\Controllers\DatatablesController@regions')->name('region-list');
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -146,6 +148,11 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/coupon/delete','App\Http\Controllers\CouponController@delete');
   Route::post('/coupon/restore','App\Http\Controllers\CouponController@restore');
   Route::get('/coupon/generate','App\Http\Controllers\CouponController@generate');
+
+  Route::post('/region/create','App\Http\Controllers\RegionController@create');
+  Route::post('/region/update','App\Http\Controllers\RegionController@update');
+  Route::post('/region/delete','App\Http\Controllers\RegionController@delete');
+  Route::post('/region/restore','App\Http\Controllers\RegionController@restore');
 
   Route::post('/order/update','App\Http\Controllers\OrderController@update');
   Route::post('/order/delete','App\Http\Controllers\OrderController@delete');
