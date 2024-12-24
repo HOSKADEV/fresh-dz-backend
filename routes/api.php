@@ -38,6 +38,7 @@ Route::group(['middleware' => ['sometimes.auth']], function () {
   Route::post('/v1/product/get','App\Http\Controllers\ProductController@get');
   Route::post('/v1/ad/get','App\Http\Controllers\AdController@get');
   Route::post('/v1/offer/get','App\Http\Controllers\OfferController@get');
+  Route::post('/v1/region/get','App\Http\Controllers\RegionController@get');
   // Route::post('/v1/driver/get','App\Http\Controllers\DriverController@get');
   Route::post('/v1/coupon/check','App\Http\Controllers\CouponController@check');
 });

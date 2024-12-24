@@ -99,7 +99,7 @@ class AuthController extends Controller
             'phone' => $firebase_user->phoneNumber,
             'image' => $firebase_user->photoUrl,
           ]
-        );
+        )->refresh();
 
         switch($user->status){
           case 0 : throw new Exception('blocked account');
@@ -115,14 +115,15 @@ class AuthController extends Controller
           ]);
 
           $user->customer_id = $customer->getId();
+          $user->save();
         }
 
         if($request->has('fcm_token')){
           $user->fcm_token = $request->fcm_token;
+          $user->save();
         }
 
         $token = $user->createToken($this->random())->plainTextToken;
-        $user->save();
 
         return response()->json([
           'status'=> 1,
