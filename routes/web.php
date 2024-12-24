@@ -205,6 +205,10 @@ Route::get('/lang/{lang}', function($lang){
   return redirect()->back();
 });
 
+Route::get('/redirect',function(){
+  return view('redirect');
+})->name('');
+
 
 
 
