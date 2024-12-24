@@ -101,6 +101,7 @@ class OrderController extends Controller
       'payment_account' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
       'payment_receipt' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
       'checkout_id' => 'required_if:payment_method,chargily',
+      'region_id' => 'required|exists:regions,id',
       //'products' => 'required|array',
       //'products.*.id' => 'required|distinct|exists:products,id',
       //'products.*.quantity' => 'required|numeric'`
@@ -389,7 +390,7 @@ class OrderController extends Controller
 
       if ($request->has('order_id')) {
 
-        $order = Order::where('id', $request->order_id)->where('user_id', $user->id)->first();
+        $order = Order::where('user_id', $user->id)->findOrFail($request->order_id);
 
         return response()->json([
           'status' => 1,

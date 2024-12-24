@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
-use App\Models\User;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
+use Chargily\ChargilyPay\ChargilyPay;
+use Illuminate\Support\Facades\Validator;
+use Chargily\ChargilyPay\Auth\Credentials;
 
 class UserController extends Controller
 {
@@ -60,6 +62,19 @@ class UserController extends Controller
 
             $user->image = $url;
             $user->save();
+        }
+
+        if (empty($user->customer_id) && $request->phone) {
+          $chargily_pay = new ChargilyPay(new Credentials(config('chargily.credentials')));
+          $customer = $chargily_pay->customers()->create([
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $request->phone
+          ]);
+
+          $user->customer_id = $customer->getId();
+          $user->phone = $request->phone;
+          $user->save();
         }
 
         return response()->json([

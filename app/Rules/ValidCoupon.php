@@ -60,6 +60,6 @@ class ValidCoupon implements Rule
      */
     public function message()
     {
-        return 'not valid';
+        return 'Coupon not valid';
     }
 }
