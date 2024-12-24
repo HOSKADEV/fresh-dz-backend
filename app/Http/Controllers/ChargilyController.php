@@ -54,8 +54,9 @@ class ChargilyController extends Controller
 
         $invoice->is_paid = 'yes';
         $invoice->paid_at = now();
+        $order->status = 'accepted';
         $invoice->save();
-
+        $order->save();
 
         return redirect()->route('chargily-success');
 
