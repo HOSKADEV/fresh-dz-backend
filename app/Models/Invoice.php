@@ -36,7 +36,7 @@ class Invoice extends Model
 
     public function getFileAttribute($value)
     {
-      return Storage::disk('upload')->exists($value)
+      return Storage::disk('upload')->exists($value??'')
       ? Storage::disk('upload')->url($value)
       : null;
     }

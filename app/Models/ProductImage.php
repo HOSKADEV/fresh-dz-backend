@@ -21,7 +21,7 @@ class ProductImage extends Model
 
     public function getImageAttribute($value)
     {
-      return Storage::disk('upload')->exists($value)
+      return Storage::disk('upload')->exists($value ??'')
       ? Storage::disk('upload')->url($value)
       : null;
     }
