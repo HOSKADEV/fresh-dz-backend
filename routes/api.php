@@ -119,6 +119,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::post('/test', function(Request $request){
   $chargily_pay = new \Chargily\ChargilyPay\ChargilyPay(new \Chargily\ChargilyPay\Auth\Credentials(config('chargily.credentials')));
-  $checkout = $chargily_pay->checkouts()->get($request->checkout_id);
-  dd($checkout);
+  $checkouts = $chargily_pay->checkouts()->all();
+  dd($checkouts);
 });
