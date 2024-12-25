@@ -452,6 +452,10 @@ class DatatablesController extends Controller
 
     }
 
+    if($request->region){
+      $orders = $orders->where('region_id',$request->region);
+    }
+
     $orders = $orders->get();
 
     return datatables()
@@ -460,6 +464,8 @@ class DatatablesController extends Controller
 
       ->addColumn('action', function ($row) {
           $btn = '';
+
+          $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing info" title="'.__('Info').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-info-circle"></span></button>';
 
           $btn .= '<button class="btn btn-icon btn-label-secondary inline-spacing note" title="'.__('Note').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-note"></span></button>';
 
@@ -485,17 +491,15 @@ class DatatablesController extends Controller
 
 
           if(!in_array($row->status,['pending','canceled'])){
-            if(!is_null($row->invoice)){
 
-                $btn .= '<button class="btn btn-icon btn-label-dark inline-spacing invoice" title="'.__('Invoice').'" table_id="'.$row->invoice->id.'"><span class="tf-icons bx bx-file"></span></button>';
+            $btn .= '<button class="btn btn-icon btn-label-dark inline-spacing invoice" title="'.__('Invoice').'" table_id="'.$row->invoice->id.'"><span class="tf-icons bx bx-file"></span></button>';
 
-              if($row->status == 'ongoing' && $row->invoice->is_paid == 'no'){
+          }
 
-                $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing payment" title="'.__('Payment').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-money"></span></button>';
+          if($row->status == 'ongoing'){
 
-              }
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing deliver" title="'.__('Delivered').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-home-smile"></span></button>';
 
-            }
           }
 
           return $btn;
@@ -506,6 +510,12 @@ class DatatablesController extends Controller
           return $row->user->fullname();
 
       })
+
+      ->addColumn('region', function ($row) {
+
+        return $row->region->name;
+
+    })
 
       ->addColumn('phone', function ($row) {
 
@@ -535,7 +545,7 @@ class DatatablesController extends Controller
 
       })
 
-      ->addColumn('tax_amount', function ($row) {
+      /* ->addColumn('tax_amount', function ($row) {
 
         if(!is_null($row->invoice)){
           return number_format($row->invoice->tax_amount,2,'.',',');
@@ -557,7 +567,7 @@ class DatatablesController extends Controller
           return number_format($row->invoice->total_amount,2,'.',',');
         }
 
-      })
+      }) */
 
       ->addColumn('created_at', function ($row) {
 

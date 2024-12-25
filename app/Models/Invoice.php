@@ -41,6 +41,13 @@ class Invoice extends Model
       : null;
     }
 
+    public function getPaymentReceiptAttribute($value)
+    {
+      return $value && Storage::disk('upload')->exists($value)
+      ? Storage::disk('upload')->url($value)
+      : null;
+    }
+
     public function order(){
       return $this->belongsTo(Order::class);
     }

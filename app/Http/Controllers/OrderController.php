@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Driver;
+use App\Models\Region;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Delivery;
@@ -30,10 +31,12 @@ class OrderController extends Controller
   public function index()
   {
     $drivers = Driver::all();
-    $shipping = Set::where('name', 'shipping')->first();
+    $regions = Region::all();
+    //$shipping = Set::where('name', 'shipping')->first();
     return view('content.orders.list')
       ->with('drivers', $drivers)
-      ->with('shipping', $shipping);
+      ->with('regions', $regions);
+      //->with('shipping', $shipping);
   }
 
   public function distance(Request $request)
@@ -243,15 +246,15 @@ class OrderController extends Controller
           $invoice = $order->invoice;
           $delivery = $order->delivery;
 
-          $invoice->is_paid = 'yes';
-          $invoice->paid_at = $now;
-          $invoice->payment_method = $request->payment_method;
-
           $delivery->delivered_at = $now;
-
-          $invoice->save();
           $delivery->save();
 
+          if($invoice->is_paid == 'no'){
+            $invoice->is_paid = 'yes';
+            $invoice->paid_at = $now;
+            //$invoice->payment_method = $request->payment_method;
+            $invoice->save();
+          }
         }
 
 
@@ -274,7 +277,7 @@ class OrderController extends Controller
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => $order
+        'data' => new OrderDetailResource($order)
       ]);
 
     } catch (Exception $e) {

@@ -4,7 +4,7 @@
 
 @section('vendor-script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-    <script src="{{ asset('assets/vendor/js/map.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/mapRegion.js') }}"></script>
 @endsection
 
 @section('page-style')
