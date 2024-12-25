@@ -205,7 +205,7 @@ Route::get('/lang/{lang}', function($lang){
   return redirect()->back();
 });
 
-Route::get('/redirect',function(){
+Route::get('/downloadApp',function(){
   return view('redirect');
 })->name('');
 
