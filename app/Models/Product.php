@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Session;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
-use Session;
 
 class Product extends Model
 {
@@ -38,7 +39,9 @@ class Product extends Model
 
     public function getImageAttribute($value)
     {
-      return $value ? url($value) : null;
+      return Storage::disk('upload')->exists($value)
+      ? Storage::disk('upload')->url($value)
+      : null;
     }
 
     public function subcategory(){

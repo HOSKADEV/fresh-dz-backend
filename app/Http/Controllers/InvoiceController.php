@@ -26,17 +26,10 @@ class InvoiceController extends Controller
 
       $invoice = Invoice::find($request->invoice_id);
 
-      if(!is_null($invoice->file)){
-        File::delete(url($invoice->file));
-      }
-
-      $invoice->pdf();
-      $invoice->refresh();
-
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => url($invoice->file)
+        'data' => $invoice->pdf()
       ]);
 
     } catch (Exception $e) {

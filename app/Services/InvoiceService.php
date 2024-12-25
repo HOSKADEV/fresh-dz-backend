@@ -71,8 +71,10 @@ class InvoiceService
 
         $filename = $this->invoice['order_id'] . '.pdf';
 
-        Storage::disk('invoice')->put($filename, $mpdf->Output('', 'S'));
+        $filepath = 'uploads/invoices/'. $filename;
 
-        return 'uploads/invoices/'. $filename;
+        Storage::disk('upload')->put($filepath, $mpdf->Output('', 'S'));
+
+        return $filepath;
     }
 }

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use \Askedio\SoftCascade\Traits\SoftCascadeTrait;
-use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
@@ -18,6 +19,13 @@ class Category extends Model
     ];
 
     protected $softCascade = ['subcategories','members','category_offers'];
+
+    public function getImageAttribute($value)
+    {
+      return Storage::disk('upload')->exists($value)
+      ? Storage::disk('upload')->url($value)
+      : null;
+    }
 
     public function subcategories(){
       return $this->hasMany(Subcategory::class);

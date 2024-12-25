@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use App\Services\InvoiceService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\Invoice\UserResource;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Resources\Invoice\ItemCollection;
@@ -32,6 +33,13 @@ class Invoice extends Model
       'payment_account',
       'payment_receipt',
     ];
+
+    public function getFileAttribute($value)
+    {
+      return Storage::disk('upload')->exists($value)
+      ? Storage::disk('upload')->url($value)
+      : null;
+    }
 
     public function order(){
       return $this->belongsTo(Order::class);
@@ -82,7 +90,7 @@ class Invoice extends Model
 
         $this->save();
 
-        return url($this->file);
+        return $this->file;
 
     }
 

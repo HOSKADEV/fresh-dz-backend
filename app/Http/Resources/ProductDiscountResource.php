@@ -31,7 +31,7 @@ class ProductDiscountResource extends JsonResource
           'pack_units' => $this->pack_units,
           'unit_type' => $this->unit_type,
           'status' => $this->status,
-          'image' => empty($this->image) ? null : url($this->image),
+          'image' => $this->image,
           'is_discounted' => is_null($this->discount_id) ? false : true,
           'discount_amount' => is_null($this->amount) ? 0 : $this->amount,
           'start_date' => $this->start_date,

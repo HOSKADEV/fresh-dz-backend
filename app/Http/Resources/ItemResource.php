@@ -33,8 +33,8 @@ class ItemResource extends JsonResource
           'pack_units' => empty($this->pack_units) ? $product->pack_units : $this->pack_units ,
           'unit_type' => is_null($product) ? null : $product->unit_type,
           'discount_amount' => $discount ,
-          'status' => is_null($product) ? null : $product->status,
-          'image' => is_null($product) ? null : (empty($product->image) ? null : url($product->image)),
+          'status' => $product?->status,
+          'image' => $product?->image,
           'quantity' => $this->quantity
         ];
     }

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductVideo extends Model
 {
@@ -18,8 +19,10 @@ class ProductVideo extends Model
       return $this->belongs(Product::class);
     }
 
-    public function getPathAttribute($value)
+    public function getImageAttribute($value)
     {
-        return url($value);
+      return Storage::disk('upload')->exists($value)
+      ? Storage::disk('upload')->url($value)
+      : null;
     }
 }

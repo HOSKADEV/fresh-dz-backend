@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Driver extends Model
 {
@@ -17,6 +18,13 @@ class Driver extends Model
       'phone',
       'status',
     ];
+
+    public function getImageAttribute($value)
+    {
+      return Storage::disk('upload')->exists($value)
+      ? Storage::disk('upload')->url($value)
+      : null;
+    }
 
     public function deliveries(){
       return $this->hasMany(Delivery::class);

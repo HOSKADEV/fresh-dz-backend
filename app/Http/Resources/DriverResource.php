@@ -18,7 +18,7 @@ class DriverResource extends JsonResource
           'firstname' => $this->firstname,
           'lastname' => $this->lastname,
           'phone' => $this->phone(),
-          'image' => empty($this->image) ? null : url($this->image),
+          'image' => $this->image,
         ];
     }
 }

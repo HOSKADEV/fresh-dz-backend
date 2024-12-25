@@ -17,7 +17,7 @@ class CategoryResource extends JsonResource
         return [
           'id' => $this->id,
           'name' => $this->name,
-          'image' => empty($this->image) ? null : url($this->image),
+          'image' => $this->image,
         ];
     }
 }

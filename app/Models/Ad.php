@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ad extends Model
 {
@@ -16,6 +17,13 @@ class Ad extends Model
       'type',
       'url',
     ];
+
+    public function getImageAttribute($value)
+    {
+      return Storage::disk('upload')->exists($value)
+      ? Storage::disk('upload')->url($value)
+      : null;
+    }
 
     public function product_ad(){
       return $this->hasOne(ProductAd::class);
