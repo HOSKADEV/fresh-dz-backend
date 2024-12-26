@@ -40,7 +40,7 @@
                     </select>
                 </div>
                 <div class="col-md-auto">
-                    <select class="form-select" id="region" name="region">
+                    <select class="form-select filter-select" id="region" name="region">
                         <option value=""> {{ __('Region filter') }}</option>
                         @foreach ($regions as $region)
                             <option value="{{ $region->id }}"> {{ $region->name }} </option>

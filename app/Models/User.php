@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, /*Notifiable,*/ SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -94,6 +94,14 @@ class User extends Authenticatable
       }
 
       return $cart;
+    }
+
+    public function update_status($status){
+      if(!$status){
+        $this->tokens()->delete();
+      }
+
+      $this->update(['status' => $status]);
     }
 
 

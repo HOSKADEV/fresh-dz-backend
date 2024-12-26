@@ -22,7 +22,7 @@ class NoticeController extends Controller
         'title_en' => 'required|string',
         'content_ar' => 'required|string',
         'content_en' => 'required|string',
-        'type' => 'required|in:0,1,2'
+        'priority' => 'required|in:0,1'
       ]);
 
       if ($validator->fails()) {
@@ -36,18 +36,21 @@ class NoticeController extends Controller
 
         $notice = Notice::create($request->all());
 
-        $users = User::where('status',1)->where('role',1)->get();
+        $data = User::where('status',1)->where('role',1)->pluck('fcm_token', 'id')->toArray();
 
-        $fcm_tokens = [];
+        $users = array_keys($data);
 
-        foreach($users as $user){
-          Notification::create([
-            'user_id' => $user->id,
-            'notice_id' => $notice->id
-          ]);
+        $fcm_tokens = array_filter($data);
 
-          array_push($fcm_tokens,$user->fcm_token);
-        }
+        array_walk($users, function(&$value, $key) use ($notice){
+          $value = [
+            'user_id' => $value,
+            'notice_id' => $notice->id,
+            'created_at' => now(),
+          ];
+        });
+
+        Notification::insert($users);
 
         $this->send_fcm_multi(
           $notice->title_ar,

@@ -17,6 +17,8 @@ class Notice extends Model
       'content_ar',
       'content_en',
       'type',
+      'priority',
+      'metadata'
   ];
 
   protected $softCascade = ['notifications'];

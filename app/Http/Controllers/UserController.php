@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Models\Notice;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\UserResource;
@@ -47,7 +48,7 @@ class UserController extends Controller
 
         $user = User::find($request->user_id);
 
-        $user->update($request->except('image'));
+        $user->update($request->except('image','status'));
 
         if($request->hasFile('image')){
             $url = $request->image->store('/uploads/users/images','upload');
@@ -62,6 +63,11 @@ class UserController extends Controller
 
             $user->image = $url;
             $user->save();
+        }
+
+        if($request->has('status')){
+          $user->notify(Notice::ProfileNotice($request->status));
+          $user->update_status($request->status);
         }
 
         if (empty($user->customer_id) && $request->phone) {

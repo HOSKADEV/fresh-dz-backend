@@ -25,7 +25,7 @@
                         <th>#</th>
                         <th>{{ __('Notice') }}</th>
                         <th>{{ __('Created at') }}</th>
-                        <th>{{ __('Notice type') }}</th>
+                        <th>{{ __('Notice priority') }}</th>
                         {{-- <th>{{__('Views')}}</th> --}}
                         <th>{{ __('Actions') }}</th>
                     </tr>
@@ -69,8 +69,8 @@
 
 
                         <div class="mb-3">
-                            <label class="form-label" for="type">{{ __('Notice type') }}</label>
-                            <select class="form-select" name="type">
+                            <label class="form-label" for="priority">{{ __('Notice priority') }}</label>
+                            <select class="form-select" name="priority">
                                 <option value="0">{{ __('Normal notice') }}</option>
                                 <option value="1">{{ __('Urgent notice') }}</option>
 {{--                                 <option value="2">{{ __('Update Notice') }}</option> --}}
@@ -166,8 +166,8 @@
                         },
 
                         {
-                            data: 'type',
-                            name: 'type',
+                            data: 'priority',
+                            name: 'priority',
                             render: function(data) {
                                 if (data == 1) {
                                     return '<span class="badge bg-success">{{ __('Urgent notice') }}</span>';
@@ -191,11 +191,24 @@
 
 
             $('#add').on('click', function() {
+              $("#add_form")[0].reset();
                 $("#add_modal").modal('show');
             });
 
             $('#submit').on('click', function() {
                 var queryString = new FormData($("#add_form")[0]);
+                $("#add_modal").modal('hide');
+                Swal.fire({
+                    title: "{{ __('Wait a moment') }}",
+                    icon: 'info',
+                    html: '<div style="height:50px;"><div class="spinner-border text-primary" role="status"><span class="visually-hidden"></div></div>',
+                    showCloseButton: false,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                });
 
                 $.ajax({
                     url: '{{ url('notice/create') }}',

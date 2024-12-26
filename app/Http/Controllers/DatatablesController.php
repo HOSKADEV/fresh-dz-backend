@@ -773,9 +773,9 @@ class DatatablesController extends Controller
         return $row->title_ar;
       })
 
-      ->addColumn('type', function ($row) {
+      ->addColumn('priority', function ($row) {
 
-          return $row->type;
+          return $row->priority;
 
       })
 
