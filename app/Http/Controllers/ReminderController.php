@@ -21,7 +21,7 @@ class ReminderController extends Controller
           ]);
       }
 
-      Reminder::create([
+      Reminder::updateOrCreate([
         'user_id' => auth()->id(),
         'product_id' => $request->product_id,
       ],
