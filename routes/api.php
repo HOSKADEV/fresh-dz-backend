@@ -115,6 +115,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/v1/cart/get','App\Http\Controllers\CartController@get');
   Route::get('/v1/cart/products','App\Http\Controllers\CartController@products');
   Route::get('/v1/cart/total','App\Http\Controllers\CartController@total');
+
+  Route::post('/v1/review/create','App\Http\Controllers\ReviewController@create');
+  Route::post('/v1/review/delete','App\Http\Controllers\ReviewController@delete');
+
+  Route::post('/v1/reminder/create','App\Http\Controllers\ReminderController@create');
+  Route::post('/v1/reminder/delete','App\Http\Controllers\ReminderController@delete');
 });
 
 Route::post('/test', function(Request $request){

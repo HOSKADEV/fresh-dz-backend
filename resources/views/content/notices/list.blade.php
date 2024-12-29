@@ -67,7 +67,6 @@
                             <textarea class="form-control" name="content_en" rows="3" style="height: 75px;"></textarea>
                         </div>
 
-
                         <div class="mb-3">
                             <label class="form-label" for="priority">{{ __('Notice priority') }}</label>
                             <select class="form-select" name="priority">

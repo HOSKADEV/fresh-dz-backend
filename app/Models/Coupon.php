@@ -20,6 +20,10 @@ class Coupon extends Model
   ];
 
   public function uses(){
-    return 0;
+    return Invoice::where('code', $this->code)->count();
+  }
+
+  public function notify(Notice $notice){
+    Notification::send($notice);
   }
 }

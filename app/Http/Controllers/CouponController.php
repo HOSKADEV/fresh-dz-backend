@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Str;
 use Exception;
 use App\Models\Coupon;
+use App\Models\Notice;
 use App\Rules\ValidCoupon;
 use Illuminate\Http\Request;
 use App\Http\Resources\CouponResource;
@@ -53,6 +54,8 @@ class CouponController extends Controller
 
 
       $coupon = Coupon::create($request->all());
+
+      $coupon->notify(Notice::CouponNotice($coupon->code, $coupon->discount));
 
 
       return response()->json([

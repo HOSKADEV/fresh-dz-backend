@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\ReviewResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class OrderResource extends JsonResource
@@ -27,6 +28,7 @@ class OrderResource extends JsonResource
       'created_at' => date_format($this->created_at, 'Y-m-d H:i:s'),
       'updated_at' => date_format($this->updated_at, 'Y-m-d H:i:s'),
       'invoice' => is_null($this->invoice) ? null : new InvoiceResource($this->invoice),
+      'review' => is_null($this->review) ? null : new ReviewResource($this->review),
     ];
   }
 }

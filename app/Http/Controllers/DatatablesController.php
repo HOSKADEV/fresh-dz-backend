@@ -502,6 +502,12 @@ class DatatablesController extends Controller
 
           }
 
+          if($row->status == 'delivered' && $row->review){
+
+            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing review" title="'.__('Delivered').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-star"></span></button>';
+
+          }
+
           return $btn;
       })
 

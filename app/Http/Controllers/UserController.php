@@ -66,7 +66,7 @@ class UserController extends Controller
         }
 
         if($request->has('status')){
-          $user->notify(Notice::ProfileNotice($request->status));
+          $user->notify(Notice::ProfileNotice('status', $request->status ? 'active' : 'inactive'));
           $user->update_status($request->status);
         }
 

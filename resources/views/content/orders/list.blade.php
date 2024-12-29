@@ -9,6 +9,25 @@
 
 @section('page-style')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+
+    <style>
+        .rating-display {
+            display: flex;
+            justify-content: flex-start;
+            gap: 5px;
+        }
+
+        .star {
+            width: 24px;
+            height: 24px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23ffc107' stroke='%23ffc107' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3E%3C/polygon%3E%3C/svg%3E");
+        }
+
+        .star-empty {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3E%3C/polygon%3E%3C/svg%3E");
+        }
+    </style>
+
 @endsection
 
 @section('content')
@@ -105,6 +124,42 @@
                         </div>
 
 
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- driver modal --}}
+    <div class="modal fade" id="driver_modal" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="fw-bold py-1 mb-1">{{ __('Ship order') }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
+                        enctype="multipart/form-data" id="driver_form">
+
+
+                        <input type="text" id="driver_order_id" name="order_id" hidden />
+
+                        <div class="mb-3">
+                            <label class="form-label" for="driver_id">{{ __('Driver') }}</label>
+                            <select class="form-select" id="driver_id" name="driver_id">
+                                <option value=""> {{ __('Select driver') }}</option>
+                                @foreach ($drivers as $driver)
+                                    <option value="{{ $driver->id }}"> {{ $driver->fullname() }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3" style="text-align: center">
+                            <button type="submit" id="submit_driver" name="submit_driver"
+                                class="btn btn-primary">{{ __('Send') }}</button>
+                        </div>
 
                     </form>
                 </div>
@@ -242,6 +297,30 @@
                         </div>
 
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="review_modal" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="fw-bold py-1 mb-1">Order Review</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Rating</label>
+                        <div id="rating_display" class="mb-3"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Review</label>
+                        <div id="review_content" class="form-control"
+                            style="min-height: 125px; background-color: #f8f9fa;" dir="rtl"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -817,8 +896,8 @@
 
                         if (response.status === 1) {
 
-                          initializeMap();
-                          addMarker(response.data.longitude, response.data.latitude);
+                            initializeMap();
+                            addMarker(response.data.longitude, response.data.latitude);
 
                             // Update modal content
                             $('#delivery-time').text(moment(response.data.delivery_time).format(
@@ -857,9 +936,9 @@
 
                             $('#orderModal').modal('show');
 
-                           /*  setTimeout(() => {
-                    map.invalidateSize();
-                }, 100); */
+                            /*  setTimeout(() => {
+                            map.invalidateSize();
+                        }, 100); */
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -874,6 +953,57 @@
                             title: 'Error',
                             text: 'Failed to connect to server'
                         });
+                    }
+                });
+            });
+
+            $(document.body).on('click', '.review', function() {
+                var order_id = $(this).attr('table_id');
+
+                $.ajax({
+                    url: "{{ url('order/update') }}",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'POST',
+                    data: {
+                        order_id: order_id
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        if (response.status == 1) {
+                            // Display content
+                            document.getElementById('review_content').innerText = response.data
+                                .review.content;
+
+                            const ratingDisplay = document.getElementById('rating_display');
+                            const score = response.data.review.score;
+                            const ratingConfig = {
+                                1: {
+                                    text: 'Bad',
+                                    class: 'danger'
+                                },
+                                2: {
+                                    text: 'Average',
+                                    class: 'warning'
+                                },
+                                3: {
+                                    text: 'Good',
+                                    class: 'info'
+                                },
+                                4: {
+                                    text: 'Excellent',
+                                    class: 'success'
+                                }
+                            };
+
+                            const rating = ratingConfig[score] || ratingConfig[
+                            1]; // Default to 'Bad' if score is invalid
+                            ratingDisplay.innerHTML =
+                                `<span class="badge bg-${rating.class}">${rating.text}</span>`;
+
+                            $("#review_modal").modal('show');
+                        }
                     }
                 });
             });

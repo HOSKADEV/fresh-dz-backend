@@ -124,6 +124,10 @@ class ProductController extends Controller
         $product->save();
       }
 
+      if($request->has('status')){
+        $product->notify($request->status == '1' ? 'available':'unavailable');
+      }
+
       return response()->json([
         'status' => 1,
         'message' => 'success',

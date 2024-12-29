@@ -55,6 +55,10 @@ class Order extends Model
       return $this->hasOne(Delivery::class);
     }
 
+    public function review(){
+      return $this->hasOne(Review::class);
+    }
+
     public function phone(){
       /* return is_null($this->phone) ? null : '0'.$this->phone; */
       return $this->phone;

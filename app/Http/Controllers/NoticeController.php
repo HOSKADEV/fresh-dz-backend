@@ -34,31 +34,11 @@ class NoticeController extends Controller
 
       try{
 
+        $request->mergeIfMissing(['type' => 0]);
+
         $notice = Notice::create($request->all());
 
-        $data = User::where('status',1)->where('role',1)->pluck('fcm_token', 'id')->toArray();
-
-        $users = array_keys($data);
-
-        $fcm_tokens = array_filter($data);
-
-        array_walk($users, function(&$value, $key) use ($notice){
-          $value = [
-            'user_id' => $value,
-            'notice_id' => $notice->id,
-            'created_at' => now(),
-          ];
-        });
-
-        Notification::insert($users);
-
-        $this->send_fcm_multi(
-          $notice->title_ar,
-          $notice->content_ar,
-          $fcm_tokens
-        );
-
-        //fcm
+        Notification::send($notice);
 
         return response()->json([
           'status' => 1,

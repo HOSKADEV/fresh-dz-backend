@@ -19,6 +19,8 @@ class NotificationResource extends JsonResource
           'title' => $this->notice?->title($request->header('Accept-Language', 'ar')),
           'content' => $this->notice?->content($request->header('Accept-Language', 'ar')),
           'type' => $this->notice->type,
+          'priority' => $this->notice->priority,
+          'meteadata' => json_decode($this->notice->metadata),
           'created_at' => $this->created_at,
           'is_read' => $this->is_read,
           'read_at' => $this->read_at,

@@ -72,6 +72,14 @@ class Product extends Model
       return $this->hasManyThrough(Ad::class, ProductAd::class);
     }
 
+    public function reminders(){
+      return $this->hasMany(Reminder::class);
+    }
+
+    public function users_to_remind(){
+      return $this->hasManyThrough(User::class, Reminder::class, 'product_id', 'id', 'id', 'user_id');
+    }
+
     public function discount(){
       /* return Discount::where('product_id',$this->id)
       ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
@@ -144,6 +152,17 @@ class Product extends Model
           'discount' => $discount,
           'amount' => $amount
         ]);
+      }
+    }
+    public function notify($status){
+
+      if($status == 'available' && $this->reminders()->count()){
+        $notice = Notice::ProductNotice($this->id, $this->unit_name, $this->image, $status);
+        $users = $this->users_to_remind();
+
+        Notification::send($notice, $users);
+
+        $this->reminders()->delete();
       }
     }
 

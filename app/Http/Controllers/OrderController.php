@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Driver;
+use App\Models\Notice;
 use App\Models\Region;
 use App\Models\Invoice;
 use App\Models\Product;
@@ -177,9 +178,11 @@ class OrderController extends Controller
 
       $cart->delete();
 
-      $admin_tokens = User::where('role', 0)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+      //$admin_tokens = User::where('role', 0)->whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
 
-      $this->send_fcm_multi(__('New order'), __('There is a new order pending'), $admin_tokens);
+      //$this->send_fcm_multi(__('New order'), __('There is a new order pending'), $admin_tokens);
+
+      $user->notify(Notice::OrderNotice($order->id,'pending'));
 
       return response()->json([
         'status' => 1,
@@ -222,6 +225,7 @@ class OrderController extends Controller
     try {
 
       $order = Order::find($request->order_id);
+      $user = $order->user;
 
       if ($request->has('status')) {
 
@@ -261,11 +265,13 @@ class OrderController extends Controller
         //$order->status = $request->status;
         //$order->save();
 
-        $this->send_fcm_device(
+        /* $this->send_fcm_device(
           __('Order status update'),
           __('Your order is ' . $request->status),
           $order->user->fcm_token
-        );
+        ); */
+
+        $user->notify(Notice::OrderNotice($order->id, $request->status));
 
       }
 
