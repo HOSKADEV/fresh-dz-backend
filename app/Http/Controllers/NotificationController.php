@@ -54,7 +54,8 @@ class NotificationController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'is_read' => 'sometimes|in:0,1',
-      'type' => 'sometimes|in:0,1',
+      'type' => 'sometimes|in:0,1,2,3,4',
+      'priority' => 'sometimes|in:0,1',
       'all' => 'sometimes',
     ]);
 
@@ -80,6 +81,12 @@ class NotificationController extends Controller
       if ($request->has('type')) {
         $notifications = $notifications->whereHas('notice', function($query) use ($request){
           $query->where('type', $request->type);
+        });
+      }
+
+      if ($request->has('priority')) {
+        $notifications = $notifications->whereHas('notice', function($query) use ($request){
+          $query->where('priority', $request->priority);
         });
       }
 
