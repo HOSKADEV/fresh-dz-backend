@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Carbon;
+use App\Http\Resources\AdResource;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\AdCollection;
+use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\ProductCollection;
+use Illuminate\Database\Query\JoinClause;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\DiscountCollection;
-use App\Http\Resources\ProductCollection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Resources\ProductDiscountCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class Section extends Model
 {
@@ -28,7 +29,7 @@ class Section extends Model
   public function name($lang='ar')
   {
 
-    if ($this->type == 'ad') {
+    if ($this->type == 'ads') {
       return $lang == 'en' ? 'Ads' : 'اعلانات';
     }
     if ($this->type == 'solo') {
@@ -44,8 +45,15 @@ class Section extends Model
 
     if ($this->type == 'group') {
 
-      $family = Group::find($this->element);
-      return $lang == 'en' && !empty($family->name_en) ? $family->name_en : $family->name;
+      $group = Group::find($this->element);
+      return $lang == 'en' && !empty($group->name_en) ? $group->name_en : $group->name;
+
+    }
+
+    if ($this->type == 'ad') {
+
+      $ad = Ad::find($this->element);
+      return $ad->name;
 
     }
 
@@ -65,9 +73,14 @@ class Section extends Model
   }
   public function data()
   {
-    if ($this->type == 'ad') {
+    if ($this->type == 'ads') {
       $ads = Ad::inRandomOrder()->limit(5)->get();
       return new AdCollection($ads);
+    }
+
+    if ($this->type == 'ad') {
+      $ad = Ad::find($this->element);
+      return new AdResource($ad);
     }
     if ($this->type == 'solo') {
       $members = Member::distinct('category_id')->pluck('category_id')->toArray();

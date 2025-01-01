@@ -136,7 +136,7 @@ $navbarDetached = ($navbarDetached ?? '');
               </li> --}}
 
               <li>
-                <a class="dropdown-item" href="{{url('/version')}}">
+                <a class="dropdown-item" href="{{url('/settings')}}">
                   <i class='bx bx-cog me-2'></i>
                   <span class="align-middle">{{__('Settings')}}</span>
                 </a>

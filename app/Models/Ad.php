@@ -32,4 +32,8 @@ class Ad extends Model
     public function product(){
       return $this->hasOneThrough(Product::class, ProductAd::class, 'ad_id', 'id', 'id', 'product_id');
     }
+
+    public function section(){
+      return Section::withTrashed()->where('type','ad')->where('element',$this->id)->first();
+    }
 }

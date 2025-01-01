@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Set;
+use App\Models\Notice;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Chargily\ChargilyPay\ChargilyPay;
@@ -20,7 +21,7 @@ class ChargilyController extends Controller
         throw new Exception('no checkout id');
       }
 
-      $chargily_pay = new ChargilyPay(new Credentials(config('chargily.credentials')));
+      $chargily_pay = new ChargilyPay(new Credentials(Invoice::chargily_credentials()));
       $checkout = $chargily_pay->checkouts()->get($request->checkout_id);
 
       if (empty($checkout)) {
@@ -57,6 +58,8 @@ class ChargilyController extends Controller
         $order->status = 'accepted';
         $invoice->save();
         $order->save();
+
+        $user->notify(Notice::OrderNotice($order->id,'accepted'));
 
         return redirect()->route('chargily-success');
 

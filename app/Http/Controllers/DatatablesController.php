@@ -378,7 +378,7 @@ class DatatablesController extends Controller
 
   public function sections(Request $request){
 
-    $sections = Section::withTrashed()->orderBy('deleted_at','ASC')->orderBy('rank','ASC')->get();
+    $sections = Section::withTrashed()/* ->orderBy('deleted_at','ASC') */->orderBy('rank','ASC')->get();
 
     return datatables()
       ->of($sections)
@@ -396,12 +396,15 @@ class DatatablesController extends Controller
             $btn .= '<button class="btn btn-icon btn-label-success inline-spacing restore" title="'.__(key: 'Show').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-show"></span></button>';
 
           }else{
+
+            $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing delete" title="'.__('Hide').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-hide"></span></button>';
+
             if($row->moveable == 1){
+
               $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing switch" title="'.__('Switch').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-refresh"></span></button>';
 
               $btn .= '<button class="btn btn-icon btn-label-info inline-spacing insert" title="'.__('Insert').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-redo"></span></button>';
 
-              $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing delete" title="'.__('Hide').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-hide"></span></button>';
             }
           }
 
@@ -754,7 +757,7 @@ class DatatablesController extends Controller
 
   public function notices(){
 
-    $notices = Notice::orderBy('created_at','DESC')->get();
+    $notices = Notice::whereIn('type',[0,2])->orderBy('created_at','DESC')->get();
 
     return datatables()
       ->of($notices)
@@ -763,7 +766,9 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
           $btn = '';
 
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing view" title="'.__('View').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-show"></span></button>';
+          $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing send" title="'.__('Send').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-paper-plane"></span></button>';
+
+            $btn .= '<button class="btn btn-icon btn-label-info inline-spacing view" title="'.__('View').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-show"></span></button>';
 
             $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
 
@@ -808,7 +813,17 @@ class DatatablesController extends Controller
 
             $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="'.__('Edit').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-edit"></span></button>';
 
-            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+            if(is_null($row->section())){
+
+              $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Delete').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-trash"></span></button>';
+
+              $btn .= '<button class="btn btn-icon btn-label-success inline-spacing add_to_home" title="'.__('Add to Homepage').'" table_id="'.$row->id.'"><span class="tf-icons bx bxs-plus-square"></span></button>';
+
+            }else{
+
+              $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing remove_from_home" title="'.__('Remove from Homepage').'" table_id="'.$row->section()->id.'"><span class="tf-icons bx bxs-x-square"></span></button>';
+
+            }
 
           return $btn;
       })
@@ -824,6 +839,15 @@ class DatatablesController extends Controller
       ->addColumn('created_at', function ($row) {
 
         return date('Y-m-d',strtotime($row->created_at));
+
+      })
+
+      ->addColumn('is_published', function ($row) {
+
+        if(is_null($row->section())){
+         return false ;
+        }
+        return true;
 
       })
 

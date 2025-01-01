@@ -99,8 +99,8 @@
                             data: 'type',
                             name: 'type',
                             render: function(data) {
-                                if (data == 'ad') {
-                                    return '<span class="badge bg-secondary">{{ __('ad') }}</span>';
+                                if (data == 'ads') {
+                                    return '<span class="badge bg-secondary">{{ __('ads') }}</span>';
                                 }
                                 if (data == 'solo') {
                                     return '<span class="badge bg-primary">{{ __('solo') }}</span>';
@@ -113,6 +113,9 @@
                                 }
                                 if (data == 'group') {
                                     return '<span class="badge bg-warning">{{ __('group') }}</span>';
+                                }
+                                if (data == 'ad') {
+                                    return '<span class="badge bg-danger">{{ __('ad') }}</span>';
                                 }
 
 

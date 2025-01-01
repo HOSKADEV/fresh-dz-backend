@@ -24,7 +24,7 @@ Route::get('/chargily/success', 'App\Http\Controllers\ChargilyController@success
 Route::get('/chargily/failed', 'App\Http\Controllers\ChargilyController@failed')->name('chargily-failed');
 
 Route::group(['middleware' => ['auth']], function () {
-  Route::get('/version', 'App\Http\Controllers\VersionController@index')->name('version');
+  Route::get('/settings', 'App\Http\Controllers\SetController@index')->name('version');
   Route::get('/stats', 'App\Http\Controllers\dashboard\Analytics@stats')->name('stats');
   Route::get('/category/browse', 'App\Http\Controllers\CategoryController@index')->name('settings-category-browse');
   Route::get('/subcategory/browse', 'App\Http\Controllers\SubcategoryController@index')->name('settings-subcategory-browse');
@@ -162,6 +162,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/notice/create','App\Http\Controllers\NoticeController@create');
   Route::post('/notice/update','App\Http\Controllers\NoticeController@update');
   Route::post('/notice/delete','App\Http\Controllers\NoticeController@delete');
+  Route::post('/notice/send','App\Http\Controllers\NoticeController@send');
 
   Route::get('/documentation/privacy_policy','App\Http\Controllers\DocumentationController@index')->name('documentation_privacy_policy');
   Route::get('/documentation/about','App\Http\Controllers\DocumentationController@index')->name('documentation_about');
@@ -174,7 +175,7 @@ Route::group(['middleware' => ['auth']], function () {
 
   Route::post('/shipping/switch','App\Http\Controllers\SetController@shipping');
 
-  Route::post('/version/update','App\Http\Controllers\VersionController@update');
+  Route::post('/setting/update','App\Http\Controllers\SetController@update');
 
 });
 

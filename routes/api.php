@@ -123,8 +123,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::post('/v1/reminder/delete','App\Http\Controllers\ReminderController@delete');
 });
 
-Route::post('/test', function(Request $request){
-  $chargily_pay = new \Chargily\ChargilyPay\ChargilyPay(new \Chargily\ChargilyPay\Auth\Credentials(config('chargily.credentials')));
+Route::post('v1/test', function(Request $request){
+  $chargily_pay = new \Chargily\ChargilyPay\ChargilyPay(new \Chargily\ChargilyPay\Auth\Credentials(\App\Models\Invoice::chargily_credentials()));
   $checkouts = $chargily_pay->checkouts()->all();
   dd($checkouts);
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Models\Notice;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Resources\UserResource;
@@ -71,7 +72,7 @@ class UserController extends Controller
         }
 
         if (empty($user->customer_id) && $request->phone) {
-          $chargily_pay = new ChargilyPay(new Credentials(config('chargily.credentials')));
+          $chargily_pay = new ChargilyPay(new Credentials(Invoice::chargily_credentials()));
           $customer = $chargily_pay->customers()->create([
             'name' => $user->name,
             'email' => $user->email,

@@ -37,7 +37,7 @@
     <div class="card">
         <div class="table-responsive text-nowrap">
             <div class="table-header row justify-content-between">
-                <h5 class="col-md-auto">{{ __('Ads region') }}</h5>
+                <h5 class="col-md-auto">{{ __('Regions table') }}</h5>
             </div>
             <table class="table" id="laravel_datatable">
                 <thead>

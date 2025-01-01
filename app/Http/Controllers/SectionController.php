@@ -26,7 +26,7 @@ class SectionController extends Controller
     }
     public function add(Request $request){
       $validator = Validator::make($request->all(), [
-        'type' => 'required|in:offer,family,group',
+        'type' => 'required|in:offer,family,group,ad',
         'element' => ['numeric', Rule::exists(Pluralizer::plural($request->type),'id')],
       ]);
 
@@ -237,9 +237,7 @@ class SectionController extends Controller
   public function delete(Request $request){
 
     $validator = Validator::make($request->all(), [
-      'section_id' => ['required','numeric',Rule::exists('sections','id')->where(function (Builder $query) {
-        return $query->where('moveable', 1);
-      }),],
+      'section_id' => 'required|numeric|exists:sections,id'
     ]);
 
     if ($validator->fails()){
@@ -256,18 +254,7 @@ class SectionController extends Controller
 
       $section = Section::findOrFail($request->section_id);
 
-      $rank = $section->rank;
-
-      $sections = Section::where('rank','>',$rank)->orderBy('rank','ASC')->get();
-
-      $section->update(['rank' => null]);
-
       $section->delete();
-
-      foreach($sections as $section){
-        $section->rank -= 1;
-        $section->save();
-      }
 
       DB::commit();
 
@@ -304,8 +291,6 @@ class SectionController extends Controller
     try{
 
       $section = Section::withTrashed()->findOrFail($request->section_id);
-
-      $section->update([ 'rank' => Section::all()->count() + 1]);
 
       $section->restore();
 

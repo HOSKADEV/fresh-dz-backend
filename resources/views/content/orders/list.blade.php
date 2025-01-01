@@ -204,63 +204,58 @@
         </div>
     </div>
 
-    {{-- order modal --}}
+    <!-- Order Modal -->
     <div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Order Details</h5>
+                    <h5 class="modal-title">{{ __('Order Details') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="map" style="height: 300px; margin-bottom: 20px;"></div>
-
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="fw-bold">Expected Delivery Time</label>
+                            <label class="fw-bold">{{ __('Expected Delivery Time') }}</label>
                             <p id="delivery-time"></p>
                         </div>
-
                         <div class="col-md-6">
-                            <label class="fw-bold">Payment Status</label>
+                            <label class="fw-bold">{{ __('Payment Status') }}</label>
                             <div id="payment-status"></div>
                             <small id="paid-at" class="d-block text-muted"></small>
                         </div>
-
                         <div class="col-md-6">
-                            <label class="fw-bold">Payment Method</label>
+                            <label class="fw-bold">{{ __('Payment Method') }}</label>
                             <div>
                                 <span id="payment-method"></span>
                                 <p id="payment-account" class="text-muted mb-0"></p>
                             </div>
                         </div>
-
                         <div class="col-md-6">
-                            <label class="fw-bold">Payment Receipt</label>
+                            <label class="fw-bold">{{ __('Payment Receipt') }}</label>
                             <div>
                                 <a id="receipt-link" href="#" class="btn btn-sm btn-outline-primary"
                                     target="_blank">
-                                    Download Receipt
+                                    {{ __('Download Receipt') }}
                                 </a>
                             </div>
                         </div>
-
                         <div class="col-12">
                             <table class="table table-sm">
                                 <tr>
-                                    <td>Purchase Amount</td>
+                                    <td>{{ __('Purchase Amount') }}</td>
                                     <td id="purchase-amount" class="text-end"></td>
                                 </tr>
                                 <tr>
-                                    <td>Tax</td>
+                                    <td>{{ __('Tax') }}</td>
                                     <td id="tax-amount" class="text-end"></td>
                                 </tr>
                                 <tr>
-                                    <td>Discount</td>
+                                    <td>{{ __('Discount') }}</td>
                                     <td id="discount-amount" class="text-end"></td>
                                 </tr>
                                 <tr class="fw-bold">
-                                    <td>Total</td>
+                                    <td>{{ __('Total') }}</td>
                                     <td id="total-amount" class="text-end"></td>
                                 </tr>
                             </table>
@@ -307,17 +302,16 @@
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="fw-bold py-1 mb-1">Order Review</h4>
+                    <h4 class="fw-bold py-1 mb-1">{{ __('Order Review') }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Rating</label>
+                        <label class="form-label">{{ __('Rating') }}</label>
                         <div id="rating_display" class="mb-3"></div>
                     </div>
-
                     <div class="mb-3">
-                        <label class="form-label">Review</label>
+                        <label class="form-label">{{ __('Review') }}</label>
                         <div id="review_content" class="form-control"
                             style="min-height: 125px; background-color: #f8f9fa;" dir="rtl"></div>
                     </div>
@@ -902,24 +896,46 @@
                             // Update modal content
                             $('#delivery-time').text(moment(response.data.delivery_time).format(
                                 'MMM D, YYYY h:mm A'));
-                            $('#purchase-amount').text('$' + response.data.invoice
+                            $('#purchase-amount').text(response.data.invoice
                                 .purchase_amount
                                 .toFixed(2));
-                            $('#tax-amount').text('$' + response.data.invoice.tax_amount
+                            $('#tax-amount').text(response.data.invoice.tax_amount
                                 .toFixed(2));
-                            $('#discount-amount').text('$' + response.data.invoice
+                            $('#discount-amount').text(response.data.invoice
                                 .discount_amount
                                 .toFixed(2));
-                            $('#total-amount').text('$' + response.data.invoice.total_amount
+                            $('#total-amount').text(response.data.invoice.total_amount
                                 .toFixed(
                                     2));
+                            const paymentMethodConfig = {
+                                'cash': {
+                                    text: "{{ __('Cash') }}",
+                                    class: 'info'
+                                },
+                                'ccp': {
+                                    text: "{{ __('CCP') }}",
+                                    class: 'primary'
+                                },
+                                'baridi': {
+                                    text: "{{ __('Baridi Mob') }}",
+                                    class: 'success'
+                                },
+                                'chargily': {
+                                    text: "{{ __('Chargily') }}",
+                                    class: 'warning'
+                                }
+                            };
+
+                            // Then you can use it like this:
                             $('#payment-method').html(
-                                `<span class="badge bg-info">${response.data.invoice.payment_method}</span>`
+                                `<span class="badge bg-${paymentMethodConfig[response.data.invoice.payment_method].class}">
+        ${paymentMethodConfig[response.data.invoice.payment_method].text}
+    </span>`
                             );
                             $('#payment-account').text(response.data.invoice.payment_account);
                             $('#payment-status').html(response.data.invoice.is_paid == 'yes' ?
-                                `<span class="badge bg-success">Paid</span>` :
-                                `<span class="badge bg-warning">Pending</span>`
+                                `<span class="badge bg-success">{{ __('paid') }}</span>` :
+                                `<span class="badge bg-danger">{{ __('unpaid') }}</span>`
                             );
                             $('#paid-at').text(response.data.invoice.paid_at ?
                                 moment(response.data.invoice.paid_at).format(
@@ -937,8 +953,8 @@
                             $('#orderModal').modal('show');
 
                             /*  setTimeout(() => {
-                            map.invalidateSize();
-                        }, 100); */
+                                map.invalidateSize();
+                            }, 100); */
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -980,25 +996,25 @@
                             const score = response.data.review.score;
                             const ratingConfig = {
                                 1: {
-                                    text: 'Bad',
+                                    text: "{{ __('Bad') }}",
                                     class: 'danger'
                                 },
                                 2: {
-                                    text: 'Average',
+                                    text: "{{ __('Average') }}",
                                     class: 'warning'
                                 },
                                 3: {
-                                    text: 'Good',
+                                    text: "{{ __('Good') }}",
                                     class: 'info'
                                 },
                                 4: {
-                                    text: 'Excellent',
+                                    text: "{{ __('Excellent') }}",
                                     class: 'success'
                                 }
                             };
 
                             const rating = ratingConfig[score] || ratingConfig[
-                            1]; // Default to 'Bad' if score is invalid
+                                1]; // Default to 'Bad' if score is invalid
                             ratingDisplay.innerHTML =
                                 `<span class="badge bg-${rating.class}">${rating.text}</span>`;
 

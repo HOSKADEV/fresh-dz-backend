@@ -16,9 +16,9 @@
     <!-- Basic Bootstrap Table -->
     <div class="card">
         <div class="table-responsive text-nowrap">
-          <div class="table-header row justify-content-between">
-            <h5 class="col-md-auto">{{ __('Notices table') }}</h5>
-          </div>
+            <div class="table-header row justify-content-between">
+                <h5 class="col-md-auto">{{ __('Notices table') }}</h5>
+            </div>
             <table class="table" id="laravel_datatable">
                 <thead>
                     <tr>
@@ -72,7 +72,7 @@
                             <select class="form-select" name="priority">
                                 <option value="0">{{ __('Normal notice') }}</option>
                                 <option value="1">{{ __('Urgent notice') }}</option>
-{{--                                 <option value="2">{{ __('Update Notice') }}</option> --}}
+                                {{--                                 <option value="2">{{ __('Update Notice') }}</option> --}}
                             </select>
                         </div>
                         <br>
@@ -135,7 +135,7 @@
                 $.fn.dataTable.moment('YYYY-M-D');
                 var table = $('#laravel_datatable').DataTable({
 
-                    language:  {!! file_get_contents(base_path('lang/'.session('locale','en').'/datatable.json')) !!},
+                    language: {!! file_get_contents(base_path('lang/' . session('locale', 'en') . '/datatable.json')) !!},
                     responsive: true,
                     processing: true,
                     serverSide: true,
@@ -170,7 +170,7 @@
                             render: function(data) {
                                 if (data == 1) {
                                     return '<span class="badge bg-success">{{ __('Urgent notice') }}</span>';
-                                }else {
+                                } else {
                                     return '<span class="badge bg-secondary">{{ __('Normal notice') }}</span>';
                                 }
                             }
@@ -190,7 +190,7 @@
 
 
             $('#add').on('click', function() {
-              $("#add_form")[0].reset();
+                $("#add_form")[0].reset();
                 $("#add_modal").modal('show');
             });
 
@@ -313,7 +313,66 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        $('#laravel_datatable').DataTable().ajax.reload();
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
+                                    });
+                                }
+                            }
+                        });
+
+
+                    }
+                })
+            });
+
+            $(document.body).on('click', '.send', function() {
+
+                var notice_id = $(this).attr('table_id');
+                //console.log(vaccination_id);
+                Swal.fire({
+                    title: "{{ __('Are you sure?') }}",
+                    text: "{{ __('You will not be able to revert this!') }}",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "{{ __('Yes') }}",
+                    cancelButtonText: "{{ __('No') }}"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        Swal.fire({
+                            title: "{{ __('Wait a moment') }}",
+                            icon: 'info',
+                            html: '<div style="height:50px;"><div class="spinner-border text-primary" role="status"><span class="visually-hidden"></div></div>',
+                            showCloseButton: false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            allowEnterKey: false,
+                        });
+
+                        $.ajax({
+                            url: '{{ url('notice/send') }}',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            data: {
+                                notice_id: notice_id,
+                            },
+                            dataType: 'JSON',
+                            success: function(response) {
+                                if (response.status == 1) {
+
+                                    Swal.fire(
+                                        "{{ __('Success') }}",
+                                        "{{ __('success') }}",
+                                        'success'
+                                    ).then((result) => {
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
                                     });
                                 }
                             }

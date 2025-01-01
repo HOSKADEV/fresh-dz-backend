@@ -26,6 +26,7 @@
                         <th>{{ __('Name') }}</th>
                         <th>{{ __('Type') }}</th>
                         <th>{{ __('Created at') }}</th>
+                        <th>{{ __('Published') }}</th>
                         <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
@@ -167,6 +168,18 @@
                             name: 'created_at'
                         },
 
+                        {
+                            data: 'is_published',
+                            name: 'is_published',
+                            render: function(data) {
+                                if (data == false) {
+                                    return '<span class="badge bg-danger">{{ __('No') }}</span>';
+                                } else {
+                                    return '<span class="badge bg-success">{{ __('Yes') }}</span>';
+                                }
+                            }
+                        },
+
 
                         {
                             data: 'action',
@@ -228,7 +241,8 @@
                             document.getElementById('url').value = response.data.url;
                             //var type = response.data.type;
                             document.getElementById('type').value = response.data.type;
-                            document.getElementById('product_id').value = response.data.product_id;
+                            document.getElementById('product_id').value = response.data
+                                .product_id;
 
                             $('#type').trigger("change");
 
@@ -328,6 +342,99 @@
                             type: 'POST',
                             data: {
                                 ad_id: ad_id
+                            },
+                            dataType: 'JSON',
+                            success: function(response) {
+                                if (response.status == 1) {
+
+                                    Swal.fire(
+                                        "{{ __('Success') }}",
+                                        "{{ __('success') }}",
+                                        'success'
+                                    ).then((result) => {
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
+                                    });
+                                }
+                            }
+                        });
+
+
+                    }
+                })
+            });
+
+            $(document.body).on('click', '.add_to_home', function() {
+
+                var ad_id = $(this).attr('table_id');
+
+                Swal.fire({
+                    title: "{{ __('Warning') }}",
+                    text: "{{ __('Are you sure?') }}",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "{{ __('Yes') }}",
+                    cancelButtonText: "{{ __('No') }}"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "{{ url('section/add') }}",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            data: {
+                                type: "ad",
+                                element: ad_id
+                            },
+                            dataType: 'JSON',
+                            success: function(response) {
+                                if (response.status == 1) {
+
+                                    Swal.fire(
+                                        "{{ __('Success') }}",
+                                        "{{ __('success') }}",
+                                        'success'
+                                    ).then((result) => {
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
+                                    });
+                                }
+                            }
+                        });
+
+
+                    }
+                })
+            });
+
+            $(document.body).on('click', '.remove_from_home', function() {
+
+                var section_id = $(this).attr('table_id');
+
+                Swal.fire({
+                    title: "{{ __('Warning') }}",
+                    text: "{{ __('Are you sure?') }}",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "{{ __('Yes') }}",
+                    cancelButtonText: "{{ __('No') }}"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "{{ url('section/delete') }}",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            data: {
+                                section_id: section_id
                             },
                             dataType: 'JSON',
                             success: function(response) {

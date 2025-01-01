@@ -7,27 +7,35 @@ use Illuminate\Http\Request;
 
 class SetController extends Controller
 {
-  public function shipping(Request $request){
-    $set = Set::where('name','shipping')->first();
+  public function index(){
+    $settings = Set::pluck('value', 'name')->toArray();
 
-    $set->value = $request->value;
+    return view('content.settings.index')
+    ->with('settings',$settings);
 
-    $set->save();
 
-    return response()->json([
-      'status' => 1,
-      'message' => 'success',
-    ]);
   }
 
   public function get(){
 
-    $sets = Set::pluck('value', 'name');
+    $settings = Set::pluck('value', 'name');
 
     return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => $sets
+        'data' => $settings
+    ]);
+  }
+
+  public function update(Request $request){
+
+    foreach ($request->all() as $key => $value) {
+      Set::updateOrInsert(['name' => $key], ['value' => $value]);
+    }
+
+    return response()->json([
+        'status' => 1,
+        'message' => 'success',
     ]);
   }
 }

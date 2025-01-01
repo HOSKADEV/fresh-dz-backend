@@ -116,14 +116,14 @@ class User extends Authenticatable
     $this->save();
   }
 
-  public function notify(Notice $notice)
+  public function notify(Notice $notice, $with_fcm = true)
   {
     Notification::create([
       'user_id' => $this->id,
       'notice_id' => $notice->id
     ]);
 
-    if ($this->fcm_token) {
+    if ($with_fcm && $this->fcm_token) {
       $controller = new \App\Http\Controllers\Controller();
       $controller->send_fcm_device(
         $notice->title(),

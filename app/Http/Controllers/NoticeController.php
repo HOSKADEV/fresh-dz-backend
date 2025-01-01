@@ -38,8 +38,6 @@ class NoticeController extends Controller
 
         $notice = Notice::create($request->all());
 
-        Notification::send($notice);
-
         return response()->json([
           'status' => 1,
           'message' => 'success',
@@ -114,6 +112,39 @@ class NoticeController extends Controller
         return response()->json([
           'status' => 1,
           'message' => 'success',
+        ]);
+
+      }catch(Exception $e){
+        DB::rollBack();
+        return response()->json([
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]);
+      }
+    }
+
+    public function send(Request $request){
+      $validator = Validator::make($request->all(), [
+        'notice_id' => 'required|exists:notices,id',
+      ]);
+
+      if ($validator->fails()) {
+        return response()->json([
+          'status'=> 0,
+          'message' => $validator->errors()->first()
+        ]);
+      }
+
+      try{
+
+        $notice = Notice::find($request->notice_id);
+
+        Notification::send($notice);
+
+        return response()->json([
+          'status' => 1,
+          'message' => 'success',
+
         ]);
 
       }catch(Exception $e){
