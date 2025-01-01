@@ -55,8 +55,7 @@ class CouponController extends Controller
 
       $coupon = Coupon::create($request->all());
 
-      $coupon->notify(Notice::CouponNotice($coupon->code, $coupon->discount));
-
+      Notice::CouponNotice($coupon->code, $coupon->discount);
 
       return response()->json([
         'status' => 1,

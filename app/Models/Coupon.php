@@ -23,7 +23,4 @@ class Coupon extends Model
     return Invoice::where('code', $this->code)->count();
   }
 
-  public function notify(Notice $notice){
-    Notification::send($notice);
-  }
 }
