@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/order/{id}/items', 'App\Http\Controllers\ItemController@index')->name('order-items');
   Route::get('/driver/browse', 'App\Http\Controllers\DriverController@index')->name('driver-browse');
   Route::get('/user/browse', 'App\Http\Controllers\UserController@index')->name('user-browse');
+  Route::get('/admin/browse', 'App\Http\Controllers\AdminController@index')->name('admin-browse');
   Route::get('/notice/browse', 'App\Http\Controllers\NoticeController@index')->name('notice-browse');
   Route::get('/ad/browse', 'App\Http\Controllers\AdController@index')->name('ad-browse');
   Route::get('/coupon/browse', 'App\Http\Controllers\CouponController@index')->name('coupon-browse');
@@ -55,6 +56,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/item/list', 'App\Http\Controllers\DatatablesController@items')->name('item-list');
   Route::get('/driver/list', 'App\Http\Controllers\DatatablesController@drivers')->name('driver-list');
   Route::get('/user/list', 'App\Http\Controllers\DatatablesController@users')->name('user-list');
+  Route::get('/admin/list', 'App\Http\Controllers\DatatablesController@admins')->name('admin-list');
   Route::get('/notice/list', 'App\Http\Controllers\DatatablesController@notices')->name('notice-list');
   Route::get('/ad/list', 'App\Http\Controllers\DatatablesController@ads')->name('ad-list');
   Route::post('/image/list', 'App\Http\Controllers\DatatablesController@images')->name('image-list');
@@ -172,6 +174,12 @@ Route::group(['middleware' => ['auth']], function () {
   Route::post('/user/delete','App\Http\Controllers\UserController@delete');
   Route::post('/user/restore','App\Http\Controllers\UserController@restore');
   Route::post('/user/update','App\Http\Controllers\UserController@update');
+
+  Route::post('/admin/create','App\Http\Controllers\AdminController@create');
+  Route::post('/admin/update','App\Http\Controllers\AdminController@update');
+  Route::post('/admin/delete','App\Http\Controllers\AdminController@delete');
+  Route::post('/admin/restore','App\Http\Controllers\AdminController@restore');
+
 
   Route::post('/shipping/switch','App\Http\Controllers\SetController@shipping');
 

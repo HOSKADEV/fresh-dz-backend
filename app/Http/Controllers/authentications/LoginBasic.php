@@ -22,7 +22,7 @@ class LoginBasic extends Controller
 
     $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials)) {
+    if (Auth::attempt($credentials + ['status' => 1])) {
         return redirect()->intended('/')
                     ->withSuccess('Signed in');
     }

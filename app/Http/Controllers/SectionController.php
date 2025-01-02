@@ -39,7 +39,7 @@ class SectionController extends Controller
       }
 
       try{
-        $request->merge([ 'rank' => Section::all()->count() + 1 ]);
+        $request->merge([ 'rank' => Section::withTrashed()->all()->count() + 1 ]);
 
         $section = Section::create($request->all());
 
@@ -87,7 +87,7 @@ class SectionController extends Controller
       $section->forceDelete();
 
       if($rank){
-        $sections = Section::where('rank','>',$rank)->orderBy('rank','ASC')->get();
+        $sections = Section::withTrashed()->where('rank','>',$rank)->orderBy('rank','ASC')->get();
 
         foreach($sections as $section){
           $section->rank -= 1;
@@ -136,9 +136,9 @@ class SectionController extends Controller
 
       DB::beginTransaction();
 
-        $section_1 = Section::findOrFail($request->section_id);
+        $section_1 = Section::withTrashed()->findOrFail($request->section_id);
 
-        $section_2 = Section::where('rank',$request->rank)->first();
+        $section_2 = Section::withTrashed()->where('rank',$request->rank)->first();
 
         $rank_1 = $section_1->rank;
         $rank_2 = $section_2->rank;
@@ -184,7 +184,7 @@ class SectionController extends Controller
 
 
 
-      $section = Section::findOrFail($request->section_id);
+      $section = Section::withTrashed()->findOrFail($request->section_id);
 
 
      if($section->rank != $request->rank) {
@@ -196,7 +196,7 @@ class SectionController extends Controller
       $rank_min = min([$request->rank,$section->rank]);
       $rank_max = max([$request->rank,$section->rank]);
 
-      $sections = Section::whereBetween('rank',[$rank_min,$rank_max])
+      $sections = Section::withTrashed()->whereBetween('rank',[$rank_min,$rank_max])
       ->whereNot('id',$request->section_id)->orderBy('rank',$order)->get();
 
       //return ($sections);

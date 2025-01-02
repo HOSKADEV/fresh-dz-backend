@@ -7,6 +7,7 @@ use Session;
 use App\Models\Ad;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Group;
 use App\Models\Offer;
 use App\Models\Order;
@@ -726,6 +727,67 @@ class DatatablesController extends Controller
       ->addColumn('phone', function ($row) {
 
           return $row->phone();
+
+      })
+
+      ->addColumn('email', function ($row) {
+
+        return $row->email;
+
+    })
+
+      ->addColumn('status', function ($row) {
+
+        if($row->status == 1){
+            return true;
+          }else{
+            return false;
+          }
+
+      })
+
+      ->addColumn('created_at', function ($row) {
+
+        return date('Y-m-d',strtotime($row->created_at));
+
+      })
+
+
+      ->make(true);
+  }
+
+  public function admins(){
+
+    $admins = Admin::whereNot('role', 0)->whereNot('id',auth()->id())->get();
+
+    return datatables()
+      ->of($admins)
+      ->addIndexColumn()
+
+      ->addColumn('action', function ($row) {
+          $btn = '';
+
+          if($row->status == 1){
+            $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="'.__('Block').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-x-circle"></span></button>';
+          }else{
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing restore" title="'.__('Activate').'" table_id="'.$row->id.'"><span class="tf-icons bx bx-check-circle"></span></button>';
+          }
+
+
+
+
+          return $btn;
+      })
+
+      ->addColumn('name', function ($row) {
+
+        return $row->name;
+
+      })
+
+      ->addColumn('phone', function ($row) {
+
+          return $row->phone;
 
       })
 

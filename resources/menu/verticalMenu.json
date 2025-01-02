@@ -7,6 +7,12 @@
       "slug": "dashboard-analytics"
     },
     {
+      "url": "/admin/browse",
+      "name": "Admins",
+      "icon": "menu-icon tf-icons bx bxs-group",
+      "slug": "admin-browse"
+    },
+    {
       "url": "/user/browse",
       "name": "Users",
       "icon": "menu-icon tf-icons bx bxs-user",
