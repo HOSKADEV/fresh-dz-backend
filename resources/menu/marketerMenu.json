@@ -1,0 +1,65 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bxs-home-circle",
+      "slug": "dashboard-analytics"
+    },
+    {
+      "url": "/analytics",
+      "name": "Analytics",
+      "icon": "menu-icon tf-icons bx bxs-bar-chart-alt-2",
+      "slug": "analytics"
+    },
+    {
+      "url": "/product/browse",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bxs-package",
+      "slug": "product-browse"
+    },
+    {
+      "url": "/coupon/browse",
+      "name": "Coupons",
+      "icon": "menu-icon tf-icons bx bxs-coupon",
+      "slug": "coupon-browse"
+    },
+    {
+      "url": "/notice/browse",
+      "name": "Notices",
+      "icon": "menu-icon tf-icons bx bxs-bell",
+      "slug": "notice-browse"
+    },
+    {
+      "url": "/family/browse",
+      "name": "Families",
+      "icon": "menu-icon tf-icons bx bxs-collection",
+      "slug": "settings-family-browse"
+    },
+    {
+      "url": "/group/browse",
+      "name": "Groups",
+      "icon": "menu-icon tf-icons bx bxs-layer",
+      "slug": "settings-group-browse"
+    },
+    {
+      "url": "/ad/browse",
+      "name": "Ads",
+      "icon": "menu-icon tf-icons bx bxs-badge-dollar",
+      "slug": "ad-browse"
+    },
+    {
+      "url": "/offer/browse",
+      "name": "Offers",
+      "icon": "menu-icon tf-icons bx bxs-offer",
+      "slug": "settings-offer-browse"
+    },
+    {
+      "url": "/section/browse",
+      "name": "Sections",
+      "icon": "menu-icon tf-icons bx bxs-layout",
+      "slug": "settings-section-browse"
+    }
+
+  ]
+}

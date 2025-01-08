@@ -50,6 +50,8 @@ class RegionController extends Controller
     $request->validate([
       'region_id' => 'required|exists:regions,id',
       'name' => 'sometimes|nullable|string|max:255',
+      'longitude' => 'sometimes|nullable|string',
+      'latitude' => 'sometimes|nullable|string',
       'coordinates' => 'sometimes|nullable|array|min:3',
       'coordinates.*' => 'array'
     ]);
@@ -61,6 +63,10 @@ class RegionController extends Controller
       if ($request->coordinates) {
         $region->boundaries = $request->coordinates;
         $region->save();
+      }
+
+      if ($request->has('longitude', 'latitude')) {
+        $region->update($request->only('longitude', 'latitude'));
       }
 
 

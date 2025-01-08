@@ -39,7 +39,7 @@ class SectionController extends Controller
       }
 
       try{
-        $request->merge([ 'rank' => Section::withTrashed()->all()->count() + 1 ]);
+        $request->merge([ 'rank' => Section::withTrashed()->count() + 1 ]);
 
         $section = Section::create($request->all());
 
@@ -60,7 +60,7 @@ class SectionController extends Controller
 
   }
 
-  public function remove(Request $request){
+  public function delete(Request $request){
 
     $validator = Validator::make($request->all(), [
       'section_id' => ['required','numeric',Rule::exists('sections','id')->where(function (Builder $query) {
@@ -234,7 +234,7 @@ class SectionController extends Controller
 
   }
 
-  public function delete(Request $request){
+  public function remove(Request $request){
 
     $validator = Validator::make($request->all(), [
       'section_id' => 'required|numeric|exists:sections,id'

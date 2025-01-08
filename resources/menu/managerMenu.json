@@ -1,0 +1,28 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bxs-home-circle",
+      "slug": "dashboard-analytics"
+    },
+    {
+      "url": "/product/browse",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bxs-package",
+      "slug": "product-browse"
+    },
+    {
+      "url": "/driver/browse",
+      "name": "Drivers",
+      "icon": "menu-icon tf-icons bx bxs-truck",
+      "slug": "driver-browse"
+    },
+    {
+      "url": "/order/browse",
+      "name": "Orders",
+      "icon": "menu-icon tf-icons bx bxs-spreadsheet",
+      "slug": "order-browse"
+    }
+  ]
+}

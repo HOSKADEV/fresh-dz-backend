@@ -1,223 +1,292 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-$controller_path = 'App\Http\Controllers';
-
-// Main Page Route
-Route::get('/', 'App\Http\Controllers\dashboard\Analytics@index')->name('dashboard-analytics')->middleware('auth');
-Route::get('/privacy_policy','App\Http\Controllers\DocumentationController@privacy');
-Route::get('/delete_account','App\Http\Controllers\DocumentationController@delete_account');
-Route::get('/chargily/callback', 'App\Http\Controllers\ChargilyController@callback')->name('chargily-callback');
-Route::get('/chargily/success', 'App\Http\Controllers\ChargilyController@success')->name('chargily-success');
-Route::get('/chargily/failed', 'App\Http\Controllers\ChargilyController@failed')->name('chargily-failed');
-
-Route::group(['middleware' => ['auth']], function () {
-  Route::get('/settings', 'App\Http\Controllers\SetController@index')->name('version');
-  Route::get('/stats', 'App\Http\Controllers\dashboard\Analytics@stats')->name('stats');
-  Route::get('/category/browse', 'App\Http\Controllers\CategoryController@index')->name('settings-category-browse');
-  Route::get('/subcategory/browse', 'App\Http\Controllers\SubcategoryController@index')->name('settings-subcategory-browse');
-  Route::get('/family/browse', 'App\Http\Controllers\FamilyController@index')->name('settings-family-browse');
-  Route::get('/offer/browse', 'App\Http\Controllers\OfferController@index')->name('settings-offer-browse');
-  Route::get('/group/browse', 'App\Http\Controllers\GroupController@index')->name('settings-group-browse');
-  Route::get('/product/browse', 'App\Http\Controllers\ProductController@index')->name('product-browse');
-  Route::get('/product/{id}/images', 'App\Http\Controllers\ProductImageController@index')->name('product-images');
-  Route::get('/product/{id}/videos', 'App\Http\Controllers\ProductVideoController@index')->name('product-videos');
-  Route::get('/product/{id}/discounts', 'App\Http\Controllers\DiscountController@index')->name('product-discounts');
-  Route::get('/section/browse', 'App\Http\Controllers\SectionController@index')->name('settings-section-browse');
-  Route::get('/order/browse', 'App\Http\Controllers\OrderController@index')->name('order-browse');
-  Route::get('/order/{id}/items', 'App\Http\Controllers\ItemController@index')->name('order-items');
-  Route::get('/driver/browse', 'App\Http\Controllers\DriverController@index')->name('driver-browse');
-  Route::get('/user/browse', 'App\Http\Controllers\UserController@index')->name('user-browse');
-  Route::get('/admin/browse', 'App\Http\Controllers\AdminController@index')->name('admin-browse');
-  Route::get('/notice/browse', 'App\Http\Controllers\NoticeController@index')->name('notice-browse');
-  Route::get('/ad/browse', 'App\Http\Controllers\AdController@index')->name('ad-browse');
-  Route::get('/coupon/browse', 'App\Http\Controllers\CouponController@index')->name('coupon-browse');
-  Route::get('/region/browse', 'App\Http\Controllers\RegionController@index')->name('settings-region-browse');
-  Route::get('/category/list', 'App\Http\Controllers\DatatablesController@categories')->name('category-list');
-  Route::post('/subcategory/list', 'App\Http\Controllers\DatatablesController@subcategories')->name('subcategory-list');
-  Route::get('/family/list', 'App\Http\Controllers\DatatablesController@families')->name('family-list');
-  Route::get('/offer/list', 'App\Http\Controllers\DatatablesController@offers')->name('offer-list');
-  Route::get('/group/list', 'App\Http\Controllers\DatatablesController@groups')->name('group-list');
-  Route::post('/product/list', 'App\Http\Controllers\DatatablesController@products')->name('product-list');
-  Route::get('/section/list', 'App\Http\Controllers\DatatablesController@sections')->name('section-list');
-  Route::post('/order/list', 'App\Http\Controllers\DatatablesController@orders')->name('order-list');
-  Route::post('/item/list', 'App\Http\Controllers\DatatablesController@items')->name('item-list');
-  Route::get('/driver/list', 'App\Http\Controllers\DatatablesController@drivers')->name('driver-list');
-  Route::get('/user/list', 'App\Http\Controllers\DatatablesController@users')->name('user-list');
-  Route::get('/admin/list', 'App\Http\Controllers\DatatablesController@admins')->name('admin-list');
-  Route::get('/notice/list', 'App\Http\Controllers\DatatablesController@notices')->name('notice-list');
-  Route::get('/ad/list', 'App\Http\Controllers\DatatablesController@ads')->name('ad-list');
-  Route::post('/image/list', 'App\Http\Controllers\DatatablesController@images')->name('image-list');
-  Route::post('/video/list', 'App\Http\Controllers\DatatablesController@videos')->name('video-list');
-  Route::get('/coupon/list', 'App\Http\Controllers\DatatablesController@coupons')->name('coupon-list');
-  Route::post('/discount/list', 'App\Http\Controllers\DatatablesController@discounts')->name('discount-list');
-  Route::get('/region/list', 'App\Http\Controllers\DatatablesController@regions')->name('region-list');
-});
-
-Route::group(['middleware' => ['auth']], function () {
-  Route::get('/logout','App\Http\Controllers\AuthController@logout');
-  Route::post('/user/update','App\Http\Controllers\UserController@update');
-  Route::post('/user/change_password','App\Http\Controllers\UserController@change_password');
-
-  Route::post('/category/create','App\Http\Controllers\CategoryController@create');
-  Route::post('/category/update','App\Http\Controllers\CategoryController@update');
-  Route::post('/category/delete','App\Http\Controllers\CategoryController@delete');
-  Route::post('/category/restore','App\Http\Controllers\CategoryController@restore');
-  Route::post('/category/get','App\Http\Controllers\CategoryController@get');
-
-  Route::post('/subcategory/create','App\Http\Controllers\SubcategoryController@create');
-  Route::post('/subcategory/update','App\Http\Controllers\SubcategoryController@update');
-  Route::post('/subcategory/delete','App\Http\Controllers\SubcategoryController@delete');
-  Route::post('/subcategory/restore','App\Http\Controllers\SubcategoryController@restore');
-  Route::post('/subcategory/get','App\Http\Controllers\SubcategoryController@get');
+use App\Http\Controllers\AdController;
+use App\Http\Controllers\SetController;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\pages\MiscError;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\DriverController;
+use App\Http\Controllers\FamilyController;
+use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\RegionController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChargilyController;
+use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\dashboard\Analytics;
+use App\Http\Controllers\DatatablesController;
+use App\Http\Controllers\SubcategoryController;
+use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\ProductVideoController;
+use App\Http\Controllers\DocumentationController;
+use App\Http\Controllers\authentications\LoginBasic;
+use App\Http\Controllers\pages\MiscUnderMaintenance;
+use App\Http\Controllers\authentications\LogoutBasic;
+use App\Http\Controllers\pages\AccountSettingsAccount;
+use App\Http\Controllers\pages\AccountSettingsConnections;
+use App\Http\Controllers\pages\AccountSettingsNotifications;
+use App\Http\Controllers\authentications\ForgotPasswordBasic;
 
 
-  Route::post('/family/create','App\Http\Controllers\FamilyController@create');
-  Route::post('/family/update','App\Http\Controllers\FamilyController@update');
-  Route::post('/family/delete','App\Http\Controllers\FamilyController@delete');
-  Route::post('/family/restore','App\Http\Controllers\FamilyController@restore');
-
-  Route::post('/group/create','App\Http\Controllers\GroupController@create');
-  Route::post('/group/update','App\Http\Controllers\GroupController@update');
-  Route::post('/group/delete','App\Http\Controllers\GroupController@delete');
-  Route::post('/group/restore','App\Http\Controllers\GroupController@restore');
-
-
-  Route::post('/product/create','App\Http\Controllers\ProductController@create');
-  Route::post('/product/update','App\Http\Controllers\ProductController@update');
-  Route::post('/product/delete','App\Http\Controllers\ProductController@delete');
-  Route::post('/product/restore','App\Http\Controllers\ProductController@restore');
-  Route::post('/product/get','App\Http\Controllers\ProductController@get');
-
-
-  Route::post('/discount/create','App\Http\Controllers\DiscountController@create');
-  Route::post('/discount/update','App\Http\Controllers\DiscountController@update');
-  Route::post('/discount/delete','App\Http\Controllers\DiscountController@delete');
-  Route::post('/discount/restore','App\Http\Controllers\DiscountController@restore');
-
-
-  Route::post('/ad/create','App\Http\Controllers\AdController@create');
-  Route::post('/ad/update','App\Http\Controllers\AdController@update');
-  Route::post('/ad/delete','App\Http\Controllers\AdController@delete');
-  Route::post('/ad/restore','App\Http\Controllers\AdController@restore');
-
-
-  Route::post('/offer/create','App\Http\Controllers\OfferController@create');
-  Route::post('/offer/update','App\Http\Controllers\OfferController@update');
-  Route::post('/offer/delete','App\Http\Controllers\OfferController@delete');
-  Route::post('/offer/restore','App\Http\Controllers\OfferController@restore');
-
-
-
-  Route::post('/section/add','App\Http\Controllers\SectionController@add');
-  Route::post('/section/remove','App\Http\Controllers\SectionController@remove');
-  Route::post('/section/switch','App\Http\Controllers\SectionController@switch');
-  Route::post('/section/insert','App\Http\Controllers\SectionController@insert');
-  Route::post('/section/delete','App\Http\Controllers\SectionController@delete');
-  Route::post('/section/restore','App\Http\Controllers\SectionController@restore');
-
-
-  Route::post('/driver/create','App\Http\Controllers\DriverController@create');
-  Route::post('/driver/update','App\Http\Controllers\DriverController@update');
-  Route::post('/driver/delete','App\Http\Controllers\DriverController@delete');
-  Route::post('/driver/restore','App\Http\Controllers\DriverController@restore');
-
-  Route::post('/item/add','App\Http\Controllers\ItemController@add');
-  Route::post('/item/edit','App\Http\Controllers\ItemController@edit');
-  Route::post('/item/delete','App\Http\Controllers\ItemController@delete');
-  Route::post('/item/restore','App\Http\Controllers\ItemController@restore');
-
-  Route::post('/image/add','App\Http\Controllers\ProductImageController@add');
-  Route::post('/image/delete','App\Http\Controllers\ProductImageController@delete');
-
-  Route::post('/video/add','App\Http\Controllers\ProductVideoController@add');
-  Route::post('/video/delete','App\Http\Controllers\ProductVideoController@delete');
-
-  Route::post('/coupon/create','App\Http\Controllers\CouponController@create');
-  Route::post('/coupon/update','App\Http\Controllers\CouponController@update');
-  Route::post('/coupon/delete','App\Http\Controllers\CouponController@delete');
-  Route::post('/coupon/restore','App\Http\Controllers\CouponController@restore');
-  Route::get('/coupon/generate','App\Http\Controllers\CouponController@generate');
-
-  Route::post('/region/create','App\Http\Controllers\RegionController@create');
-  Route::post('/region/update','App\Http\Controllers\RegionController@update');
-  Route::post('/region/delete','App\Http\Controllers\RegionController@delete');
-  Route::post('/region/restore','App\Http\Controllers\RegionController@restore');
-
-  Route::post('/order/update','App\Http\Controllers\OrderController@update');
-  Route::post('/order/delete','App\Http\Controllers\OrderController@delete');
-
-  Route::post('/invoice/update','App\Http\Controllers\InvoiceController@update');
-
-  Route::post('/notice/create','App\Http\Controllers\NoticeController@create');
-  Route::post('/notice/update','App\Http\Controllers\NoticeController@update');
-  Route::post('/notice/delete','App\Http\Controllers\NoticeController@delete');
-  Route::post('/notice/send','App\Http\Controllers\NoticeController@send');
-
-  Route::get('/documentation/privacy_policy','App\Http\Controllers\DocumentationController@index')->name('documentation_privacy_policy');
-  Route::get('/documentation/about','App\Http\Controllers\DocumentationController@index')->name('documentation_about');
-
-  Route::post('/documentation/update','App\Http\Controllers\DocumentationController@update');
-
-  Route::post('/user/delete','App\Http\Controllers\UserController@delete');
-  Route::post('/user/restore','App\Http\Controllers\UserController@restore');
-  Route::post('/user/update','App\Http\Controllers\UserController@update');
-
-  Route::post('/admin/create','App\Http\Controllers\AdminController@create');
-  Route::post('/admin/update','App\Http\Controllers\AdminController@update');
-  Route::post('/admin/delete','App\Http\Controllers\AdminController@delete');
-  Route::post('/admin/restore','App\Http\Controllers\AdminController@restore');
-
-
-  Route::post('/shipping/switch','App\Http\Controllers\SetController@shipping');
-
-  Route::post('/setting/update','App\Http\Controllers\SetController@update');
-
-});
-
-
-// pages
-Route::group(['middleware' => ['auth']], function () {
-  Route::get('/pages/account-settings-account', 'App\Http\Controllers\pages\AccountSettingsAccount@index')->name('pages-account-settings-account');
-  Route::get('/pages/account-settings-notifications', 'App\Http\Controllers\pages\AccountSettingsNotifications@index')->name('pages-account-settings-notifications');
-  Route::get('/pages/account-settings-connections', 'App\Http\Controllers\pages\AccountSettingsConnections@index')->name('pages-account-settings-connections');
-  Route::get('/pages/misc-error', 'App\Http\Controllers\pages\MiscError@index')->name('pages-misc-error');
-  Route::get('/pages/misc-under-maintenance', 'App\Http\Controllers\pages\MiscUnderMaintenance@index')->name('pages-misc-under-maintenance');
-});
-// authentication
-Route::get('/auth/login-basic', 'App\Http\Controllers\authentications\LoginBasic@index')->name('login');
-//Route::get('/auth/register-basic', 'App\Http\Controllers\authentications\RegisterBasic@index')->name('auth-register-basic');
-//Route::post('/auth/register-action', 'App\Http\Controllers\authentications\RegisterBasic@register');
-Route::post('/auth/login-action', 'App\Http\Controllers\authentications\LoginBasic@login');
-Route::get('/auth/forgot-password-basic', 'App\Http\Controllers\authentications\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
-Route::get('/auth/logout', 'App\Http\Controllers\authentications\LogoutBasic@logout')->name('auth-logout');
-
-Route::get('/theme/{theme}', function($theme){
-  Session::put('theme',$theme);
-  return redirect()->back();
-});
-
-Route::get('/lang/{lang}', function($lang){
-  Session::put('locale', $lang);
-  return redirect()->back();
-});
-
-Route::get('/downloadApp',function(){
-  return view('redirect');
+Route::get('/privacy_policy', [DocumentationController::class, 'privacy']);
+Route::get('/delete_account', [DocumentationController::class, 'delete_account']);
+Route::get('/downloadApp', function() {
+    return view('redirect');
 })->name('');
 
+Route::get('/theme/{theme}', function($theme) {
+    Session::put('theme', $theme);
+    return redirect()->back();
+});
+Route::get('/lang/{lang}', function($lang) {
+    Session::put('locale', $lang);
+    return redirect()->back();
+});
+
+Route::prefix('chargily')->group(function () {
+    Route::get('/callback', [ChargilyController::class, 'callback'])->name('chargily-callback');
+    Route::get('/success', [ChargilyController::class, 'success'])->name('chargily-success');
+    Route::get('/failed', [ChargilyController::class, 'failed'])->name('chargily-failed');
+});
+
+Route::prefix('auth')->group(function () {
+    Route::get('/login-basic', [LoginBasic::class, 'index'])->name('login');
+    Route::post('/login-action', [LoginBasic::class, 'login']);
+    Route::get('/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
+    Route::get('/logout', [LogoutBasic::class, 'logout'])->name('auth-logout');
+});
 
 
+Route::group(['middleware' => ['auth']], function () {
 
+      Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+      Route::get('/analytics', [Analytics::class, 'analytics'])->name('analytics')->middleware('role:0,1,4,5');
+      Route::get('/stats', [Analytics::class, 'stats'])->name('stats')->middleware('role:0,1,4,5');
+
+
+      Route::prefix('settings')->middleware('role:0')->group(function () {
+        Route::get('/', [SetController::class, 'index'])->name('settings');
+        Route::post('/update', [SetController::class, 'update']);
+      });
+
+      Route::prefix('account')->group(function () {
+        Route::get('/', [AdminController::class, 'account'])->name('account');
+        Route::post('/update', [AdminController::class, 'update']);
+        Route::post('/delete', [AdminController::class, 'delete']);
+        Route::post('/password/change', [AdminController::class, 'change_password']);
+      });
+
+    Route::prefix('pages')->group(function () {
+        Route::prefix('account-settings')->group(function () {
+            Route::get('/account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
+            Route::get('/notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
+            Route::get('/connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
+        });
+        Route::prefix('misc')->group(function () {
+            Route::get('/error', [MiscError::class, 'index'])->name('pages-misc-error');
+            Route::get('/under-maintenance', [MiscUnderMaintenance::class, 'index'])->name('pages-misc-under-maintenance');
+        });
+    });
+
+    Route::prefix('category')->middleware('role:0,1,2')->group(function () {
+        Route::get('/browse', [CategoryController::class, 'index'])->name('settings-category-browse');
+        Route::get('/list', [DatatablesController::class, 'categories'])->name('category-list');
+        Route::post('/create', [CategoryController::class, 'create']);
+        Route::post('/update', [CategoryController::class, 'update']);
+        Route::post('/delete', [CategoryController::class, 'delete']);
+        Route::post('/restore', [CategoryController::class, 'restore']);
+    });
+
+    Route::prefix('subcategory')->middleware('role:0,1,2')->group(function () {
+        Route::get('/browse', [SubcategoryController::class, 'index'])->name('settings-subcategory-browse');
+        Route::post('/list', [DatatablesController::class, 'subcategories'])->name('subcategory-list');
+        Route::post('/create', [SubcategoryController::class, 'create']);
+        Route::post('/update', [SubcategoryController::class, 'update']);
+        Route::post('/delete', [SubcategoryController::class, 'delete']);
+        Route::post('/restore', [SubcategoryController::class, 'restore']);
+    });
+
+    Route::prefix('unit')->middleware('role:0,1,2')->group(function () {
+      Route::get('/browse', [UnitController::class, 'index'])->name('settings-unit-browse');
+      Route::get('/list', [DatatablesController::class, 'units'])->name('unit-list');
+      Route::post('/create', [UnitController::class, 'create']);
+      Route::post('/update', [UnitController::class, 'update']);
+      Route::post('/delete', [UnitController::class, 'delete']);
+      Route::post('/restore', [UnitController::class, 'restore']);
+  });
+
+    Route::prefix('family')->middleware('role:0,1,5')->group(function () {
+        Route::get('/browse', [FamilyController::class, 'index'])->name('settings-family-browse');
+        Route::get('/list', [DatatablesController::class, 'families'])->name('family-list');
+        Route::post('/create', [FamilyController::class, 'create']);
+        Route::post('/update', [FamilyController::class, 'update']);
+        Route::post('/delete', [FamilyController::class, 'delete']);
+        Route::post('/restore', [FamilyController::class, 'restore']);
+    });
+
+    Route::prefix('offer')->middleware('role:0,1,5')->group(function () {
+        Route::get('/browse', [OfferController::class, 'index'])->name('settings-offer-browse');
+        Route::get('/list', [DatatablesController::class, 'offers'])->name('offer-list');
+        Route::post('/create', [OfferController::class, 'create']);
+        Route::post('/update', [OfferController::class, 'update']);
+        Route::post('/delete', [OfferController::class, 'delete']);
+        Route::post('/restore', [OfferController::class, 'restore']);
+    });
+
+    Route::prefix('group')->middleware('role:0,1,5')->group(function () {
+        Route::get('/browse', [GroupController::class, 'index'])->name('settings-group-browse');
+        Route::get('/list', [DatatablesController::class, 'groups'])->name('group-list');
+        Route::post('/create', [GroupController::class, 'create']);
+        Route::post('/update', [GroupController::class, 'update']);
+        Route::post('/delete', [GroupController::class, 'delete']);
+        Route::post('/restore', [GroupController::class, 'restore']);
+    });
+
+    Route::prefix('section')->middleware('role:0,1,5')->group(function () {
+        Route::get('/browse', [SectionController::class, 'index'])->name('settings-section-browse');
+        Route::get('/list', [DatatablesController::class, 'sections'])->name('section-list');
+        Route::post('/add', [SectionController::class, 'add']);
+        Route::post('/remove', [SectionController::class, 'remove']);
+        Route::post('/switch', [SectionController::class, 'switch']);
+        Route::post('/insert', [SectionController::class, 'insert']);
+        Route::post('/delete', [SectionController::class, 'delete']);
+        Route::post('/restore', [SectionController::class, 'restore']);
+    });
+
+    Route::prefix('driver')->middleware('role:0,1,3')->group(function () {
+        Route::get('/browse', [DriverController::class, 'index'])->name('driver-browse');
+        Route::get('/list', [DatatablesController::class, 'drivers'])->name('driver-list');
+        Route::post('/create', [DriverController::class, 'create']);
+        Route::post('/update', [DriverController::class, 'update']);
+        Route::post('/delete', [DriverController::class, 'delete']);
+        Route::post('/restore', [DriverController::class, 'restore']);
+    });
+
+    Route::prefix('notice')->middleware('role:0,1,5')->group(function () {
+        Route::get('/browse', [NoticeController::class, 'index'])->name('notice-browse');
+        Route::get('/list', [DatatablesController::class, 'notices'])->name('notice-list');
+        Route::post('/create', [NoticeController::class, 'create']);
+        Route::post('/update', [NoticeController::class, 'update']);
+        Route::post('/delete', [NoticeController::class, 'delete']);
+        Route::post('/send', [NoticeController::class, 'send']);
+    });
+
+    Route::prefix('ad')->middleware('role:0,1,5')->group(function () {
+        Route::get('/browse', [AdController::class, 'index'])->name('ad-browse');
+        Route::get('/list', [DatatablesController::class, 'ads'])->name('ad-list');
+        Route::post('/create', [AdController::class, 'create']);
+        Route::post('/update', [AdController::class, 'update']);
+        Route::post('/delete', [AdController::class, 'delete']);
+        Route::post('/restore', [AdController::class, 'restore']);
+    });
+
+    Route::prefix('coupon')->middleware('role:0,1,5')->group(function () {
+        Route::get('/browse', [CouponController::class, 'index'])->name('coupon-browse');
+        Route::get('/list', [DatatablesController::class, 'coupons'])->name('coupon-list');
+        Route::post('/create', [CouponController::class, 'create']);
+        Route::post('/update', [CouponController::class, 'update']);
+        Route::post('/delete', [CouponController::class, 'delete']);
+        Route::post('/restore', [CouponController::class, 'restore']);
+        Route::get('/generate', [CouponController::class, 'generate']);
+    });
+
+    Route::prefix('user')->middleware('role:0,1')->group(function () {
+      Route::get('/browse', [UserController::class, 'index'])->name('user-browse');
+      Route::get('/list', [DatatablesController::class, 'users'])->name('user-list');
+      Route::post('/update', [UserController::class, 'update']);
+      Route::post('/change_password', [UserController::class, 'change_password']);
+      Route::post('/delete', [UserController::class, 'delete']);
+      Route::post('/restore', [UserController::class, 'restore']);
+  });
+
+  Route::prefix('admin')->middleware('role:0,1')->group(function () {
+      Route::get('/browse', [AdminController::class, 'index'])->name('admin-browse');
+      Route::get('/list', [DatatablesController::class, 'admins'])->name('admin-list');
+      Route::post('/create', [AdminController::class, 'create']);
+      Route::post('/update', [AdminController::class, 'update']);
+      Route::post('/delete', [AdminController::class, 'delete']);
+      Route::post('/restore', [AdminController::class, 'restore']);
+  });
+
+    Route::prefix('region')->middleware('role:0')->group(function () {
+        Route::get('/browse', [RegionController::class, 'index'])->name('settings-region-browse');
+        Route::get('/list', [DatatablesController::class, 'regions'])->name('region-list');
+        Route::post('/create', [RegionController::class, 'create']);
+        Route::post('/update', [RegionController::class, 'update']);
+        Route::post('/delete', [RegionController::class, 'delete']);
+        Route::post('/restore', [RegionController::class, 'restore']);
+    });
+
+    Route::prefix('product')->group(function () {
+      Route::middleware('role:0,1,2,5')->group(function () {
+        Route::post('/create', [ProductController::class, 'create']);
+        Route::post('/update', [ProductController::class, 'update']);
+        Route::post('/delete', [ProductController::class, 'delete']);
+        Route::post('/restore', [ProductController::class, 'restore']);
+        Route::get('/{id}/images', [ProductImageController::class, 'index'])->name('product-images');
+        Route::get('/{id}/videos', [ProductVideoController::class, 'index'])->name('product-videos');
+        Route::get('/{id}/discounts', [DiscountController::class, 'index'])->name('product-discounts');
+      });
+
+      Route::get('/browse', [ProductController::class, 'index'])->name('product-browse');
+      Route::post('/list', [DatatablesController::class, 'products'])->name('product-list');
+    });
+
+    Route::prefix('image')->middleware('role:0,1,2,5')->group(function () {
+        Route::post('/list', [DatatablesController::class, 'images'])->name('image-list');
+        Route::post('/add', [ProductImageController::class, 'add']);
+        Route::post('/delete', [ProductImageController::class, 'delete']);
+    });
+
+    Route::prefix('video')->middleware('role:0,1,2,5')->group(function () {
+        Route::post('/list', [DatatablesController::class, 'videos'])->name('video-list');
+        Route::post('/add', [ProductVideoController::class, 'add']);
+        Route::post('/delete', [ProductVideoController::class, 'delete']);
+    });
+
+    Route::prefix('discount')->middleware('role:0,1,2,5')->group(function () {
+        Route::post('/list', [DatatablesController::class, 'discounts'])->name('discount-list');
+        Route::post('/create', [DiscountController::class, 'create']);
+        Route::post('/update', [DiscountController::class, 'update']);
+        Route::post('/delete', [DiscountController::class, 'delete']);
+        Route::post('/restore', [DiscountController::class, 'restore']);
+    });
+
+    Route::prefix('order')->middleware('role:0,1,3,4')->group(function () {
+        Route::get('/browse', [OrderController::class, 'index'])->name('order-browse');
+        Route::get('/{id}/items', [ItemController::class, 'index'])->name('order-items');
+        Route::post('/list', [DatatablesController::class, 'orders'])->name('order-list');
+        Route::post('/update', [OrderController::class, 'update']);
+        Route::post('/delete', [OrderController::class, 'delete']);
+    });
+
+    Route::prefix('item')->middleware('role:0,1,3,4')->group(function () {
+        Route::post('/list', [DatatablesController::class, 'items'])->name('item-list');
+        Route::post('/add', [ItemController::class, 'add']);
+        Route::post('/edit', [ItemController::class, 'edit']);
+        Route::post('/delete', [ItemController::class, 'delete']);
+        Route::post('/restore', [ItemController::class, 'restore']);
+    });
+
+    Route::prefix('invoice')->middleware('role:0,1,3,4')->group(function () {
+        Route::post('/update', [InvoiceController::class, 'update']);
+    });
+
+    Route::prefix('documentation')->middleware('role:0,1')->group(function () {
+        Route::get('/privacy_policy', [DocumentationController::class, 'index'])->name('documentation_privacy_policy');
+        Route::get('/about', [DocumentationController::class, 'index'])->name('documentation_about');
+        Route::post('/update', [DocumentationController::class, 'update']);
+    });
+
+});

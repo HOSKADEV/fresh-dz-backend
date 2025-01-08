@@ -60,6 +60,11 @@ class Invoice extends Model
 
       $this->purchase_amount = $this->order->cart->items()->sum('amount');
 
+      $start_point = $this->order->region->only('longitude', 'latitude');
+      $end_point = $this->order->only('longitude', 'latitude');
+
+      $this->tax_amount = Set::calculateDeliveryPrice($start_point, $end_point, $this->purchase_amount);
+
       /* if($this->tax_type == 'fixed'){
         $this->total_amount = $this->purchase_amount + $this->tax_amount;
       }else{

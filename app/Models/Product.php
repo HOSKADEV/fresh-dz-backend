@@ -16,6 +16,7 @@ class Product extends Model
 
     protected $fillable = [
       'subcategory_id',
+      'unit_id',
       'unit_name',
       'pack_name',
       'image',
@@ -46,6 +47,10 @@ class Product extends Model
 
     public function subcategory(){
       return $this->belongsTo(Subcategory::class);
+    }
+
+    public function unit(){
+      return $this->belongsTo(Unit::class);
     }
 
     public function items(){

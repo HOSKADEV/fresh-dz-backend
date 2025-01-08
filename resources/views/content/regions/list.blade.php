@@ -5,6 +5,7 @@
 @section('vendor-script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
     <script src="{{ asset('assets/vendor/js/mapRegion.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/mapDeliveryPoint.js') }}"></script>
 @endsection
 
 @section('page-style')
@@ -53,6 +54,7 @@
     </div>
 
     @include('content.regions.modal')
+    @include('content.regions.delivery')
 
 @endsection
 
@@ -200,6 +202,101 @@
                     Swal.fire({
                         title: 'Error',
                         text: 'An error occurred while saving the region',
+                        icon: 'error'
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.delivery', function() {
+            $('#deliveryForm')[0].reset();
+            deliveryMarker = null;
+            const region_id = $(this).attr('table_id');
+            $('#delivery_region_id').val(region_id);
+
+            $.ajax({
+                url: "{{ url('region/update') }}",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'POST',
+                data: {
+                    region_id: region_id
+                },
+                success: function(response) {
+                    if (response.status == 1) {
+                        const region = response.data;
+
+                        $('#deliveryPointModal').modal('show');
+
+                        setTimeout(() => {
+                            initializeDeliveryMap();
+                            const boundaries = JSON.parse(region.boundaries);
+                            setTimeout(() => {
+                                displayRegion(boundaries);
+
+                                // If region already has delivery coordinates, show them
+                                if (region.latitude && region.longitude) {
+                                    setDeliveryPoint(region.latitude, region.longitude);
+
+                                }
+                            }, 300);
+                        }, 150);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to load region data',
+                        icon: 'error'
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '#submit_delivery_point', function() {
+            const point = getDeliveryPoint();
+            if (!point) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please select a delivery point',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            const region_id = $('#delivery_region_id').val();
+
+            $.ajax({
+                url: "{{ url('region/update') }}",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'POST',
+                data: {
+                    region_id: region_id,
+                    longitude: point.lng,
+                    latitude: point.lat
+                },
+                success: function(response) {
+                    if (response.status == 1) {
+                        $('#deliveryPointModal').modal('hide');
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Delivery point has been updated',
+                            icon: 'success'
+                        });
+
+                        // Optionally refresh the datatable if you have one
+                        // if ($.fn.DataTable.isDataTable('#regionsTable')) {
+                        //     $('#regionsTable').DataTable().ajax.reload();
+                        // }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to update delivery point',
                         icon: 'error'
                     });
                 }

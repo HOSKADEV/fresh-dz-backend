@@ -182,7 +182,7 @@
                             document.getElementById('name_en').value = response.data.name_en;
 
                             $.ajax({
-                                url: '{{ url('category/get?all=1') }}',
+                                url: '{{ url('api/v1/category/get?all=1') }}',
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
                                         'content')

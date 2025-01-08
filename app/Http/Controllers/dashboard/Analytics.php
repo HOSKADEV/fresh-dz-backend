@@ -15,6 +15,10 @@ class Analytics extends Controller
 {
   public function index()
   {
+    return view('content.dashboard.dashboards-home');
+  }
+  public function analytics()
+  {
     //dd(Auth::id());
     $last_year = Carbon::now()->subYear()->lastOfMonth();
     $last_month = Carbon::now()->subMonth()->lastOfMonth();

@@ -82,9 +82,16 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label" for="phone">{{ __('Phone') }}</label>
-                            <input type="text" class="form-control" id="phone" name="phone" />
-                        </div>
+                          <label class="form-label" for="phone">{{ __('Phone') }}</label>
+                          <div class="d-flex" dir="ltr">
+                              <div class="me-2">
+                                  <span class="form-control bg-light">+213</span>
+                              </div>
+                              <div class="flex-grow-1">
+                                  <input type="number" class="form-control" id="phone" name="phone">
+                              </div>
+                          </div>
+                      </div>
 
 
                         <div class="mb-3" style="text-align: center">
@@ -194,7 +201,6 @@
                     dataType: 'JSON',
                     success: function(response) {
                         if (response.status == 1) {
-
                             document.getElementById('firstname').value = response.data
                             .firstname;
                             document.getElementById('lastname').value = response.data.lastname;

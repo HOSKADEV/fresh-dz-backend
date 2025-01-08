@@ -8,11 +8,13 @@
         <div class="col-md-auto">
             <span class="text-muted fw-light">{{ __('Order') }} /</span> {{ __('Items') }}
         </div>
-        @if ($order->status == 'pending' || $order->status == 'accepted')
-            <div class="col-md-auto">
-                <button type="button" class="btn btn-primary" id="create" style="float:right">{{ __('Add item') }}</button>
-            </div>
-        @endif
+
+          @if ($order->status == 'pending' && (in_array(auth()->user()->role, [0, 1]) || auth()->user()->region_id == $order->region_id))
+              <div class="col-md-auto">
+                  <button type="button" class="btn btn-primary" id="create" style="float:right">{{ __('Add item') }}</button>
+              </div>
+          @endif
+
 
     </h4>
 
@@ -163,7 +165,7 @@
                         url: "{{ url('item/list') }}",
                         type: 'POST',
                         data: {
-                            cart_id: "{{ $order->cart_id }}"
+                            order_id: "{{ $order->id }}"
                         },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -210,18 +212,9 @@
 
 
                         {
-                            data: 'action',
-                            name: 'action',
-                            render: function(data) {
-                                if ("{{ $order->status }}" == "pending" ||
-                                    "{{ $order->status }}" == "accepted") {
-                                    /* return '<div class="dropdown"><button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button><div class="dropdown-menu">'
-                                      +data+'</div></div>' */
-                                    return '<span>' + data + '</span>';
-                                } else {
-                                    return null;
-                                }
-                            }
+                          data: 'action',
+                          name: 'action',
+                          searchable: false
                         }
 
                     ],
@@ -415,7 +408,7 @@
 
                 var category_id = document.getElementById('category').value;
                 $.ajax({
-                    url: '{{ url('subcategory/get?all=1') }}',
+                    url: '{{ url('api/v1/subcategory/get?all=1') }}',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -447,7 +440,7 @@
 
                 var subcategory_id = document.getElementById('subcategory').value;
                 $.ajax({
-                    url: '{{ url('product/get?all=1') }}',
+                    url: '{{ url('api/v1/product/get?all=1') }}',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },

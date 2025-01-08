@@ -1,0 +1,123 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bxs-home-circle",
+      "slug": "dashboard-analytics"
+    },
+    {
+      "url": "/analytics",
+      "name": "Analytics",
+      "icon": "menu-icon tf-icons bx bxs-bar-chart-alt-2",
+      "slug": "analytics"
+    },
+    {
+      "url": "/admin/browse",
+      "name": "Admins",
+      "icon": "menu-icon tf-icons bx bxs-group",
+      "slug": "admin-browse"
+    },
+    {
+      "url": "/user/browse",
+      "name": "Users",
+      "icon": "menu-icon tf-icons bx bxs-user",
+      "slug": "user-browse"
+    },
+    {
+      "url": "/ad/browse",
+      "name": "Ads",
+      "icon": "menu-icon tf-icons bx bxs-badge-dollar",
+      "slug": "ad-browse"
+    },
+    {
+      "url": "/product/browse",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bxs-package",
+      "slug": "product-browse"
+    },
+    {
+      "url": "/driver/browse",
+      "name": "Drivers",
+      "icon": "menu-icon tf-icons bx bxs-truck",
+      "slug": "driver-browse"
+    },
+    {
+      "url": "/coupon/browse",
+      "name": "Coupons",
+      "icon": "menu-icon tf-icons bx bxs-coupon",
+      "slug": "coupon-browse"
+    },
+    {
+      "url": "/order/browse",
+      "name": "Orders",
+      "icon": "menu-icon tf-icons bx bxs-spreadsheet",
+      "slug": "order-browse"
+    },
+    {
+      "url": "/notice/browse",
+      "name": "Notices",
+      "icon": "menu-icon tf-icons bx bxs-bell",
+      "slug": "notice-browse"
+    },
+    {
+      "name": "System settings",
+      "icon": "menu-icon tf-icons bx bxs-cog",
+      "slug": "settings",
+      "submenu": [
+        {
+          "url": "/category/browse",
+          "name": "Categories",
+          "slug": "settings-category-browse"
+        },
+        {
+          "url": "/subcategory/browse",
+          "name": "Subcategories",
+          "slug": "settings-subcategory-browse"
+        },
+        {
+          "url": "/unit/browse",
+          "name": "Units",
+          "slug": "settings-unit-browse"
+        },
+        {
+          "url": "/family/browse",
+          "name": "Families",
+          "slug": "settings-family-browse"
+        },
+        {
+          "url": "/offer/browse",
+          "name": "Offers",
+          "slug": "settings-offer-browse"
+        },
+        {
+          "url": "/group/browse",
+          "name": "Groups",
+          "slug": "settings-group-browse"
+        },
+        {
+          "url": "/section/browse",
+          "name": "Sections",
+          "slug": "settings-section-browse"
+        }
+      ]
+    },
+    {
+      "name": "Documentation",
+      "icon": "menu-icon tf-icons bx bxs-info-square",
+      "slug": "documentation",
+      "submenu": [
+        {
+          "url": "/documentation/privacy_policy",
+          "name": "Privacy policy",
+          "slug": "documentation_privacy_policy"
+        },
+        {
+          "url": "/documentation/about",
+          "name": "About",
+          "slug": "documentation_about"
+        }
+      ]
+    }
+  ]
+}

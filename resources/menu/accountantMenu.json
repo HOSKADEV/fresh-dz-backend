@@ -1,0 +1,28 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bxs-home-circle",
+      "slug": "dashboard-analytics"
+    },
+    {
+      "url": "/analytics",
+      "name": "Analytics",
+      "icon": "menu-icon tf-icons bx bxs-bar-chart-alt-2",
+      "slug": "analytics"
+    },
+    {
+      "url": "/product/browse",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bxs-package",
+      "slug": "product-browse"
+    },
+    {
+      "url": "/order/browse",
+      "name": "Orders",
+      "icon": "menu-icon tf-icons bx bxs-spreadsheet",
+      "slug": "order-browse"
+    }
+  ]
+}

@@ -18,6 +18,10 @@ class AdminController extends Controller
     ->with('regions', $regions);
   }
 
+  public function account(){
+    return view('content.account.index');
+  }
+
   public function create(Request $request){
 
     $validator = Validator::make($request->all(), [
@@ -68,7 +72,7 @@ class AdminController extends Controller
 
   public function update(Request $request){
 
-    $request->mergeIfMissing(['admin_id' => auth()->admin()->id]);
+    $request->mergeIfMissing(['admin_id' => auth()->user()->id]);
     $admin = Admin::find($request->admin_id);
 
     $validator = Validator::make($request->all(), [
@@ -117,6 +121,8 @@ class AdminController extends Controller
   }
 
   public function delete(Request $request){
+
+    $request->mergeIfMissing(['admin_id' => auth()->user()->id]);
 
     $validator = Validator::make($request->all(), [
       'admin_id' => 'required',
@@ -183,6 +189,46 @@ class AdminController extends Controller
       ]
     );
     }
+
+  }
+
+  public function change_password(Request $request){
+
+    $validator = Validator::make($request->all(), [
+      'old_password' => 'required',
+      'new_password' => 'required|min:8|confirmed',
+    ]);
+
+
+
+    if ($validator->fails()) {
+      return response()->json([
+        'status'=> 0,
+        'message' => $validator->errors()->first()
+      ]);
+
+    }
+
+      $user = auth()->user();
+
+      if(Hash::check($request->old_password, $user->password)){
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+          'status'=> 1,
+          'message' => __('password changed')
+        ]);
+
+      }else{
+
+        return response()->json([
+          'status'=> 0,
+          'message' => __('wrong password')
+        ]);
+
+      }
 
   }
 

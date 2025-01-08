@@ -51,10 +51,24 @@ class Admin extends Authenticatable
   {
     return $value && Storage::disk('upload')->exists($value)
       ? Storage::disk('upload')->url($value)
-      : $value;
+      : asset("assets/img/avatars/{$this->role}.png");
   }
 
-  public function region(){
+  public function region()
+  {
     $this->belongsTo(Region::class);
+  }
+
+  public function role()
+  {
+    return match ($this->role) {
+      0 => 'Super Admin',
+      1 => 'Admin',
+      2 => 'Data Entry',
+      3 => 'Region Manager',
+      4 => 'Accountant',
+      5 => 'Marketer',
+      default => 'Unknown',
+    };
   }
 }

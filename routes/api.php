@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['sometimes.auth']], function () {
   Route::get('/v1/version','App\Http\Controllers\VersionController@get');
-  Route::post('/v1/distance','App\Http\Controllers\OrderController@distance');
+  //Route::post('/v1/distance','App\Http\Controllers\OrderController@distance');
   Route::post('/v1/register','App\Http\Controllers\AuthController@register');
   Route::post('/v1/login','App\Http\Controllers\AuthController@login');
   Route::post('/v1/home','App\Http\Controllers\SectionController@get');
@@ -31,6 +31,7 @@ Route::group(['middleware' => ['sometimes.auth']], function () {
   Route::get('/v1/privacy_policy','App\Http\Controllers\DocumentationController@privacy_policy');
   Route::get('/v1/about','App\Http\Controllers\DocumentationController@about');
   Route::get('/v1/settings','App\Http\Controllers\SetController@get');
+  Route::post('/v1/info','App\Http\Controllers\SetController@info');
 
   Route::post('/v1/category/get','App\Http\Controllers\CategoryController@get');
   Route::post('/v1/subcategory/get','App\Http\Controllers\SubcategoryController@get');
@@ -40,7 +41,6 @@ Route::group(['middleware' => ['sometimes.auth']], function () {
   Route::post('/v1/offer/get','App\Http\Controllers\OfferController@get');
   Route::post('/v1/region/get','App\Http\Controllers\RegionController@get');
   // Route::post('/v1/driver/get','App\Http\Controllers\DriverController@get');
-  Route::post('/v1/coupon/check','App\Http\Controllers\CouponController@check');
 });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   Route::post('/v1/notification/get','App\Http\Controllers\NotificationController@get');
   Route::post('/v1/notification/read','App\Http\Controllers\NotificationController@read');
+
+  //Route::post('/v1/coupon/check','App\Http\Controllers\CouponController@check');
 
   Route::post('/v1/category/create','App\Http\Controllers\CategoryController@create');
   Route::post('/v1/category/update','App\Http\Controllers\CategoryController@update');
@@ -121,6 +123,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
   Route::post('/v1/reminder/create','App\Http\Controllers\ReminderController@create');
   Route::post('/v1/reminder/delete','App\Http\Controllers\ReminderController@delete');
+
+  Route::post('/v1/location/create','App\Http\Controllers\LocationController@create');
+  Route::post('/v1/location/update','App\Http\Controllers\LocationController@update');
+  Route::post('/v1/location/delete','App\Http\Controllers\LocationController@delete');
+  Route::get('/v1/location/get','App\Http\Controllers\LocationController@get');
+
 });
 
 Route::post('v1/test', function(Request $request){

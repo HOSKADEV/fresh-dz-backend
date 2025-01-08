@@ -16,7 +16,7 @@ return new class extends Migration
           $table->foreignId('region_id')->nullable()->default(null)->constrained();
           $table->string('name')->unique();
           $table->string('image')->nullable()->default(null);
-          $table->integer('phone')->unique();
+          $table->string('phone')->unique();
           $table->string('email')->unique();
           $table->timestamp('email_verified_at')->nullable();
           $table->string('password');

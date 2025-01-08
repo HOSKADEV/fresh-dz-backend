@@ -8,9 +8,11 @@
         <div class="col-md-auto">
             <span class="text-muted fw-light">{{ __('Products') }} /</span> {{ __('Browse products') }}
         </div>
-        <div class="col-md-auto">
-            <button type="button" class="btn btn-primary" id="create">{{ __('Add Product') }}</button>
-        </div>
+        @if (in_array(auth()->user()->role, [0, 1, 2, 5]))
+          <div class="col-md-auto">
+              <button type="button" class="btn btn-primary" id="create">{{ __('Add Product') }}</button>
+          </div>
+        @endif
     </h4>
 
     <!-- Basic Bootstrap Table -->
@@ -103,7 +105,69 @@
                                 </div>
                                 <hr class="my-0">
 
-                                <div class="mb-3">
+                                <div class="row  justify-content-between p-2">
+
+                                  <div class="form-group col-md-6">
+                                    <label class="form-label" for="unit_name">{{ __('Name') }}</label>
+                                    <input type="text" class="form-control" id="unit_name" name="unit_name"
+                                    placeholder="{{ __('Unit name') }}" />
+                                  </div>
+
+                                  <div class="form-group col-md-6">
+                                    <label class="form-label" for="unit_price">{{ __('Price') }}</label>
+                                    <input type="text" class="form-control" id="unit_price" name="unit_price"
+                                    placeholder="{{ __('Unit price') }}" />
+                                  </div>
+
+                                </div>
+
+                                <div class="row  justify-content-between p-2">
+
+                                  <div class="form-group col-md-6">
+                                    <label class="form-label" for="category_id">{{ __('Category') }}</label>
+                                    <select class="form-select" id="category_id">
+                                      <option value=""> {{ __('Select category') }}</option>
+                                      @foreach ($categories as $category)
+                                          <option value="{{ $category->id }}"> {{ $category->name }} </option>
+                                      @endforeach
+                                  </select>
+                                  </div>
+
+                                  <div class="form-group col-md-6">
+                                    <label class="form-label" for="subcategory_id">{{ __('Subcategory') }}</label>
+                                    <select class="form-select" id="subcategory_id" name="subcategory_id">
+                                      <option value=""> {{ __('Select category first') }} </option>
+                                  </select>
+                                  </div>
+
+                                </div>
+
+                                <div class="row  justify-content-between p-2">
+
+                                  <div class="form-group col-md-6">
+                                    <label class="form-label" for="unit_id">{{ __('Unit type') }}</label>
+                                    <select class="form-select" id="unit_id" name="unit_id">
+                                      <option value=""> {{ __('Select category') }}</option>
+                                      @foreach ($units as $unit)
+                                          <option value="{{ $unit->id }}"> {{ $unit->name(session('locale')) }} </option>
+                                      @endforeach
+                                        {{-- <option value="1"> {{ __('Piece') }}</option>
+                                        <option value="2"> {{ __('100 gram') }}</option>
+                                        <option value="3"> {{ __('1 kilogram') }}</option> --}}
+                                    </select>
+                                  </div>
+
+                                  <div class="form-group col-md-6">
+                                    <label class="form-label" for="status">{{ __('Status') }}</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="1"> {{ __('Available') }}</option>
+                                        <option value="2"> {{ __('Unavailable') }}</option>
+                                    </select>
+                                  </div>
+
+                                </div>
+
+                                {{-- <div class="mb-3">
                                     <label class="form-label" for="name">{{ __('Name') }}</label>
                                     <div class="input-group input-group-merge">
                                         <input type="text" class="form-control" id="unit_name" name="unit_name"
@@ -136,19 +200,29 @@
                                             <option value=""> {{ __('Select category first') }} </option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
 
                             </div>
                             <div class="col-md-6">
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="name">{{ __('Pack units') }}</label>
-                                    <input type="number" class="form-control" id="pack_units" name="pack_units" />
+                                    <label class="form-label" for="pack_name">{{ __('Pack name') }}</label>
+                                    <input type="text" class="form-control" id="pack_name" name="pack_name" />
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label" for="unit_type">{{ __('Unit type') }}</label>
-                                    <select class="form-select" id="unit_type" name="unit_type">
+                                  <label class="form-label" for="pack_price">{{ __('Pack price') }}</label>
+                                  <input type="number" class="form-control" id="pack_price" name="pack_price" />
+                              </div>
+
+                              <div class="mb-3">
+                                <label class="form-label" for="pack_units">{{ __('Pack units') }}</label>
+                                <input type="number" class="form-control" id="pack_units" name="pack_units" />
+                            </div>
+
+                                {{-- <div class="mb-3">
+                                    <label class="form-label" for="unit_id">{{ __('Unit type') }}</label>
+                                    <select class="form-select" id="unit_id" name="unit_id">
                                         <option value="1"> {{ __('Piece') }}</option>
                                         <option value="2"> {{ __('100 gram') }}</option>
                                         <option value="3"> {{ __('1 kilogram') }}</option>
@@ -162,7 +236,7 @@
                                         <option value="1"> {{ __('Available') }}</option>
                                         <option value="2"> {{ __('Unavailable') }}</option>
                                     </select>
-                                </div>
+                                </div> --}}
 
                                 <div class="mb-3">
                                     <label for="" class="form-label">{{ __('Description') }}</label>
@@ -284,7 +358,7 @@
                 var discount = document.getElementById('discount').value;
                 var availability = document.getElementById('availability').value;
                 $.ajax({
-                    url: '{{ url('subcategory/get?all=1') }}',
+                    url: '{{ url('api/v1/subcategory/get?all=1') }}',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
@@ -410,8 +484,8 @@
                                 .pack_price;
                             document.getElementById('pack_units').value = response.data
                                 .pack_units;
-                            document.getElementById('unit_type').value = response.data
-                                .unit_type;
+                            document.getElementById('unit_id').value = response.data
+                                .unit_id;
                             document.getElementById('status').value = response.data.status ==
                                 'available' ? 1 : 2;
                             document.getElementById('description').value = response.data
@@ -445,7 +519,7 @@
                 var category_id = document.getElementById('category_id').value;
                 $.when(
                     $.ajax({
-                        url: '{{ url('subcategory/get?all=1') }}',
+                        url: '{{ url('api/v1/subcategory/get?all=1') }}',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },

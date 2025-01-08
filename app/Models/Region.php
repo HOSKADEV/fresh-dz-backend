@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Region extends Model
 {
   use HasFactory;
-    protected $fillable = ['name', 'boundaries'];
+  protected $fillable = [
+    'name',
+    'longitude',
+    'latitude',
+    'boundaries'
+  ];
 }

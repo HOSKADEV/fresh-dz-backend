@@ -65,7 +65,16 @@ class Order extends Model
     }
 
     public function address(){
-      return 'https://maps.google.com/?q='.$this->longitude.','.$this->latitude;
+      return 'https://maps.google.com/?q='.$this->latitude.','.$this->longitude;
+    }
+
+    public function whatsapp(){
+      return 'https://wa.me/'.$this->delivery?->driver?->phone().'?text=' .
+      __('order N') . ': ' . $this->id . '%0A' .
+      __('Total amount') . ': ' . number_format($this->invoice->total_amount, 2, '.', ',') . '%0A' .
+      __('Phone') . ': ' . $this->phone() . '%0A' .
+      __('Invoice') . ': ' . $this->invoice->file . '%0A' .
+      __('Location') . ': ' . $this->address();
     }
 
 }

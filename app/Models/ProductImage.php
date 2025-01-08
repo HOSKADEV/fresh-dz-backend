@@ -19,7 +19,7 @@ class ProductImage extends Model
       return $this->belongs(Product::class);
     }
 
-    public function getImageAttribute($value)
+    public function getPathAttribute($value)
     {
       return $value && Storage::disk('upload')->exists($value)
       ? Storage::disk('upload')->url($value)

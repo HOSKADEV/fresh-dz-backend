@@ -2,36 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PaginatedProductCollection;
-use App\Http\Resources\ProductCollection;
-use App\Http\Resources\ProductResource;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Subcategory;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Session;
+use Exception;
+use App\Models\Unit;
+use App\Models\Product;
+use App\Models\Category;
+use App\Models\Subcategory;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductCollection;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\PaginatedProductCollection;
 
 class ProductController extends Controller
 {
 
   public function index(){
     $categories = Category::all();
+    $units = Unit::all();
     return view('content.products.list')
-    ->with('categories',$categories);
+    ->with('categories',$categories)
+    ->with('units',$units);
   }
   public function create(Request $request){
     //dd($request->all());
     $validator = Validator::make($request->all(), [
 
       'subcategory_id' => 'required|exists:subcategories,id',
+      'unit_id' => 'required|exists:units,id',
       'unit_name' => 'required|string',
       'pack_name'=> 'sometimes|string',
       'image' => 'sometimes|mimetypes:image/*',
       'unit_price' => 'required|numeric',
-      'unit_type' => 'required|in:1,2,3',
       'pack_price' => 'required_with:pack_units|nullable|numeric',
       'pack_units' => 'required_with:pack_price|nullable|integer',
       'status' => 'required|in:1,2',
@@ -84,11 +87,11 @@ class ProductController extends Controller
 
     $validator = Validator::make($request->all(), [
       'product_id' => 'required|exists:products,id',
+      'unit_id' => 'sometimes|exists:units,id',
       'unit_name' => 'sometimes|string',
       'pack_name'=> 'sometimes|string',
       'image' => 'sometimes|mimetypes:image/*',
       'unit_price' => 'sometimes|numeric',
-      'unit_type' => 'sometimes|in:1,2,3',
       'pack_price' => 'required_with:pack_units|nullable|numeric',
       'pack_units' => 'required_with:pack_price|nullable|integer',
       'status' => 'sometimes|in:1,2',

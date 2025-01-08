@@ -77,6 +77,10 @@ class User extends Authenticatable
     return $this->hasMany(Reminder::class);
   }
 
+  public function locations(){
+    return $this->hasMany(Location::class);
+  }
+
   public function fullname()
   {
     //return $this->firstname . ' ' . $this->lastname;

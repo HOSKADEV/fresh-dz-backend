@@ -58,14 +58,16 @@
                         <option value=""> {{ __('All') }}</option>
                     </select>
                 </div>
-                <div class="col-md-auto">
-                    <select class="form-select filter-select" id="region" name="region">
-                        <option value=""> {{ __('Region filter') }}</option>
-                        @foreach ($regions as $region)
-                            <option value="{{ $region->id }}"> {{ $region->name }} </option>
-                        @endforeach
-                    </select>
-                </div>
+                @if(auth()->user()->role != 3)
+                  <div class="col-md-auto">
+                      <select class="form-select filter-select" id="region" name="region">
+                          <option value=""> {{ __('Region filter') }}</option>
+                          @foreach ($regions as $region)
+                              <option value="{{ $region->id }}"> {{ $region->name }} </option>
+                          @endforeach
+                      </select>
+                  </div>
+                @endif
             </div>
             <table class="table" id="laravel_datatable">
                 <thead>
@@ -215,31 +217,40 @@
                 <div class="modal-body">
                     <div id="map" style="height: 300px; margin-bottom: 20px;"></div>
                     <div class="row g-3">
-                        <div class="col-md-6">
+                        <div class="col-md-4 text-center">
                             <label class="fw-bold">{{ __('Expected Delivery Time') }}</label>
                             <p id="delivery-time"></p>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4 text-center">
                             <label class="fw-bold">{{ __('Payment Status') }}</label>
                             <div id="payment-status"></div>
-                            <small id="paid-at" class="d-block text-muted"></small>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-md-4 text-center">
+                          <label class="fw-bold">{{ __('Payment Date') }}</label>
+                          <div><p id="paid-at"></p></div>
+                      </div>
+                        <div class="col-md-4 text-center">
                             <label class="fw-bold">{{ __('Payment Method') }}</label>
                             <div>
                                 <span id="payment-method"></span>
-                                <p id="payment-account" class="text-muted mb-0"></p>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4 text-center">
                             <label class="fw-bold">{{ __('Payment Receipt') }}</label>
                             <div>
-                                <a id="receipt-link" href="#" class="btn btn-sm btn-outline-primary"
+                                <a id="receipt-link" href="#"
                                     target="_blank">
                                     {{ __('Download Receipt') }}
                                 </a>
                             </div>
                         </div>
+
+                        <div class="col-md-4 text-center">
+                          <label class="fw-bold">{{ __('Payment Account') }}</label>
+                          <div><p id="payment-account"></p></div>
+                      </div>
+
                         <div class="col-12">
                             <table class="table table-sm">
                                 <tr>
@@ -806,30 +817,6 @@
                 });
             });
 
-            $('#shipping_switch').on('change', function() {
-                var checkbox = document.getElementById('shipping_switch');
-                var status = checkbox.checked ? 1 : 0;
-                $.ajax({
-                    url: "{{ url('shipping/switch') }}",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: 'POST',
-                    dataType: 'JSON',
-                    data: {
-                        status: status,
-                    },
-                    //contentType: false,
-                    //processData: false,
-                    success: function(response) {
-                        if (response.status == 1) {
-                            $('#laravel_datatable').DataTable().ajax.reload();
-                        }
-                    }
-                });
-
-            });
-
             $(document).on('click', '.invoice', function() {
 
                 Swal.fire({
@@ -891,7 +878,7 @@
                         if (response.status === 1) {
 
                             initializeMap();
-                            addMarker(response.data.longitude, response.data.latitude);
+                            addMarker(response.data.latitude, response.data.longitude);
 
                             // Update modal content
                             $('#delivery-time').text(moment(response.data.delivery_time).format(

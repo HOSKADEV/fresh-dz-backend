@@ -20,7 +20,7 @@ class DriverController extends Controller
     $validator = Validator::make($request->all(), [
       'firstname' => 'required|string',
       'lastname' => 'required|string',
-      'phone' => 'required|min:10|unique:drivers,phone',
+      'phone' => 'required|min:9|max:9|unique:drivers,phone',
       'image' => 'sometimes|mimetypes:image/*'
     ]);
 
@@ -31,7 +31,6 @@ class DriverController extends Controller
       ]);
     }
     try{
-
 
       $driver = Driver::create($request->except('image'));
 
@@ -54,7 +53,7 @@ class DriverController extends Controller
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new DriverResource($driver)
+        'data' => $driver
       ]);
 
     }catch(Exception $e){
@@ -72,7 +71,7 @@ class DriverController extends Controller
       'driver_id' => 'required',
       'firstname' => 'sometimes|string',
       'lastname' => 'sometimes|string',
-      'phone' => ['sometimes','min:10',Rule::unique('drivers')->ignore($request->driver_id)],
+      'phone' => ['sometimes','min:9', 'max:9',Rule::unique('drivers')->ignore($request->driver_id)],
       'image' => 'sometimes|mimetypes:image/*'
     ]);
 
@@ -108,7 +107,7 @@ class DriverController extends Controller
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new DriverResource($driver)
+        'data' => $driver
       ]);
 
     }catch(Exception $e){

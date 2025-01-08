@@ -1,3 +1,19 @@
+@php
+  $verticalMenuJson = file_get_contents(base_path(
+      match(auth()->user()->role){
+        0 => '/resources/menu/superMenu.json',
+        1 => '/resources/menu/adminMenu.json',
+        2 => '/resources/menu/dataMenu.json',
+        3 => '/resources/menu/managerMenu.json',
+        4 => '/resources/menu/accountantMenu.json',
+        5 => '/resources/menu/marketerMenu.json',
+        default => '/resources/menu/verticalMenu.json',
+      }
+    ));
+    $verticalMenuData = json_decode($verticalMenuJson);
+    $menuData = [$verticalMenuData];
+@endphp
+
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
   <!-- ! Hide app brand if navbar-full -->

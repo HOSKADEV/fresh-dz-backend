@@ -56,27 +56,20 @@ class OrderController extends Controller
     try {
 
       $start_point = [
-        'lng' => 33.386027,
-        'lat' => 6.839005
+        'longitude' => 33.386027,
+        'latitude' => 6.839005
       ];
 
       $end_point = [
-        'lng' => floatval($request->longitude),
-        'lat' => floatval($request->latitude)
+        'longitude' => floatval($request->longitude),
+        'latitude' => floatval($request->latitude)
       ];
-
-      $distance = $this->calc_distance($start_point, $end_point);
-      /* $true_price = ($distance/1000) * 20;
-      $actual_price = min(max($true_price,100),500); */
-      $price = $this->delivery_price($distance);
 
       return response()->json(
         [
           'status' => 1,
-          'data' => [
-            'distance' => number_format($distance / 1000, 2, '.', ','),
-            'price' => number_format($price, 2, '.', ',')
-          ]
+          'data' => number_format(Set::calculateDeliveryPrice($start_point, $end_point),2)
+
         ]
       );
 
@@ -140,27 +133,9 @@ class OrderController extends Controller
 
       $order = Order::create($request->all());
 
-      $start_point = [
-        'lng' => 33.386027,
-        'lat' => 6.839005
-      ];
-
-      $end_point = [
-        'lng' => floatval($request->longitude),
-        'lat' => floatval($request->latitude)
-      ];
-
-      $distance = $this->calc_distance($start_point, $end_point);
-      /* $true_price = ($distance/1000) * 20;
-      $actual_price = min(max($true_price,100),500); */
-      $price = $this->delivery_price($distance);
-
-
 
       $invoice = Invoice::create([
         'order_id' => $order->id,
-        //'tax_type' => $request->tax_type,
-        'tax_amount' => $price,
         'discount_code' => $request->discount_code,
         'payment_method' => $request->payment_method,
         'payment_account' => $request->payment_account,

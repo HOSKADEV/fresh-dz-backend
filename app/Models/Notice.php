@@ -49,7 +49,7 @@ class Notice extends Model
 
   public static function ProfileNotice(string $action, string $value): self
   {
-    $key = "notices.profile.{$action}.{$value}";
+    $key = "messages.profile.{$action}.{$value}";
 
     return self::create([
       'title_en' => trans("{$key}.title", [], 'en'),
@@ -65,10 +65,10 @@ class Notice extends Model
   public static function CouponNotice(string $code, int $discount): self
   {
     return self::create([
-      'title_en' => trans('notices.coupon.title', [], 'en'),
-      'title_ar' => trans('notices.coupon.title', [], 'ar'),
-      'content_en' => trans('notices.coupon.content', ['discount' => $discount], 'en'),
-      'content_ar' => trans('notices.coupon.content', ['discount' => $discount], 'ar'),
+      'title_en' => trans('messages.coupon.title', [], 'en'),
+      'title_ar' => trans('messages.coupon.title', [], 'ar'),
+      'content_en' => trans('messages.coupon.content', ['discount' => $discount], 'en'),
+      'content_ar' => trans('messages.coupon.content', ['discount' => $discount], 'ar'),
       'type' => 2,
       'priority' => 0,
       'metadata' => json_encode(['code' => $code])
@@ -77,7 +77,7 @@ class Notice extends Model
 
   public static function OrderNotice(int $orderId, string $status): self
   {
-    $key = "notices.order.{$status}";
+    $key = "messages.order.{$status}";
 
     return self::create([
       'title_en' => trans("{$key}.title", [], 'en'),
@@ -95,7 +95,7 @@ class Notice extends Model
 
   public static function ProductNotice(int $productId, string $productName, string $image, string $status): self
   {
-    $key = "notices.product.{$status}";
+    $key = "messages.product.{$status}";
 
     return self::create([
       'title_en' => trans("{$key}.title", [], 'en'),

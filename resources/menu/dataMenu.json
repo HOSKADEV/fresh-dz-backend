@@ -1,0 +1,34 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bxs-home-circle",
+      "slug": "dashboard-analytics"
+    },
+    {
+      "url": "/category/browse",
+      "name": "Categories",
+      "icon": "menu-icon tf-icons bx bxs-category",
+      "slug": "settings-category-browse"
+    },
+    {
+      "url": "/subcategory/browse",
+      "name": "Subcategories",
+      "icon": "menu-icon tf-icons bx bxs-shapes",
+      "slug": "settings-subcategory-browse"
+    },
+    {
+      "url": "/unit/browse",
+      "name": "Unit",
+      "icon": "menu-icon tf-icons bx bxs-ruler",
+      "slug": "settings-unit-browse"
+    },
+    {
+      "url": "/product/browse",
+      "name": "Products",
+      "icon": "menu-icon tf-icons bx bxs-package",
+      "slug": "product-browse"
+    }
+  ]
+}
