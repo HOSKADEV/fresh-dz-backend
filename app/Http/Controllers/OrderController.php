@@ -95,7 +95,7 @@ class OrderController extends Controller
       'delivery_time' => 'required|date|after_or_equal:now',
       'discount_code' => ['sometimes', 'nullable', 'string', new ValidCoupon()],
       'payment_method' => 'required|in:ccp,baridi,chargily,cash',
-      'payment_account' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
+      //'payment_account' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
       'payment_receipt' => Rule::requiredIf(in_array($request->payment_method, ['ccp', 'baridi'])),
       'checkout_id' => 'required_if:payment_method,chargily',
       'region_id' => 'required|exists:regions,id',
