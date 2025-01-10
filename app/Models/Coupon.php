@@ -20,7 +20,7 @@ class Coupon extends Model
   ];
 
   public function uses(){
-    return Invoice::where('code', $this->code)->count();
+    return Invoice::where('discount_code', $this->code)->count();
   }
 
 }
