@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sets', function (Blueprint $table) {
-            $table->dropColumn('status');
-            $table->string('value')->after('name')->nullable()->default(null);
+//            $table->dropColumn('status');
+            $table->string('value')->after('id')->nullable()->default(null);
         });
     }
 

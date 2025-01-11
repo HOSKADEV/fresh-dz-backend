@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('notices', function (Blueprint $table) {
-            $table->smallInteger('priority')->after('type')->default(0);
-            $table->json('metadata')->nullable()->default(null)->after('priority');
+      Schema::create('notices', function (Blueprint $table) {
+            $table->id();
+            $table->string('title_ar');
+            $table->string('title_en');
+            $table->string('content_ar');
+            $table->string('content_en');
+            $table->enum('type', ['important', 'normal', 'urgent']);
+            $table->smallInteger('priority')->default(0);
+            $table->json('metadata')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -22,8 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notices', function (Blueprint $table) {
-            //
-        });
+            Schema::dropIfExists('notices');
     }
 };
