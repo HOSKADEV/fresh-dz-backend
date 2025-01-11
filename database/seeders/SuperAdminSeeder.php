@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use \App\Models\Admin;
 
 class SuperAdminSeeder extends Seeder
 {
@@ -12,7 +13,7 @@ class SuperAdminSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Admin::create([
+        Admin::create([
           'name' => 'super admin',
           'phone' => '0123456789',
           'email' => 'super@admin.com',
