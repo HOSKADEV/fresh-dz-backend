@@ -43,7 +43,7 @@
 
         navigator.serviceWorker.addEventListener('message', event => {
             if (event.data.type === 'PLAY_NOTIFICATION_SOUND') {
-                const audio = new Audio('/assets/audio/mixkit-urgent-simple-tone-loop-2976.wav');
+                const audio = new Audio("{{ asset('/assets/audio/mixkit-urgent-simple-tone-loop-2976.wav') }}");
                 audio.play();
             }
         });
