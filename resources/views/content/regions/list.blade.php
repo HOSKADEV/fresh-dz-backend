@@ -138,13 +138,15 @@
                         }, 150);
                     }
                 },
-                error: function(xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Failed to load region data',
-                        icon: 'error'
-                    });
-                }
+                error: function(data) {
+                        var errors = data.responseJSON;
+                        Swal.fire(
+                            "{{ __('Error') }}",
+                            errors.message,
+                            'error'
+                        );
+                        // Render the errors with js ...
+                    }
             });
         });
 
@@ -189,22 +191,25 @@
                 success: function(response) {
                     if (response.status == 1) {
                         Swal.fire({
-                            title: 'Success',
-                            text: response.message,
-                            icon: 'success'
+                          title: "{{ __('Success') }}",
+                                text: "{{ __('success') }}",
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
                         }).then((result) => {
                             $('#regionModal').modal('hide');
                             $('#laravel_datatable').DataTable().ajax.reload();
                         });
                     }
                 },
-                error: function(xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred while saving the region',
-                        icon: 'error'
-                    });
-                }
+                error: function(data) {
+                        var errors = data.responseJSON;
+                        Swal.fire(
+                            "{{ __('Error') }}",
+                            errors.message,
+                            'error'
+                        );
+                        // Render the errors with js ...
+                    }
             });
         });
 
@@ -244,13 +249,15 @@
                         }, 150);
                     }
                 },
-                error: function(xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Failed to load region data',
-                        icon: 'error'
-                    });
-                }
+                error: function(data) {
+                        var errors = data.responseJSON;
+                        Swal.fire(
+                            "{{ __('Error') }}",
+                            errors.message,
+                            'error'
+                        );
+                        // Render the errors with js ...
+                    }
             });
         });
 
@@ -258,8 +265,8 @@
             const point = getDeliveryPoint();
             if (!point) {
                 Swal.fire({
-                    title: 'Error',
-                    text: 'Please select a delivery point',
+                    title: "{{ __('Error') }}",
+                    text: "{{ __('Please select a delivery point') }}",
                     icon: 'error'
                 });
                 return;
@@ -282,9 +289,10 @@
                     if (response.status == 1) {
                         $('#deliveryPointModal').modal('hide');
                         Swal.fire({
-                            title: 'Success',
-                            text: 'Delivery point has been updated',
-                            icon: 'success'
+                          title: "{{ __('Success') }}",
+                                text: "{{ __('success') }}",
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
                         });
 
                         // Optionally refresh the datatable if you have one
@@ -293,13 +301,15 @@
                         // }
                     }
                 },
-                error: function(xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Failed to update delivery point',
-                        icon: 'error'
-                    });
-                }
+                error: function(data) {
+                        var errors = data.responseJSON;
+                        Swal.fire(
+                            "{{ __('Error') }}",
+                            errors.message,
+                            'error'
+                        );
+                        // Render the errors with js ...
+                    }
             });
         });
     </script>

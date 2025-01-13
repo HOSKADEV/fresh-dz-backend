@@ -158,6 +158,7 @@ class OrderController extends Controller
       //$this->send_fcm_multi(__('New order'), __('There is a new order pending'), $admin_tokens);
 
       $user->notify(Notice::OrderNotice($order->id,'pending'), false);
+      $order->notify();
 
       return response()->json([
         'status' => 1,

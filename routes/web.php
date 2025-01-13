@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdController;
 use App\Http\Controllers\SetController;
@@ -288,5 +289,23 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/about', [DocumentationController::class, 'index'])->name('documentation_about');
         Route::post('/update', [DocumentationController::class, 'update']);
     });
+
+    Route::get('/pusher/beams-auth', function (Request $request) {
+
+      $userID = $request->user()->id;
+      $userIDInQueryParam = $request->user_id;
+
+      $beamsClient = new \Pusher\PushNotifications\PushNotifications(array(
+        "instanceId" => "28c790e7-fd74-4cf5-9d0c-f0c1e0c7b1e0",
+        "secretKey" => "F2847B6FF7E00151FF242507274AFE90A910D5035F1C3FCCCA1CC9E3D61BB828",
+      ));
+
+      if ($userID != $userIDInQueryParam) {
+          return response('Inconsistent request', 401);
+      } else {
+          $beamsToken = $beamsClient->generateToken($userID);
+          return response()->json($beamsToken);
+      }
+  });
 
 });

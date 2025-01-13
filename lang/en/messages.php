@@ -28,6 +28,10 @@ return [
     'content' => 'Use coupon to get :discount% discount on your next purchase.'
   ],
   'order' => [
+    'created' => [
+      'title' => 'New Order #:order_id',
+      'content' => 'New order received in :region_name'
+    ],
     'pending' => [
       'title' => 'New Order Placed',
       'content' => 'Your order #:order_id has been placed successfully. Waiting for confirmation.'

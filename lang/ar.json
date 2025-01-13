@@ -290,6 +290,8 @@
   "Payment Status": "حالة الدفع",
   "Payment Method": "طريقة الدفع",
   "Payment Receipt": "إيصال الدفع",
+  "Payment Date": "تاريخ الدفع",
+  "Payment Account": "حساب الدفع",
   "Download Receipt": "تحميل الإيصال",
   "Purchase Amount": "مبلغ الشراء",
   "Tax": "التوصيل",
@@ -413,5 +415,6 @@
     "Minimum Delivery Price": "الحد الأدنى لسعر التوصيل",
     "Maximum Delivery Price": "الحد الأقصى لسعر التوصيل",
     "Delivery Point": "نقطة التوصيل",
-    "Select Delivery Point": "اختر نقطة التوصيل"
+    "Select Delivery Point": "اختر نقطة التوصيل",
+    "Please select a delivery point" : "الرجاء تحديد نقطة توصيل"
 }

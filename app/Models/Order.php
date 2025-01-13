@@ -77,4 +77,27 @@ class Order extends Model
       __('Location') . ': ' . $this->address();
     }
 
+    public function notify(){
+
+      $admins = Admin::where('role',1)->orWhere('region_id',$this->region_id)->pluck('id')->toArray();
+
+      $beamsClient = new \Pusher\PushNotifications\PushNotifications(array(
+        "instanceId" => "28c790e7-fd74-4cf5-9d0c-f0c1e0c7b1e0",
+        "secretKey" => "F2847B6FF7E00151FF242507274AFE90A910D5035F1C3FCCCA1CC9E3D61BB828",
+      ));
+
+      $publishResponse = $beamsClient->publishToUsers(
+        $admins,
+        [
+          "web" => [
+            "notification" => [
+              "title" => trans('messages.order.created.title',['order_id' => $this->id]),
+              "body" => trans('messages.order.created.content',['region_name' => $this->region?->name]),
+              'deep_link' => url('order/browse'),
+            ]
+          ]
+      ]);
+
+    }
+
 }

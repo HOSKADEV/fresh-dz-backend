@@ -28,6 +28,10 @@ return [
     'content' => 'استخدم الكوبون للحصول على خصم :discount% على مشترياتك التالية.'
   ],
   'order' => [
+    'created' => [
+      'title' => 'طلب جديد #:order_id',
+      'content' => 'تم استلام طلب جديد في :region_name'
+    ],
     'pending' => [
       'title' => 'تم إنشاء طلب جديد',
       'content' => 'تم تقديم طلبك رقم #:order_id بنجاح. في انتظار التأكيد.'

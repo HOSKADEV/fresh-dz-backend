@@ -15,9 +15,54 @@
 <script src="https://cdn.datatables.net/plug-ins/1.13.1/sorting/datetime-moment.js"></script>
 
 {{-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> --}}
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
+
+<script>
+    const currentUserId = "{{ auth()->id() }}"; // Get this from your auth system
+    const beamsClient = new PusherPushNotifications.Client({
+        instanceId: "28c790e7-fd74-4cf5-9d0c-f0c1e0c7b1e0",
+    });
+
+    const beamsTokenProvider = new PusherPushNotifications.TokenProvider({
+        url: "/pusher/beams-auth",
+    });
+
+    if (currentUserId) {
+        beamsClient
+            .start()
+            .then(() => beamsClient.setUserId(currentUserId, beamsTokenProvider))
+            .catch(console.error);
+
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data.type === 'PLAY_NOTIFICATION_SOUND') {
+                const audio = new Audio('/assets/audio/mixkit-urgent-simple-tone-loop-2976.wav');
+                audio.play();
+            }
+        });
+
+        beamsClient
+            .getUserId()
+            .then((userId) => {
+                // Check if the Beams user matches the user that is currently logged in
+                if (userId !== currentUserId) {
+                    // Unregister for notifications
+                    return beamsClient.stop();
+                }
+            })
+            .catch(console.error);
+
+    }else{
+        beamsClient.stop();
+    }
+</script>
 
 <!-- END: Theme JS-->
 <!-- Pricing Modal JS-->
@@ -28,62 +73,61 @@
 <!-- END: Page JS-->
 
 <script>
-  $('#change_password').on('click', function() {
-    $("#change_password_modal").modal("show");
-  });
+    $('#change_password').on('click', function() {
+        $("#change_password_modal").modal("show");
+    });
 
-  $('#submit_password').on('click', function() {
+    $('#submit_password').on('click', function() {
 
-    var old_password = $('#old_password').val();
-    var new_password = $('#new_password').val();
-    var new_password_confirmation = $('#new_password_confirmation').val();
+        var old_password = $('#old_password').val();
+        var new_password = $('#new_password').val();
+        var new_password_confirmation = $('#new_password_confirmation').val();
 
-    $.ajax({
-        url: '{{ url('user/change_password') }}',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        type:'POST',
-        data:{
-          old_password :old_password,
-          new_password :new_password,
-          new_password_confirmation :new_password_confirmation,
-        },
-        dataType : 'JSON',
-        //contentType: false,
-        //processData: false,
-        success:function(response){
-            if(response.status==1){
-              $("#change_password_modal").modal("hide");
-              Swal.fire(
-                "{{ __('Success') }}",
-                "{{ __('success') }}",
-                  'success'
-              );
+        $.ajax({
+            url: '{{ url('user/change_password') }}',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'POST',
+            data: {
+                old_password: old_password,
+                new_password: new_password,
+                new_password_confirmation: new_password_confirmation,
+            },
+            dataType: 'JSON',
+            //contentType: false,
+            //processData: false,
+            success: function(response) {
+                if (response.status == 1) {
+                    $("#change_password_modal").modal("hide");
+                    Swal.fire(
+                        "{{ __('Success') }}",
+                        "{{ __('success') }}",
+                        'success'
+                    );
 
-            } else {
-              console.log(response.message);
-              Swal.fire(
-                  "{{ __('Error') }}",
-                  response.message,
-                  'error'
-              );
+                } else {
+                    console.log(response.message);
+                    Swal.fire(
+                        "{{ __('Error') }}",
+                        response.message,
+                        'error'
+                    );
+                }
+            },
+            error: function(data) {
+                var errors = data.responseJSON;
+                console.log(errors);
+                Swal.fire(
+                    "{{ __('Error') }}",
+                    errors.message,
+                    'error'
+                );
+                // Render the errors with js ...
             }
-        },
-        error: function(data){
-          var errors = data.responseJSON;
-          console.log(errors);
-          Swal.fire(
-              "{{ __('Error') }}",
-              errors.message,
-              'error'
-          );
-          // Render the errors with js ...
-        }
 
 
-      });
+        });
 
-  });
-
+    });
 </script>
