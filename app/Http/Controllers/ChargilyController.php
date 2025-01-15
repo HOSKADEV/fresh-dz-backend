@@ -21,7 +21,7 @@ class ChargilyController extends Controller
         throw new Exception('no checkout id');
       }
 
-      $chargily_pay = new ChargilyPay(new Credentials(Invoice::chargily_credentials()));
+      $chargily_pay = new ChargilyPay(new Credentials(Set::chargily_credentials()));
       $checkout = $chargily_pay->checkouts()->get($request->checkout_id);
 
       if (empty($checkout)) {

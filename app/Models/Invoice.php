@@ -106,12 +106,4 @@ class Invoice extends Model
 
     }
 
-    public static function chargily_credentials(){
-      return [
-        'mode' => 'test',
-        'public' => Set::where('name','chargily_pk')->value('value'),
-        'secret' => Set::where('name','chargily_sk')->value('value'),
-      ];
-    }
-
 }

@@ -46,4 +46,21 @@ class Set extends Model
           self::where('name', 'max_price')->value('value')
       );
   }
+
+  public static function chargily_credentials(){
+    return [
+      'mode' => self::where('name','chargily_mode')->value('value'),
+      'public' => self::where('name','chargily_pk')->value('value'),
+      'secret' => self::where('name','chargily_sk')->value('value'),
+    ];
+  }
+
+  public static function pusher_credentials(){
+    return [
+      'instanceId' => self::where('name','pusher_instance_id')->value('value'),
+      'secretKey' => self::where('name','pusher_secret_key')->value('value'),
+    ];
+  }
+
+
 }

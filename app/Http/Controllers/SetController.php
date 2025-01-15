@@ -35,7 +35,7 @@ class SetController extends Controller
 
   public function update(Request $request)
   {
-
+//dd($request->all());
     foreach ($request->all() as $key => $value) {
       Set::updateOrInsert(['name' => $key], ['value' => $value]);
     }

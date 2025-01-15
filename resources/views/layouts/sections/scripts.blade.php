@@ -26,41 +26,40 @@
 <script src="https://js.pusher.com/beams/1.0/push-notifications-cdn.js"></script>
 
 <script>
-    const currentUserId = "{{ auth()->id() }}"; // Get this from your auth system
-    const beamsClient = new PusherPushNotifications.Client({
-        instanceId: "28c790e7-fd74-4cf5-9d0c-f0c1e0c7b1e0",
-    });
-
-    const beamsTokenProvider = new PusherPushNotifications.TokenProvider({
-        url: "/pusher/beams-auth",
-    });
-
-    if (currentUserId) {
-        beamsClient
-            .start()
-            .then(() => beamsClient.setUserId(currentUserId, beamsTokenProvider))
-            .catch(console.error);
-
-        navigator.serviceWorker.addEventListener('message', event => {
-            if (event.data.type === 'PLAY_NOTIFICATION_SOUND') {
-                const audio = new Audio("{{ asset('/assets/audio/mixkit-urgent-simple-tone-loop-2976.wav') }}");
-                audio.play();
-            }
+    const instanceId = "{{ DB::table('sets')->where('name', 'pusher_instance_id')->value('value') }}";
+    if (instanceId) {
+        const currentUserId = "{{ auth()->id() }}"; // Get this from your auth system
+        const beamsClient = new PusherPushNotifications.Client({
+            instanceId: instanceId,
         });
-
-        beamsClient
-            .getUserId()
-            .then((userId) => {
-                // Check if the Beams user matches the user that is currently logged in
-                if (userId !== currentUserId) {
-                    // Unregister for notifications
-                    return beamsClient.stop();
+        const beamsTokenProvider = new PusherPushNotifications.TokenProvider({
+            url: "/pusher/beams-auth",
+        });
+        if (currentUserId) {
+            beamsClient
+                .start()
+                .then(() => beamsClient.setUserId(currentUserId, beamsTokenProvider))
+                .catch(console.error);
+            navigator.serviceWorker.addEventListener('message', event => {
+                if (event.data.type === 'PLAY_NOTIFICATION_SOUND') {
+                    const audio = new Audio(
+                        "{{ asset('/assets/audio/mixkit-urgent-simple-tone-loop-2976.wav') }}");
+                    audio.play();
                 }
-            })
-            .catch(console.error);
-
-    }else{
-        beamsClient.stop();
+            });
+            beamsClient
+                .getUserId()
+                .then((userId) => {
+                    // Check if the Beams user matches the user that is currently logged in
+                    if (userId !== currentUserId) {
+                        // Unregister for notifications
+                        return beamsClient.stop();
+                    }
+                })
+                .catch(console.error);
+        } else {
+            beamsClient.stop();
+        }
     }
 </script>
 

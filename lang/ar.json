@@ -416,5 +416,15 @@
     "Maximum Delivery Price": "الحد الأقصى لسعر التوصيل",
     "Delivery Point": "نقطة التوصيل",
     "Select Delivery Point": "اختر نقطة التوصيل",
-    "Please select a delivery point" : "الرجاء تحديد نقطة توصيل"
+    "Please select a delivery point" : "الرجاء تحديد نقطة توصيل",
+    "Chargily Mode": "وضع Chargily",
+    "Test": "تجريبي",
+    "Live": "مباشر",
+    "Alerts Settings": "إعدادات التنبيهات",
+    "Pusher Instance ID": "معرف نموذج Pusher",
+    "Pusher Primary Key": "المفتاح الرئيسي لـ Pusher",
+    "Enable Cash Payment": "تفعيل الدفع نقداً",
+    "Enable Baridi Mob": "تفعيل بريدي موب",
+    "Enable CCP": "CCP تفعيل",
+    "Enable Chargily": "تفعيل Chargily"
 }

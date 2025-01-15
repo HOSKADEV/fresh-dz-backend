@@ -81,10 +81,7 @@ class Order extends Model
 
       $admins = Admin::where('role',1)->orWhere('region_id',$this->region_id)->pluck('id')->toArray();
 
-      $beamsClient = new \Pusher\PushNotifications\PushNotifications(array(
-        "instanceId" => "28c790e7-fd74-4cf5-9d0c-f0c1e0c7b1e0",
-        "secretKey" => "F2847B6FF7E00151FF242507274AFE90A910D5035F1C3FCCCA1CC9E3D61BB828",
-      ));
+      $beamsClient = new \Pusher\PushNotifications\PushNotifications(Set::pusher_credentials());
 
       $publishResponse = $beamsClient->publishToUsers(
         $admins,

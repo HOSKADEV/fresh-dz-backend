@@ -130,31 +130,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::get('/v1/location/get','App\Http\Controllers\LocationController@get');
 
 });
-
-Route::post('v1/test', function(Request $request){
-  $beamsClient = new \Pusher\PushNotifications\PushNotifications(array(
-    "instanceId" => "28c790e7-fd74-4cf5-9d0c-f0c1e0c7b1e0",
-    "secretKey" => "F2847B6FF7E00151FF242507274AFE90A910D5035F1C3FCCCA1CC9E3D61BB828",
-  ));
-
- /*  $publishResponse = $beamsClient->publishToInterests(
-    array("hello"),
-    array("web" => array("notification" => array(
-      "title" => "Hello",
-      "body" => "Hello, World!",
-      "deep_link" => "https://www.pusher.com",
-      'sound' => asset('assets/sound/mixkit-urgent-simple-tone-loop-2976.wav'),
-    )),
-  )); */
-
-  $publishResponse = $beamsClient->publishToUsers(
-    array("1"),
-    array(
-      "web" => array(
-        "notification" => array(
-          "title" => "Hi!",
-          "body" => "This is my first Push Notification!"
-        )
-      )
-  ));
-});

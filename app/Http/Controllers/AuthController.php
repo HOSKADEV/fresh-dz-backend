@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
-use App\Models\Invoice;
+use App\Models\Set;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Auth\UserQuery;
 use App\Http\Resources\UserResource;
@@ -108,7 +108,7 @@ class AuthController extends Controller
         }
 
         if (empty($user->customer_id) && $user->phone) {
-          $chargily_pay = new ChargilyPay(new Credentials(Invoice::chargily_credentials()));
+          $chargily_pay = new ChargilyPay(new Credentials(Set::chargily_credentials()));
           $customer = $chargily_pay->customers()->create([
             'name' => $user->name,
             'email' => $user->email,

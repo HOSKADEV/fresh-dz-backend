@@ -120,38 +120,111 @@
 
         <!-- Financial Information -->
         <h4 class="fw-bold py-3 mb-3">
-            <span class="text-muted fw-light"></span> {{ __('Financial Information') }}
+          <span class="text-muted fw-light"></span> {{ __('Financial Information') }}
+      </h4>
+      <div class="row">
+          <div class="col-md-9">
+              <div class="card mb-4">
+                  <div class="card-body">
+                      <!-- Left side content remains the same -->
+                      <div class="row mb-3">
+                          <div class="col-md-6">
+                              <label class="form-label" for="ccp">{{ __('CCP Account') }}</label>
+                              <input type="text" class="form-control" id="ccp" name="ccp"
+                                  value="{{ $settings['ccp'] ?? '' }}">
+                          </div>
+                          <div class="col-md-6">
+                              <label class="form-label" for="baridi">{{ __('Baridi Mob') }}</label>
+                              <input type="text" class="form-control" id="baridi" name="baridi"
+                                  value="{{ $settings['baridi'] ?? '' }}">
+                          </div>
+                      </div>
+                      <div class="row mb-3">
+                          <div class="col-md-4">
+                              <label class="form-label" for="chargily_pk">{{ __('Chargily Public Key') }}</label>
+                              <input type="text" class="form-control" id="chargily_pk" name="chargily_pk"
+                                  value="{{ $settings['chargily_pk'] ?? '' }}">
+                          </div>
+                          <div class="col-md-4">
+                              <label class="form-label" for="chargily_sk">{{ __('Chargily Secret Key') }}</label>
+                              <input type="password" class="form-control" id="chargily_sk" name="chargily_sk"
+                                  value="{{ $settings['chargily_sk'] ?? '' }}">
+                          </div>
+                          <div class="col-md-4">
+                              <label class="form-label" for="chargily_mode">{{ __('Chargily Mode') }}</label>
+                              <select class="form-select" id="chargily_mode" name="chargily_mode">
+                                  <option value="test" @if (($settings['chargily_mode'] ?? '') === 'test') selected @endif>
+                                      {{ __('Test') }}</option>
+                                  <option value="live" @if (($settings['chargily_mode'] ?? '') === 'live') selected @endif>
+                                      {{ __('Live') }}</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <div class="mb-3">
+                      {{-- <label class="form-label">{{ __('Payment Methods') }}</label> --}}
+
+                      <!-- Cash Payment -->
+                      <input type="hidden" name="cash_enabled" value="0">
+                      <div class="form-check form-switch my-3">
+                          <input class="form-check-input" type="checkbox" id="cash_enabled" name="cash_enabled"
+                              value="1" @if ($settings['cash_enabled'] ?? false) checked @endif>
+                          <label class="form-check-label" for="cash_enabled">{{ __('Enable Cash Payment') }}</label>
+                      </div>
+
+                      <!-- Baridi Mob -->
+                      <input type="hidden" name="baridi_enabled" value="0">
+                      <div class="form-check form-switch mb-3">
+                          <input class="form-check-input" type="checkbox" id="baridi_enabled" name="baridi_enabled"
+                              value="1" @if ($settings['baridi_enabled'] ?? false) checked @endif>
+                          <label class="form-check-label" for="baridi_enabled">{{ __('Enable Baridi Mob') }}</label>
+                      </div>
+
+                      <!-- CCP -->
+                      <input type="hidden" name="ccp_enabled" value="0">
+                      <div class="form-check form-switch mb-3">
+                          <input class="form-check-input" type="checkbox" id="ccp_enabled" name="ccp_enabled"
+                              value="1" @if ($settings['ccp_enabled'] ?? false) checked @endif>
+                          <label class="form-check-label" for="ccp_enabled">{{ __('Enable CCP') }}</label>
+                      </div>
+
+                      <!-- Chargily -->
+                      <input type="hidden" name="chargily_enabled" value="0">
+                      <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="chargily_enabled" name="chargily_enabled"
+                              value="1" @if ($settings['chargily_enabled'] ?? false) checked @endif>
+                          <label class="form-check-label" for="chargily_enabled">{{ __('Enable Chargily') }}</label>
+                      </div>
+                  </div>
+              </div>
+              </div>
+          </div>
+      </div>
+
+        <h4 class="fw-bold py-3 mb-3">
+            <span class="text-muted fw-light"></span> {{ __('Alerts Settings') }}
         </h4>
         <div class="card mb-4">
             <div class="card-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label" for="ccp">{{ __('CCP Account') }}</label>
-                        <input type="text" class="form-control" id="ccp" name="ccp"
-                            value="{{ $settings['ccp'] ?? '' }}">
+                        <label class="form-label" for="pusher_instance_id">{{ __('Pusher Instance ID') }}</label>
+                        <input type="text" class="form-control" id="pusher_instance_id" name="pusher_instance_id"
+                            value="{{ $settings['pusher_instance_id'] ?? '' }}">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="baridi">{{ __('Baridi Mob') }}</label>
-                        <input type="text" class="form-control" id="baridi" name="baridi"
-                            value="{{ $settings['baridi'] ?? '' }}">
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label" for="chargily_pk">{{ __('Chargily Public Key') }}</label>
-                        <input type="text" class="form-control" id="chargily_pk" name="chargily_pk"
-                            value="{{ $settings['chargily_pk'] ?? '' }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="chargily_sk">{{ __('Chargily Secret Key') }}</label>
-                        <input type="password" class="form-control" id="chargily_sk" name="chargily_sk"
-                            value="{{ $settings['chargily_sk'] ?? '' }}">
+                        <label class="form-label" for="pusher_primary_key">{{ __('Pusher Primary Key') }}</label>
+                        <input type="password" class="form-control" id="pusher_primary_key" name="pusher_primary_key"
+                            value="{{ $settings['pusher_primary_key'] ?? '' }}">
                     </div>
                 </div>
             </div>
         </div>
-
-
 
         <!-- Delivery Settings -->
         <h4 class="fw-bold py-3 mb-3">
