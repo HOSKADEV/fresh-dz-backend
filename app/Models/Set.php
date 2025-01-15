@@ -58,7 +58,7 @@ class Set extends Model
   public static function pusher_credentials(){
     return [
       'instanceId' => self::where('name','pusher_instance_id')->value('value'),
-      'secretKey' => self::where('name','pusher_secret_key')->value('value'),
+      'secretKey' => self::where('name','pusher_primary_key')->value('value'),
     ];
   }
 
