@@ -11,6 +11,7 @@ class LocationController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'region_id' => 'required|exists:regions,id',
             'name' => 'required|string',
             'address' => 'required|string',
             'longitude' => 'required|string',
