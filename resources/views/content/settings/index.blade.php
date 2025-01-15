@@ -140,17 +140,17 @@
                           </div>
                       </div>
                       <div class="row mb-3">
-                          <div class="col-md-4">
+                          <div class="col-md-5">
                               <label class="form-label" for="chargily_pk">{{ __('Chargily Public Key') }}</label>
                               <input type="text" class="form-control" id="chargily_pk" name="chargily_pk"
                                   value="{{ $settings['chargily_pk'] ?? '' }}">
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-5">
                               <label class="form-label" for="chargily_sk">{{ __('Chargily Secret Key') }}</label>
                               <input type="password" class="form-control" id="chargily_sk" name="chargily_sk"
                                   value="{{ $settings['chargily_sk'] ?? '' }}">
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-2">
                               <label class="form-label" for="chargily_mode">{{ __('Chargily Mode') }}</label>
                               <select class="form-select" id="chargily_mode" name="chargily_mode">
                                   <option value="test" @if (($settings['chargily_mode'] ?? '') === 'test') selected @endif>
