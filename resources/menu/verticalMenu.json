@@ -1,7 +1,7 @@
 {
   "menu": [
     {
-      "url": "/",
+      "url": "/dashboard",
       "name": "Dashboard",
       "icon": "menu-icon tf-icons bx bxs-home-circle",
       "slug": "dashboard-analytics"

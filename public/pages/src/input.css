@@ -1,0 +1,196 @@
+/* Import Tailwind CSS base, components, and utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root styles */
+:root {
+  writing-mode: horizontal-tb;
+  direction: rtl; /* Right-to-left text direction */
+  text-orientation: mixed;
+}
+
+/* Reset margin and padding for all elements */
+*,
+*::before {
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth scrolling for the HTML element */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Dark mode styles for the HTML element */
+html.dark {
+  background-color: #18181b;
+  color: #fff;
+}
+
+/* Body styles */
+body {
+  position: relative;
+  writing-mode: horizontal-tb;
+  direction: rtl;
+  text-orientation: mixed;
+  overflow-x: hidden !important;
+  font-family: "cairo";
+  min-height: 100vh;
+}
+
+/* Navigation link styles */
+.navLink {
+  transition: all 0.3s linear;
+  position: relative;
+  cursor: pointer;
+}
+
+.navLink:focus {
+  color: inherit;
+}
+
+.navLink::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(to right, #8BB746, #3CAB4F);
+  opacity: 0;
+  transition: width 0.3s linear;
+}
+
+.navLink:hover::before,
+.navLink:focus::before {
+  width: 100%;
+  opacity: 1;
+}
+
+#mobileMenu {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Section styles */
+section {
+  padding: 100px 0 0;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Download button styles */
+.download {
+  background:linear-gradient(to right, #8BB746, #3CAB4F);
+}
+
+/* Container styles using Tailwind CSS */
+.myContainer {
+  @apply container mx-auto px-4;
+}
+
+/* Main title styles with gradient text */
+.mainTitle {
+  background: linear-gradient(to right, #8BB746, #3CAB4F);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+/* Wave animation styles */
+.mywave {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: url("./assets/images/wave.png");
+  background-size: 1000px 100px;
+}
+
+.mywave#wave1 {
+  z-index: 100;
+  opacity: 1;
+  bottom: 0;
+  animation: animatewave 4s linear infinite;
+}
+
+.mywave#wave2 {
+  z-index: 99;
+  opacity: 0.5;
+  bottom: 10px;
+  animation: animatewave_02 4s linear infinite;
+}
+
+.mywave#wave3 {
+  z-index: 100;
+  opacity: 0.2;
+  bottom: 15px;
+  animation: animatewave 3s linear infinite;
+}
+
+.mywave#wave4 {
+  z-index: 99;
+  opacity: 0.7;
+  bottom: 20px;
+  animation: animatewave_02 3s linear infinite;
+}
+
+/* Keyframes for wave animations */
+@keyframes animatewave {
+  from {
+    background-position-x: 1000px;
+  }
+  to {
+    background-position-x: 0px;
+  }
+}
+
+@keyframes animatewave_02 {
+  from {
+    background-position-x: 0px;
+  }
+  to {
+    background-position-x: 1000px;
+  }
+}
+
+/* Feature hover styles */
+.feature:hover {
+  background:linear-gradient(to right, #8BB746, #3CAB4F);
+  transform: translateY(-3px) !important;
+  transition: all 0.3s linear !important;
+}
+
+.feature:hover .spanHolder {
+  background-color: #3CAB4F;
+}
+
+.feature:hover .featurespan {
+  background: #26C755;
+}
+
+.feature:hover .featurespan .icon {
+  color: #fff;
+}
+
+.feature:hover h2 {
+  color: #fff;
+}
+
+.feature:hover p {
+  color: #fff;
+}
+
+.row {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-left: calc(-.5 * var(--bs-gutter-x));
+  margin-right: calc(-.5 * var(--bs-gutter-x));
+}
+

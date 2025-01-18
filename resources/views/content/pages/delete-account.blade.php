@@ -88,7 +88,7 @@
           </a>
         </div>
       </div>
-      <a href="{{url('/')}}" class="logo d-flex align-items-center">
+      <a href="{{url('/dashboard')}}" class="logo d-flex align-items-center">
         <img src="{{asset('logo-no-bg.png')}}" alt="Logo" id="logo">
       </a>
 

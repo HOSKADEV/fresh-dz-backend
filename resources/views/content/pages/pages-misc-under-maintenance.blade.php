@@ -15,7 +15,7 @@
     <p class="mb-4 mx-2">
       Sorry for the inconvenience but we're performing some maintenance at the moment
     </p>
-    <a href="{{url('/')}}" class="btn btn-primary">Back to home</a>
+    <a href="{{url('/dashboard')}}" class="btn btn-primary">Back to home</a>
     <div class="mt-4">
       <img src="{{asset('assets/img/illustrations/girl-doing-yoga-light.png')}}" alt="girl-doing-yoga-light" width="500" class="img-fluid">
     </div>

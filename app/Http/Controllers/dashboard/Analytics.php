@@ -17,6 +17,11 @@ class Analytics extends Controller
   {
     return view('content.dashboard.dashboards-home');
   }
+  public function landing()
+  {
+    return view('content.pages.landing-page');
+  }
+
   public function analytics()
   {
     //dd(Auth::id());

@@ -40,7 +40,7 @@ use App\Http\Controllers\pages\AccountSettingsConnections;
 use App\Http\Controllers\pages\AccountSettingsNotifications;
 use App\Http\Controllers\authentications\ForgotPasswordBasic;
 
-
+Route::get('/', [Analytics::class, 'landing'])->name('landing-page');
 Route::get('/privacy_policy', [DocumentationController::class, 'privacy']);
 Route::get('/delete_account', [DocumentationController::class, 'delete_account']);
 Route::get('/downloadApp', function() {
@@ -72,7 +72,7 @@ Route::prefix('auth')->group(function () {
 
 Route::group(['middleware' => ['auth']], function () {
 
-      Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+      Route::get('/dashboard', [Analytics::class, 'index'])->name('dashboard-analytics');
       Route::get('/analytics', [Analytics::class, 'analytics'])->name('analytics')->middleware('role:0,1,4,5');
       Route::get('/stats', [Analytics::class, 'stats'])->name('stats')->middleware('role:0,1,4,5');
 
