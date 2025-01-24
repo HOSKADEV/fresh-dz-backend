@@ -40,7 +40,7 @@ class Order extends Model
     }
 
     public function region(){
-      return $this->belongsTo(Region::class);
+      return $this->belongsTo(Region::class)->withTrashed();
     }
 
     public function items(){

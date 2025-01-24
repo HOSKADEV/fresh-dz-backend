@@ -85,6 +85,31 @@ class RegionController extends Controller
     }
   }
 
+  public function delete(Request $request)
+  {
+    $request->validate([
+      'region_id' => 'required|exists:regions,id',
+    ]);
+
+    try {
+
+      $region = Region::find($request->region_id);
+      $region->delete();
+
+      return response()->json([
+        'status' => 1,
+        'message' => 'success',
+      ]);
+
+    } catch (Exception $e) {
+      return response()->json([
+        'status' => 0,
+        'message' => $e->getMessage(),
+      ]);
+
+    }
+  }
+
   public function get(Request $request)
   {  //paginated
     $validator = Validator::make($request->all(), [
