@@ -41,13 +41,9 @@ class ChargilyController extends Controller
 
       $order = $invoice->order;
 
-      $newOrder = $order->replicate();
-
       $user = $order->user;
 
       $cart = $order->cart;
-
-      $order->delete();
 
       if ($user->customer_id != $checkout->getCustomerId()) {
         throw new Exception('conflicted informations');
@@ -60,21 +56,21 @@ class ChargilyController extends Controller
         $invoice->is_paid = 'yes';
         $invoice->paid_at = now();
         $cart->type = 'order';
-        $newOrder->status = 'accepted';
+        $order->status = 'accepted';
         $invoice->save();
         $cart->save();
-        $newOrder->save();
+        $order->save();
 
-        $user->notify(Notice::OrderNotice($newOrder->id,'accepted'));
+        $user->notify(Notice::OrderNotice($order->id,'accepted'));
 
         return redirect()->route('chargily-success');
 
       } else {
 
         $cart->type = 'current';
-        $newOrder->status = 'canceled';
+        $order->status = 'canceled';
         $cart->save();
-        $newOrder->save();
+        $order->save();
         return redirect()->route('chargily-failed');
 
       }
