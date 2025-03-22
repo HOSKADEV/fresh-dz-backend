@@ -12,7 +12,7 @@ class ReviewController extends Controller
   {
       $validator = Validator::make($request->all(), [
           'order_id' => 'required|exists:orders,id',
-          'content' => 'required|string',
+          'content' => 'sometimes|string|nullable',
           'score' => 'required|numeric|min:1|max:4'
       ]);
 

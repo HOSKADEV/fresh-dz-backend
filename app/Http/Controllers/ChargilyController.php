@@ -55,8 +55,10 @@ class ChargilyController extends Controller
 
         $invoice->is_paid = 'yes';
         $invoice->paid_at = now();
+        $cart->type = 'order';
         $order->status = 'accepted';
         $invoice->save();
+        $cart->save();
         $order->save();
 
         $user->notify(Notice::OrderNotice($order->id,'accepted'));

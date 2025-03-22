@@ -141,7 +141,10 @@ class OrderController extends Controller
         'payment_account' => $request->payment_account,
         'checkout_id' => $request->checkout_id,
       ]);
-
+      if($request->payment_method == 'chargily'){
+        $cart->type = 'current';
+        $cart->save();
+      }
       if ($request->payment_receipt) {
         $invoice->payment_receipt = $request->payment_receipt->store('uploads/receipts', 'upload');
         $invoice->save();
