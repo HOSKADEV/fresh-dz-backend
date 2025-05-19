@@ -17,8 +17,6 @@ class SetController extends Controller
 
     return view('content.settings.index')
       ->with('settings', $settings);
-
-
   }
 
   public function get()

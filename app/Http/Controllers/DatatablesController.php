@@ -543,13 +543,13 @@ class DatatablesController extends Controller
 
       ->addColumn('user', function ($row) {
 
-        return $row->user->fullname();
+        return $row->user?->fullname();
 
       })
 
       ->addColumn('region', function ($row) {
 
-        return $row->region->name;
+        return $row->region?->name;
 
       })
 
@@ -568,7 +568,7 @@ class DatatablesController extends Controller
       ->addColumn('driver', function ($row) {
 
         if (!is_null($row->delivery)) {
-          return $row->delivery->driver->fullname();
+          return $row->delivery?->driver?->fullname();
         }
 
       })
