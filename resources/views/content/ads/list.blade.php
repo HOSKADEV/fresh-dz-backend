@@ -241,7 +241,7 @@
                     dataType: 'JSON',
                     success: function(response) {
                         if (response.status == 1) {
-console.log(response.data);
+
                             document.getElementById('name').value = response.data.name;
                             document.getElementById('url').value = response.data.url;
                             //var type = response.data.type;
