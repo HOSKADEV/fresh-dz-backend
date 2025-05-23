@@ -79,6 +79,7 @@
                         <div class="mb-3">
                             <label class="form-label" for="type">{{ __('Type') }}</label>
                             <select class="form-select" id="type" name="type">
+                                <option value="static"> {{ __('Static ad') }} </option>
                                 <option value="url"> {{ __('Off-App ad') }} </option>
                                 <option value="product"> {{ __('Product ad') }} </option>
                             </select>
@@ -155,7 +156,9 @@
                             data: 'type',
                             name: 'type',
                             render: function(data) {
-                                if (data == 'product') {
+                                if (data == 'static') {
+                                    return '<span class="badge bg-primary">{{ __('Static ad') }}</span>';
+                                } else if (data == 'product') {
                                     return '<span class="badge bg-warning">{{ __('Product ad') }}</span>';
                                 } else {
                                     return '<span class="badge bg-info">{{ __('Off-App ad') }}</span>';
@@ -205,11 +208,13 @@
             $('#type').on('change', function() {
                 var type = $(this).val();
 
+                $('#product-id-div').hide();
+                $('#url-div').hide();
+
                 if (type == 'product') {
-                    $('#product-id-div').show();
-                    $('#url-div').hide();
-                } else {
-                    $('#product-id-div').hide();
+                  $('#product-id-div').show();
+                }
+                if (type == 'url') {
                     $('#url-div').show();
                 }
 

@@ -20,6 +20,7 @@
     "pion/laravel-chunk-upload": "^1.5",
     "pusher/pusher-push-notifications": "^2.0",
     "spatie/laravel-collection-macros": "^7.14",
+    "spatie/laravel-pdf": "^1.5",
     "yajra/laravel-datatables-oracle": "^10.11"
   },
   "require-dev": {

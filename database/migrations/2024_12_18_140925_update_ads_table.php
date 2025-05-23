@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('ads', function (Blueprint $table) {
-          $table->enum('type', ['url','product'])->default('url')->after('image');
+          $table->enum('type', ['url','product','static'])->default('url')->after('image');
           $table->string('url')->nullable()->default(null)->after('type');
         });
     }

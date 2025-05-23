@@ -4,7 +4,7 @@
 
 'use strict';
 
-(async function () {
+(function () {
   let cardColor, headingColor, axisColor, shadeColor, borderColor;
 
   cardColor = config.colors.white;
@@ -12,63 +12,19 @@
   axisColor = config.colors.axisColor;
   borderColor = config.colors.borderColor;
 
-  var months = [];
-  var paid = [];
-  var unpaid = [];
-  var payment_status = [];
-  var paid_percentage = 0;
-  var orders_status = [];
-  var status_names = [];
-  var days = [];
-  var orders_array = [];
-  var users_array = [];
-  var orders_this_month = [];
-  var orders_this_week = [];
-  var users_this_week = [];
-  await $.ajax({
-    url: "/stats",
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    },
-    type:'GET',
-
-    success:function(response){
-        if(response.status==1){
-          console.log(response);
-
-          months = response.months;
-          paid = response.paid;
-          unpaid = response.unpaid;
-          payment_status = response.payment_status;
-          paid_percentage = response.paid_percentage;
-          orders_status = response.orders_status;
-          status_names = response.status_names;
-          days = response.days;
-          orders_array = response.orders_array;
-          users_array = response.users_array;
-          orders_this_month = response.orders_this_month;
-          orders_this_week = response.orders_this_week;
-          users_this_week = response.users_this_week;
-
-        }
-      }
-  });
-
   // Total Revenue Report Chart - Bar Chart
   // --------------------------------------------------------------------
   const totalRevenueChartEl = document.querySelector('#totalRevenueChart'),
     totalRevenueChartOptions = {
       series: [
         {
-          name: payment_status[0],
-          //data:[5,8,4,6,3,5,8,4,7,3,9,2]
-          data: paid
+          name: '2021',
+          data: [18, 7, 15, 29, 18, 12, 9]
         },
         {
-          name: payment_status[1],
-          //data:[-3,-2,-4,-1,-7,-5,-2,-6,-3,-4,-1,-6]
-          data: unpaid
-        },
+          name: '2020',
+          data: [-13, -18, -9, -14, -5, -17, -15]
+        }
       ],
       chart: {
         height: 300,
@@ -122,8 +78,7 @@
         }
       },
       xaxis: {
-        categories: months,
-        //categories:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
         labels: {
           style: {
             fontSize: '13px',
@@ -323,8 +278,8 @@
   // --------------------------------------------------------------------
   const growthChartEl = document.querySelector('#growthChart'),
     growthChartOptions = {
-      series: [paid_percentage],
-      labels: [payment_status[0]+'%'],
+      series: [78],
+      labels: ['Growth'],
       chart: {
         height: 240,
         type: 'radialBar'
@@ -472,13 +427,12 @@
         width: 130,
         type: 'donut'
       },
-
-      series: orders_status,
-      labels: status_names,
-      colors: [config.colors.secondary,config.colors.primary,config.colors.danger,config.colors.info,config.colors.success],
+      labels: ['Electronic', 'Sports', 'Decor', 'Fashion'],
+      series: [85, 15, 50, 50],
+      colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success],
       stroke: {
         width: 5,
-        //colors: cardColor
+        colors: cardColor
       },
       dataLabels: {
         enabled: false,
@@ -508,7 +462,7 @@
                 color: headingColor,
                 offsetY: -15,
                 formatter: function (val) {
-                  return parseInt(val * 100 / Math.max(1,orders_this_month)) + '%';
+                  return parseInt(val) + '%';
                 }
               },
               name: {
@@ -519,9 +473,9 @@
                 show: true,
                 fontSize: '0.8125rem',
                 color: axisColor,
-                label: status_names[0],
+                label: 'Weekly',
                 formatter: function (w) {
-                  return orders_status[0]+'%';
+                  return '38%';
                 }
               }
             }
@@ -536,11 +490,11 @@
 
   // Income Chart - Area chart
   // --------------------------------------------------------------------
-  const ordersChartEl = document.querySelector('#ordersChart'),
-    ordersChartConfig = {
+  const incomeChartEl = document.querySelector('#incomeChart'),
+    incomeChartConfig = {
       series: [
         {
-          data: orders_array
+          data: [24, 21, 30, 22, 42, 26, 35, 29]
         }
       ],
       chart: {
@@ -604,7 +558,7 @@
         }
       },
       xaxis: {
-        categories: days,
+        categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
         axisBorder: {
           show: false
         },
@@ -623,118 +577,21 @@
         labels: {
           show: false
         },
-        min: 0,
-        max: Math.max.apply(Math,orders_array) + 1,
-        tickAmount: Math.min.apply(Math,orders_array) + 1
+        min: 10,
+        max: 50,
+        tickAmount: 4
       }
     };
-  if (typeof ordersChartEl !== undefined && ordersChartEl !== null) {
-    const ordersChart = new ApexCharts(ordersChartEl, ordersChartConfig);
-    ordersChart.render();
-  }
-
-  const usersChartEl = document.querySelector('#usersChart'),
-    usersChartConfig = {
-      series: [
-        {
-          data: users_array
-        }
-      ],
-      chart: {
-        height: 215,
-        parentHeightOffset: 0,
-        parentWidthOffset: 0,
-        toolbar: {
-          show: false
-        },
-        type: 'area'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        width: 2,
-        curve: 'smooth'
-      },
-      legend: {
-        show: false
-      },
-      markers: {
-        size: 6,
-        colors: 'transparent',
-        strokeColors: 'transparent',
-        strokeWidth: 4,
-        discrete: [
-          {
-            fillColor: config.colors.white,
-            seriesIndex: 0,
-            dataPointIndex: 7,
-            strokeColor: config.colors.primary,
-            strokeWidth: 2,
-            size: 6,
-            radius: 8
-          }
-        ],
-        hover: {
-          size: 7
-        }
-      },
-      colors: [config.colors.primary],
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.6,
-          opacityFrom: 0.5,
-          opacityTo: 0.25,
-          stops: [0, 95, 100]
-        }
-      },
-      grid: {
-        borderColor: borderColor,
-        strokeDashArray: 3,
-        padding: {
-          top: -20,
-          bottom: -8,
-          left: -10,
-          right: 8
-        }
-      },
-      xaxis: {
-        categories: days,
-        axisBorder: {
-          show: false
-        },
-        axisTicks: {
-          show: false
-        },
-        labels: {
-          show: true,
-          style: {
-            fontSize: '13px',
-            colors: axisColor
-          }
-        }
-      },
-      yaxis: {
-        labels: {
-          show: false
-        },
-        min: 0,
-        max: Math.max.apply(Math,users_array) + 1,
-        tickAmount: Math.min.apply(Math,users_array) + 1
-      }
-    };
-  if (typeof usersChartEl !== undefined && usersChartEl !== null) {
-    const usersChart = new ApexCharts(usersChartEl, usersChartConfig);
-    usersChart.render();
+  if (typeof incomeChartEl !== undefined && incomeChartEl !== null) {
+    const incomeChart = new ApexCharts(incomeChartEl, incomeChartConfig);
+    incomeChart.render();
   }
 
   // Expenses Mini Chart - Radial Chart
   // --------------------------------------------------------------------
-  const dailyOrdersEl = document.querySelector('#todayOrders'),
-    dailyOrdersConfig = {
-      series: [Math.round(orders_array[orders_array.length-1] * 100 / Math.max(1,orders_this_week))],
+  const weeklyExpensesEl = document.querySelector('#expensesOfWeek'),
+    weeklyExpensesConfig = {
+      series: [65],
       chart: {
         width: 60,
         height: 60,
@@ -760,7 +617,7 @@
             },
             value: {
               formatter: function (val) {
-                return '' + parseInt(orders_array[orders_array.length-1]);
+                return '$' + parseInt(val);
               },
               offsetY: 5,
               color: '#697a8d',
@@ -798,79 +655,8 @@
         }
       }
     };
-  if (typeof dailyOrdersEl !== undefined && dailyOrdersEl !== null) {
-    const dailyOrders = new ApexCharts(dailyOrdersEl, dailyOrdersConfig);
-    dailyOrders.render();
-  }
-
-  const dailyUsersEl = document.querySelector('#todayUsers'),
-    dailyUsersConfig = {
-      series: [Math.round(users_array[users_array.length-1] * 100 / Math.max(1,users_this_week))],
-      chart: {
-        width: 60,
-        height: 60,
-        type: 'radialBar'
-      },
-      plotOptions: {
-        radialBar: {
-          startAngle: 0,
-          endAngle: 360,
-          strokeWidth: '8',
-          hollow: {
-            margin: 2,
-            size: '45%'
-          },
-          track: {
-            strokeWidth: '50%',
-            background: borderColor
-          },
-          dataLabels: {
-            show: true,
-            name: {
-              show: false
-            },
-            value: {
-              formatter: function (val) {
-                return '' + parseInt(users_array[users_array.length-1]);
-              },
-              offsetY: 5,
-              color: '#697a8d',
-              fontSize: '13px',
-              show: true
-            }
-          }
-        }
-      },
-      fill: {
-        type: 'solid',
-        colors: config.colors.primary
-      },
-      stroke: {
-        lineCap: 'round'
-      },
-      grid: {
-        padding: {
-          top: -10,
-          bottom: -15,
-          left: -10,
-          right: -10
-        }
-      },
-      states: {
-        hover: {
-          filter: {
-            type: 'none'
-          }
-        },
-        active: {
-          filter: {
-            type: 'none'
-          }
-        }
-      }
-    };
-  if (typeof dailyUsersEl !== undefined && dailyUsersEl !== null) {
-    const dailyUsers = new ApexCharts(dailyUsersEl, dailyUsersConfig);
-    dailyUsers.render();
+  if (typeof weeklyExpensesEl !== undefined && weeklyExpensesEl !== null) {
+    const weeklyExpenses = new ApexCharts(weeklyExpensesEl, weeklyExpensesConfig);
+    weeklyExpenses.render();
   }
 })();

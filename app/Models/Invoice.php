@@ -86,11 +86,13 @@ class Invoice extends Model
     public function pdf(){
       $order = $this->order;
       $user = $order->user;
+      $driver = $order->delivery?->driver;
       $cart = $order->cart;
 
       $invoice = new InvoiceService(
         (new UserResource(new User(['name' => 'Fresh', 'phone' => '1234567890'])))->toArray(request()),
         (new UserResource($user))->toArray(request()),
+        (new UserResource($driver))->toArray(request()),
         (new ItemCollection($cart->items))->toArray(request()),
         (new InvoiceResource($this))->toArray(request()),
         Carbon::now(),

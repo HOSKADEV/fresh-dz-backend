@@ -607,7 +607,7 @@ class DatatablesController extends Controller
 
       ->addColumn('created_at', function ($row) {
 
-        return date('Y-m-d', strtotime($row->created_at));
+        return date('Y-m-d H:i', strtotime($row->created_at));
 
       })
 

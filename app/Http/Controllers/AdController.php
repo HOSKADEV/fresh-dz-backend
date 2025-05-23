@@ -24,7 +24,7 @@ class AdController extends Controller
     $validator = Validator::make($request->all(), [
       'name' => 'required|string',
       'image' => 'sometimes|mimetypes:image/*',
-      'type' => 'required|in:url,product',
+      'type' => 'required|in:url,product,static',
       'url' => 'required_if:type,url|nullable|string',
       'product_id' => 'required_if:type,product|nullable|exists:products,id',
     ]);
@@ -77,7 +77,7 @@ class AdController extends Controller
       'ad_id' => 'required',
       'name' => 'sometimes|string',
       'image' => 'sometimes|mimetypes:image/*',
-      'type' => 'sometimes|in:url,product',
+      'type' => 'sometimes|in:url,product,static',
       'url' => 'required_if:type,url|nullable|string',
       'product_id' => 'required_if:type,product|nullable|exists:products,id',
     ]);
@@ -105,6 +105,9 @@ class AdController extends Controller
       }else if($request->type == 'url'){
         $ad->product_ad()->delete();
         $ad->url = $request->url;
+      }else{
+        $ad->product_ad()->delete();
+        $ad->url = null;
       }
 
       if($request->hasFile('image')){

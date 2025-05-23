@@ -19,7 +19,8 @@
     "highlight.js": "~9.17.1",
     "jquery": "~3.5.1",
     "masonry-layout": "~4.2.1",
-    "perfect-scrollbar": "~1.5.1"
+    "perfect-scrollbar": "~1.5.1",
+    "puppeteer": "^24.9.0"
   },
   "devDependencies": {
     "axios": "^0.25",

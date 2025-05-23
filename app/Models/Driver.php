@@ -19,6 +19,11 @@ class Driver extends Model
     'status',
   ];
 
+  public function getNameAttribute()
+  {
+    return $this->firstname . ' ' . $this->lastname;
+  }
+
   public function getImageAttribute($value)
   {
     return $value && Storage::disk('upload')->exists($value)
