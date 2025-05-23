@@ -105,7 +105,7 @@ class AdController extends Controller
       }else if($request->type == 'url'){
         $ad->product_ad()->delete();
         $ad->url = $request->url;
-      }else{
+      }else if($request->type == 'static'){
         $ad->product_ad()->delete();
         $ad->url = null;
       }
