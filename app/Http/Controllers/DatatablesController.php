@@ -459,7 +459,7 @@ class DatatablesController extends Controller
       $request->merge(['region' => auth()->user()->region_id]);
     }
 
-    $orders = Order::where('status','!=','chargily')->orderBy('created_at', 'DESC');
+    $orders = Order::where('status', '!=', 'chargily')->orderBy('created_at', 'DESC');
 
     if (!empty($request->status)) {
       if ($request->status == 'default') {
@@ -526,7 +526,7 @@ class DatatablesController extends Controller
 
 
 
-              $btn .= '<a class="btn btn-icon btn-label-primary inline-spacing" title="' . __('whatsapp') . '" href="' . $row->whatsapp() . '" target="_blank" ><span class="tf-icons bx bxl-whatsapp"></span></a>';
+            $btn .= '<a class="btn btn-icon btn-label-primary inline-spacing" title="' . __('whatsapp') . '" href="' . $row->whatsapp() . '" target="_blank" ><span class="tf-icons bx bxl-whatsapp"></span></a>';
 
             $btn .= '<button class="btn btn-icon btn-label-success inline-spacing deliver" title="' . __('Delivered') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-home-smile"></span></button>';
 
@@ -553,6 +553,15 @@ class DatatablesController extends Controller
 
       })
 
+      ->addColumn('distance', function ($row) {
+        $distance = $row->distance();
+        if ($distance) {
+          return number_format($distance / 1000, 2) . ' ' . __('Km');
+        }
+        return '';
+
+      })
+
       ->addColumn('phone', function ($row) {
 
         return $row->phone();
@@ -573,7 +582,7 @@ class DatatablesController extends Controller
 
       })
 
-      ->addColumn('purchase_amount', function ($row) {
+      /* ->addColumn('purchase_amount', function ($row) {
 
         if (!is_null($row->invoice)) {
           return number_format($row->invoice->purchase_amount, 2, '.', ',');
@@ -581,7 +590,7 @@ class DatatablesController extends Controller
 
       })
 
-      /* ->addColumn('tax_amount', function ($row) {
+       ->addColumn('tax_amount', function ($row) {
 
         if(!is_null($row->invoice)){
           return number_format($row->invoice->tax_amount,2,'.',',');
@@ -1137,22 +1146,23 @@ class DatatablesController extends Controller
       ->make(true);
   }
 
-  public function units(){
+  public function units()
+  {
 
-    $units = Unit::orderBy('created_at','DESC')->get();
+    $units = Unit::orderBy('created_at', 'DESC')->get();
 
     return datatables()
       ->of($units)
       ->addIndexColumn()
 
       ->addColumn('action', function ($row) {
-          $btn = '';
+        $btn = '';
 
-          $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="' . __('Edit') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-edit"></span></button>';
+        $btn .= '<button class="btn btn-icon btn-label-info inline-spacing update" title="' . __('Edit') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-edit"></span></button>';
 
-          $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="' . __('Delete') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-trash"></span></button>';
+        $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="' . __('Delete') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-trash"></span></button>';
 
-          return $btn;
+        return $btn;
       })
 
       ->addColumn('name', function ($row) {
@@ -1162,7 +1172,7 @@ class DatatablesController extends Controller
 
       ->addColumn('created_at', function ($row) {
 
-        return date('Y-m-d',strtotime($row->created_at));
+        return date('Y-m-d', strtotime($row->created_at));
 
       })
 

@@ -68,6 +68,29 @@ class Order extends Model
       return 'https://maps.google.com/?q='.$this->latitude.','.$this->longitude;
     }
 
+    public function distance(){
+      $order_long = $this->longitude;
+      $order_lat = $this->latitude;
+
+      $region_long = $this->region?->longitude;
+      $region_lat = $this->region?->latitude;
+
+      if($order_long && $order_lat && $region_long && $region_lat){
+        return Set::calcDistance(
+          [
+            'longitude' => $order_long,
+            'latitude' => $order_lat
+          ],
+          [
+            'longitude' => $region_long,
+            'latitude' => $region_lat
+          ]
+          );
+      }
+
+      return null;
+    }
+
     public function whatsapp(){
       return 'https://wa.me/'.$this->delivery?->driver?->phone().'?text=' .
       __('order N') . ': ' . $this->id . '%0A' .

@@ -76,6 +76,7 @@
                         <th>{{ __('User') }}</th>
                         <th>{{ __('Phone') }}</th>
                         <th>{{ __('Region') }}</th>
+                        <th>{{ __('Distance') }}</th>
                         <th>{{ __('Created at') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Driver') }}</th>
@@ -379,6 +380,11 @@
                         {
                             data: 'region',
                             name: 'region'
+                        },
+
+                        {
+                            data: 'distance',
+                            name: 'distance'
                         },
 
                         {
