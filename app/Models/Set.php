@@ -62,5 +62,10 @@ class Set extends Model
     ];
   }
 
+  public static function phone_number(){
+    $phone = self::where('name','whatsapp')->value('value');
+    return $phone ? str_replace('+213','',$phone): null;
+  }
+
 
 }

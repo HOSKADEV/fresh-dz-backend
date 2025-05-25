@@ -90,7 +90,10 @@ class Invoice extends Model
       $cart = $order->cart;
 
       $invoice = new InvoiceService(
-        (new UserResource(new User(['name' => 'Fresh', 'phone' => '1234567890'])))->toArray(request()),
+        (new UserResource(new User([
+          'name' => __('Fresh Dz'),
+          'phone' => Set::phone_number()
+          ])))->toArray(request()),
         (new UserResource($user))->toArray(request()),
         (new UserResource($driver))->toArray(request()),
         (new ItemCollection($cart->items))->toArray(request()),
