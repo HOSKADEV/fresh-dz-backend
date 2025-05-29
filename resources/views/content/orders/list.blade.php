@@ -77,6 +77,7 @@
                         <th>{{ __('Phone') }}</th>
                         <th>{{ __('Region') }}</th>
                         <th>{{ __('Distance') }}</th>
+                        <th>{{ __('Delivery Time') }}</th>
                         <th>{{ __('Created at') }}</th>
                         <th>{{ __('Status') }}</th>
                         <th>{{ __('Driver') }}</th>
@@ -385,6 +386,11 @@
                         {
                             data: 'distance',
                             name: 'distance'
+                        },
+
+                        {
+                            data: 'delivery_time',
+                            name: 'delivery_time'
                         },
 
                         {

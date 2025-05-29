@@ -618,6 +618,12 @@ class DatatablesController extends Controller
 
       })
 
+      ->addColumn('delivery_time', function ($row) {
+
+        return date('Y-m-d H:i', strtotime($row->delivery_time));
+
+      })
+
 
       ->make(true);
   }
