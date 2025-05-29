@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class InvoiceService
 {
@@ -13,6 +14,7 @@ class InvoiceService
     private $driver;
     private $items;
     private $invoice;
+    private $location;
     private $note;
     private $currency;
     private $date;
@@ -24,6 +26,7 @@ class InvoiceService
         array $driver,
         array $items,
         array $invoice,
+        string $location,
         \DateTimeInterface $date,
         ?string $note = null,
     ) {
@@ -32,16 +35,17 @@ class InvoiceService
         $this->driver = $driver;
         $this->items = $items;
         $this->invoice = $invoice;
+        $this->location = $location;
         $this->date = $date;
         $this->note = $note;
-        $this->currency = __('Dzd');
+        $this->currency = 'DA';
         $this->locale = session('locale');
     }
 
     public function generatePdf()
     {
-        $isRTL = $this->locale === 'ar';
-
+        //$isRTL = $this->locale === 'ar';
+        $isRTL = false;
         // Create the mPDF instance with RTL support if needed
         $mpdf = new Mpdf([
             'mode' => 'utf-8',
@@ -55,12 +59,22 @@ class InvoiceService
             'direction' => $isRTL ? 'rtl' : 'ltr',
         ]);
 
+        $qr_code = QrCode::size(150)
+        ->merge(public_path('assets/img/icons/brands/google-maps.png'),.3 , true)
+        ->style("round")
+        ->generate($this->location);
+
+        // Removing the xml tag
+        $qr_code = substr($qr_code, 39);
+
         // Render the Blade template
         $html = View::make('pdf.invoice', [
             'seller' => $this->seller,
             'buyer' => $this->buyer,
+            'driver' => $this->driver,
             'items' => $this->items,
             'invoice' => $this->invoice,
+            'qr_code' => $qr_code,
             'note' => $this->note,
             'currency' => $this->currency,
             'date' => $this->date,

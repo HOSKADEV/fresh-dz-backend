@@ -95,6 +95,7 @@ class Invoice extends Model
         (new UserResource($driver))->toArray(request()),
         (new ItemCollection($cart->items))->toArray(request()),
         (new InvoiceResource($this))->toArray(request()),
+        $order->address(),
         Carbon::now(),
         $order->note,
       );
