@@ -19,6 +19,7 @@ class ItemResource extends JsonResource
       'price' => $this->price(),
       'discount' => $this->price() * ($this->discount / 100),
       'quantity' => $this->quantity,
+      'unit' => $this->product?->unit?->name_en,
       'subtotal' => $this->amount,
     ];
   }

@@ -332,7 +332,7 @@
                 @foreach ($items as $item)
                     <tr>
                         <td class="item-name text-bold">{{ $item['name'] }}</td>
-                        <td><span class="number">{{ $item['quantity'] }} Kg</span></td>
+                        <td><span class="number">{{ $item['quantity'] }} ({{ $item['unit'] }})</span></td>
                         <td><span class="number">{{ number_format($item['subtotal'], 2, '.', ',') }}
                                 {{ $currency }}</span></td>
                     </tr>
@@ -364,7 +364,7 @@
         <footer class="invoice-footer">
             <table class="footer-table">
               <tr>
-                <td>{!! $qr_code  !!}</td>
+                <td><h3>G.P.S</h3>{!! $qr_code  !!}</td>
                 <td>@include('pdf.partials.thank-you')</td>
                 <td>@include('pdf.partials.stamp')</td>
               </tr>
