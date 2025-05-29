@@ -483,7 +483,7 @@ class DatatablesController extends Controller
       ->addColumn('action', function ($row) {
         $btn = '';
 
-        $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing info" title="' . __('Info') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-info-circle"></span></button>';
+        $btn .= '<button class="btn btn-icon btn-label-blue inline-spacing info" title="' . __('Info') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-info-circle"></span></button>';
 
         $btn .= '<button class="btn btn-icon btn-label-secondary inline-spacing note" title="' . __('Note') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-note"></span></button>';
 
@@ -512,23 +512,21 @@ class DatatablesController extends Controller
             $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing refuse" title="' . __('Cancel') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-x"></span></button>';
 
           }
+          if (in_array($row->status, ['accepted', 'ongoing'])) {
 
-          if ($row->status == 'accepted') {
+            $btn .= '<a class="btn btn-icon btn-label-teal inline-spacing" title="' . __('whatsapp') . '" href="' . $row->whatsapp() . '" target="_blank" ><span class="tf-icons bx bxl-whatsapp"></span></a>';
 
-            $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing ship" title="' . __('Ship') . '" table_id="' . $row->id . '"><span class="tf-icons bx bxs-truck"></span></button>';
+            if ($row->status == 'accepted') {
 
-          }
+              $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing ship" title="' . __('Ship') . '" table_id="' . $row->id . '"><span class="tf-icons bx bxs-truck"></span></button>';
 
+            }
 
+            if ($row->status == 'ongoing') {
 
+              $btn .= '<button class="btn btn-icon btn-label-success inline-spacing deliver" title="' . __('Delivered') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-home-smile"></span></button>';
 
-          if ($row->status == 'ongoing') {
-
-
-
-            $btn .= '<a class="btn btn-icon btn-label-primary inline-spacing" title="' . __('whatsapp') . '" href="' . $row->whatsapp() . '" target="_blank" ><span class="tf-icons bx bxl-whatsapp"></span></a>';
-
-            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing deliver" title="' . __('Delivered') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-home-smile"></span></button>';
+            }
 
           }
 
