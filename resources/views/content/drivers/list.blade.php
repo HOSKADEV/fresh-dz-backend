@@ -84,9 +84,9 @@
                         <div class="mb-3">
                           <label class="form-label" for="phone">{{ __('Phone') }}</label>
                           <div class="d-flex" dir="ltr">
-                              <div class="me-2">
+                              {{-- <div class="me-2">
                                   <span class="form-control bg-light">+213</span>
-                              </div>
+                              </div> --}}
                               <div class="flex-grow-1">
                                   <input type="number" class="form-control" id="phone" name="phone">
                               </div>

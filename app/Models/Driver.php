@@ -55,7 +55,11 @@ class Driver extends Model
 
   public function phone()
   {
-    return $this->phone ? '+213' . $this->phone : null;
+    if (!$this->phone) {
+      return null;
+    }
+
+    return preg_replace('/^0/', '+213', $this->phone);
   }
 
 

@@ -720,7 +720,7 @@ class DatatablesController extends Controller
 
       ->addColumn('phone', function ($row) {
 
-        return $row->phone();
+        return $row->phone;
 
       })
 
