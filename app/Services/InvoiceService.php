@@ -14,10 +14,8 @@ class InvoiceService
     private $driver;
     private $items;
     private $invoice;
-    private $location;
-    private $note;
+    private $order;
     private $currency;
-    private $date;
     private $locale;
 
     public function __construct(
@@ -26,18 +24,14 @@ class InvoiceService
         array $driver,
         array $items,
         array $invoice,
-        string $location,
-        \DateTimeInterface $date,
-        ?string $note = null,
+        array $order
     ) {
         $this->seller = $seller;
         $this->buyer = $buyer;
         $this->driver = $driver;
         $this->items = $items;
         $this->invoice = $invoice;
-        $this->location = $location;
-        $this->date = $date;
-        $this->note = $note;
+        $this->order = $order;
         $this->currency = 'DA';
         $this->locale = session('locale');
     }
@@ -62,7 +56,7 @@ class InvoiceService
         $qr_code = QrCode::size(150)
         ->merge(public_path('assets/img/icons/brands/google-maps.png'),.3 , true)
         ->style("round")
-        ->generate($this->location);
+        ->generate($this->order['location']);
 
         // Removing the xml tag
         $qr_code = substr($qr_code, 39);
@@ -74,10 +68,9 @@ class InvoiceService
             'driver' => $this->driver,
             'items' => $this->items,
             'invoice' => $this->invoice,
+            'order' => $this->order,
             'qr_code' => $qr_code,
-            'note' => $this->note,
             'currency' => $this->currency,
-            'date' => $this->date,
             'isRTL' => $isRTL,
             'locale' => $this->locale
         ])->render();

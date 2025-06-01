@@ -265,7 +265,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/restore', [DiscountController::class, 'restore']);
     });
 
-    Route::prefix('order')->middleware('role:0,1,3,4')->group(function () {
+    Route::prefix('order')->middleware('role:0,1,3,4,6')->group(function () {
         Route::get('/browse', [OrderController::class, 'index'])->name('order-browse');
         Route::get('/{id}/items', [ItemController::class, 'index'])->name('order-items');
         Route::post('/list', [DatatablesController::class, 'orders'])->name('order-list');
@@ -273,7 +273,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete', [OrderController::class, 'delete']);
     });
 
-    Route::prefix('item')->middleware('role:0,1,3,4')->group(function () {
+    Route::prefix('item')->middleware('role:0,1,3,4,6')->group(function () {
         Route::post('/list', [DatatablesController::class, 'items'])->name('item-list');
         Route::post('/add', [ItemController::class, 'add']);
         Route::post('/edit', [ItemController::class, 'edit']);

@@ -37,9 +37,8 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 30px;
+            margin-bottom: 5px;
             border-bottom: 2px solid #000;
-            padding-bottom: 20px;
         }
 
         .company-info {
@@ -292,6 +291,14 @@
         <header class="invoice-header">
             @include('pdf.partials.logo-header')
         </header>
+
+        <!-- Order Details -->
+        <div class="text-center text-bold">
+            <p>
+                ID: <span class="number">{{ $order['identifier'] }}</span> |
+                Date: <span class="number">{{ $order['date'] }}</span>
+            </p>
+        </div>
 
         <!-- Customer Information -->
         <table class="info-table">

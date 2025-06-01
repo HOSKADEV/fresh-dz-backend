@@ -8,6 +8,7 @@ use App\Models\Set;
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Admin;
 use App\Models\Order;
 use App\Models\Driver;
 use App\Models\Notice;
@@ -31,7 +32,7 @@ class OrderController extends Controller
 
   public function index()
   {
-    $drivers = Driver::all();
+    $drivers = Admin::where('role',6)->where('status',1)->get();
     $regions = Region::all();
     //$shipping = Set::where('name', 'shipping')->first();
     return view('content.orders.list')
@@ -189,7 +190,7 @@ class OrderController extends Controller
 
     $validator = Validator::make($request->all(), [
       'order_id' => 'required|exists:orders,id',
-      'driver_id' => 'sometimes|exists:drivers,id',
+      'driver_id' => 'sometimes|required_if:status,ongoing|exists:admins,id',
       'status' => 'sometimes',
       //'tax_type' => 'sometimes|in:1,2',
       'tax_amount' => 'sometimes|numeric',
@@ -217,9 +218,8 @@ class OrderController extends Controller
           $invoice->pdf();
         }
 
-        if ($request->status == 'ongoing') {
-
-          Delivery::create([
+        if ($request->status == 'ongoing' && $request->driver_id){
+          Delivery::updateOrCreate([
             'order_id' => $request->order_id,
             'driver_id' => $request->driver_id,
           ]);

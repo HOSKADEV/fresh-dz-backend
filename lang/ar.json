@@ -44,6 +44,7 @@
   "Browse subcategories": "تصفح الأصناف",
   "Add Subcategory": "إضافة صنف",
   "Subcategories table": "جدول الأصناف",
+  "driver" : "سائق",
   "Driver": "السائق",
   "Drivers": "السائقون",
   "Browse drivers": "تصفح السائقين",
@@ -430,5 +431,6 @@
     "Enable CCP": "CCP تفعيل",
     "Enable Chargily": "تفعيل Chargily",
     "Distance" : "مسافة التوصيل",
-    "Delivery Time" : "وقت الاستلام"
+    "Delivery Time" : "وقت الاستلام",
+    "Identifier" : "رقم الطلب"
 }

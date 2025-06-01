@@ -30,12 +30,7 @@
       "icon": "menu-icon tf-icons bx bxs-package",
       "slug": "product-browse"
     },
-    {
-      "url": "/driver/browse",
-      "name": "Drivers",
-      "icon": "menu-icon tf-icons bx bxs-truck",
-      "slug": "driver-browse"
-    },
+
     {
       "url": "/coupon/browse",
       "name": "Coupons",

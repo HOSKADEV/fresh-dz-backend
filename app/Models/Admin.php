@@ -12,11 +12,6 @@ class Admin extends Authenticatable
 {
   use HasFactory, /*Notifiable,*/ SoftDeletes;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array<int, string>
-   */
   protected $fillable = [
     'region_id',
     'name',
@@ -28,21 +23,11 @@ class Admin extends Authenticatable
     'status',
   ];
 
-  /**
-   * The attributes that should be hidden for serialization.
-   *
-   * @var array<int, string>
-   */
   protected $hidden = [
     'password',
     'remember_token',
   ];
 
-  /**
-   * The attributes that should be cast.
-   *
-   * @var array<string, string>
-   */
   protected $casts = [
     'id' => 'string',
     'email_verified_at' => 'datetime',
@@ -69,7 +54,27 @@ class Admin extends Authenticatable
       3 => 'Region Manager',
       4 => 'Accountant',
       5 => 'Marketer',
+      6 => 'Driver', // Add driver role
       default => 'Unknown',
     };
+  }
+
+  // Add driver-specific methods
+  public function deliveries()
+  {
+    return $this->hasMany(Delivery::class, 'driver_id');
+  }
+
+  public function isDriver()
+  {
+    return $this->role === 6;
+  }
+
+  public function phone()
+  {
+    if (!$this->phone) {
+      return null;
+    }
+    return preg_replace('/^0/', '+213', $this->phone);
   }
 }

@@ -17,10 +17,10 @@ class Delivery extends Model
     ];
 
     public function driver(){
-      return $this->belongsTo(Driver::class);
+      return $this->belongsTo(Admin::class, 'driver_id');
     }
 
     public function order(){
-      return $this->belongsTo(Driver::class);
+      return $this->belongsTo(Order::class);
     }
 }

@@ -73,6 +73,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>{{ __('Identifier') }}</th>
                         <th>{{ __('User') }}</th>
                         <th>{{ __('Phone') }}</th>
                         <th>{{ __('Region') }}</th>
@@ -153,10 +154,10 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="driver_id">{{ __('Driver') }}</label>
-                            <select class="form-select" id="driver_id" name="driver_id">
+                            <select class="form-select" id="driver_id" name="driver_id" required>
                                 <option value=""> {{ __('Select driver') }}</option>
                                 @foreach ($drivers as $driver)
-                                    <option value="{{ $driver->id }}"> {{ $driver->fullname() }} </option>
+                                    <option value="{{ $driver->id }}"> {{ $driver->name }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -366,6 +367,14 @@
                         {
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
+                        },
+
+                        {
+                            data: 'identifier',
+                            name: 'identifier',
+                            render : function (data){
+                              return '<strong>' + data + '</strong>';
+                            }
                         },
 
                         {
@@ -771,7 +780,6 @@
             $('#submit_driver').on('click', function() {
                 var formdata = new FormData($("#driver_form")[0]);
                 formdata.append('status', 'ongoing');
-                $("#driver_modal").modal('show');
 
                 $.ajax({
                     url: "{{ url('order/update') }}",
@@ -785,7 +793,7 @@
                     processData: false,
                     success: function(response) {
                         if (response.status == 1) {
-
+                          $("#driver_modal").modal('hide');
                             Swal.fire(
                                 "{{ __('Success') }}",
                                 "{{ __('success') }}",

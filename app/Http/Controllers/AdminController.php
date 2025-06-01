@@ -30,7 +30,7 @@ class AdminController extends Controller
       'email' => 'required|email|unique:admins,email',
       'password' => 'required|string|min:8',
       'image' => 'sometimes|mimetypes:image/*',
-      'role' => 'required|in:0,1,2,3,4,5',
+      'role' => 'required|in:0,1,2,3,4,5,6',
       'region_id' => 'required_if:role,3',
     ]);
 
@@ -82,7 +82,7 @@ class AdminController extends Controller
       'email' => ['sometimes','email',Rule::unique('admins')->ignore($admin->id)],
       'image' => 'sometimes|mimetypes:image/*',
       'status' => 'sometimes|in:0,1',
-      'role' => 'sometimes|in:0,1,2,3,4,5',
+      'role' => 'sometimes|in:0,1,2,3,4,5,6',
       'region_id' => 'required_if:role,3',
     ]);
 

@@ -80,6 +80,7 @@
                                 <option value="3">{{ __('Region Manager') }}</option>
                                 <option value="4">{{ __('Accountant') }}</option>
                                 <option value="5">{{ __('Marketer') }}</option>
+                                <option value="6">{{ __('driver') }}</option>
                             </select>
                         </div>
 
@@ -161,6 +162,9 @@
                                 }
                                 if (data == 5) {
                                     return '<span class="badge bg-secondary">{{ __('Marketer') }}</span>';
+                                }
+                                if (data == 6) {
+                                    return '<span class="badge bg-blue">{{ __('driver') }}</span>';
                                 }
                             }
                         },
@@ -262,7 +266,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ url('admin/update') }}",
+                            url: "{{ url('admin/delete') }}",
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
@@ -303,7 +307,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ url('admin/update') }}",
+                            url: "{{ url('admin/restore') }}",
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },

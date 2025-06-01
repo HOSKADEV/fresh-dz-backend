@@ -7,6 +7,7 @@
         3 => '/resources/menu/managerMenu.json',
         4 => '/resources/menu/accountantMenu.json',
         5 => '/resources/menu/marketerMenu.json',
+        6 => '/resources/menu/driverMenu.json',
         default => '/resources/menu/verticalMenu.json',
       }
     ));

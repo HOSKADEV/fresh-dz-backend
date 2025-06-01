@@ -8,6 +8,7 @@ use App\Services\InvoiceService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\Invoice\UserResource;
+use App\Http\Resources\Invoice\OrderResource;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Http\Resources\Invoice\ItemCollection;
 use App\Http\Resources\Invoice\InvoiceResource;
@@ -98,9 +99,7 @@ class Invoice extends Model
         (new UserResource($driver))->toArray(request()),
         (new ItemCollection($cart->items))->toArray(request()),
         (new InvoiceResource($this))->toArray(request()),
-        $order->address(),
-        Carbon::now(),
-        $order->note,
+        (new OrderResource($order))->toArray(request()),
       );
 
 

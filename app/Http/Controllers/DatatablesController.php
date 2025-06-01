@@ -474,6 +474,12 @@ class DatatablesController extends Controller
       $orders = $orders->where('region_id', $request->region);
     }
 
+    if (auth()->user()->isDriver()) {
+      $orders->whereHas('delivery', function ($query) {
+        $query->where('driver_id', auth()->id());
+      });
+    }
+
     $orders = $orders->get();
 
     return datatables()
@@ -491,7 +497,7 @@ class DatatablesController extends Controller
 
         $btn .= '<a class="btn btn-icon btn-label-info inline-spacing" title="' . __('Cart') . '" href="' . url('order/' . $row->id . '/items') . '"><span class="tf-icons bx bx-cart"></span></a>';
 
-        if (!in_array($row->status, ['pending', 'canceled'])) {
+        if (in_array($row->status, ['ongoing', 'delivered'])) {
 
           $btn .= '<button class="btn btn-icon btn-label-dark inline-spacing invoice" title="' . __('Invoice') . '" table_id="' . $row->invoice->id . '"><span class="tf-icons bx bx-file"></span></button>';
 
@@ -530,11 +536,18 @@ class DatatablesController extends Controller
 
           }
 
-
           $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="' . __('Delete') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-trash"></span></button>';
         }
 
+        if($row->delivery?->driver_id == auth()->id()){
 
+          if ($row->status == 'ongoing') {
+
+            $btn .= '<button class="btn btn-icon btn-label-success inline-spacing deliver" title="' . __('Delivered') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-home-smile"></span></button>';
+
+          }
+
+        }
 
         return $btn;
       })
@@ -572,11 +585,15 @@ class DatatablesController extends Controller
 
       })
 
+      ->addColumn('identifier', function ($row) {
+
+        return $row->identifier;
+
+      })
+
       ->addColumn('driver', function ($row) {
 
-        if (!is_null($row->delivery)) {
-          return $row->delivery?->driver?->fullname();
-        }
+        return $row->delivery?->driver?->name;
 
       })
 
@@ -815,13 +832,13 @@ class DatatablesController extends Controller
         $btn = '';
 
         if ($row->status == 1) {
-          $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="' . __('Block') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-x-circle"></span></button>';
+          $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing delete" title="' . __('Block') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-x-circle"></span></button>';
         } else {
           $btn .= '<button class="btn btn-icon btn-label-success inline-spacing restore" title="' . __('Activate') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-check-circle"></span></button>';
         }
 
 
-
+        $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="' . __('Delete') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-trash"></span></button>';
 
         return $btn;
       })

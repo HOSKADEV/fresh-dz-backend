@@ -64,6 +64,10 @@ class Order extends Model
       return $this->phone;
     }
 
+    public function getIdentifierAttribute(){
+        return sprintf('%d-%d-%d', $this->region_id, $this->user_id, $this->id);
+    }
+
     public function address(){
       return 'https://maps.google.com/?q='.$this->latitude.','.$this->longitude;
     }
