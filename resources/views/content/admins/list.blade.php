@@ -273,7 +273,6 @@
                             type: 'POST',
                             data: {
                                 admin_id: admin_id,
-                                status: 0
                             },
                             dataType: 'JSON',
                             success: function(response) {
@@ -292,7 +291,7 @@
                 })
             });
 
-            $(document.body).on('click', '.restore', function() {
+            $(document.body).on('click', '.activate', function() {
                 var admin_id = $(this).attr('table_id');
 
                 Swal.fire({
@@ -307,7 +306,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "{{ url('admin/restore') }}",
+                            url: "{{ url('admin/update') }}",
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
@@ -315,6 +314,47 @@
                             data: {
                                 admin_id: admin_id,
                                 status: 1
+                            },
+                            dataType: 'JSON',
+                            success: function(response) {
+                                if (response.status == 1) {
+                                    Swal.fire(
+                                        "{{ __('Success') }}",
+                                        "{{ __('success') }}",
+                                        'success'
+                                    ).then((result) => {
+                                        $('#laravel_datatable').DataTable().ajax.reload();
+                                    });
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+
+            $(document.body).on('click', '.suspend', function() {
+                var admin_id = $(this).attr('table_id');
+
+                Swal.fire({
+                    title: "{{ __('Warning') }}",
+                    text: "{{ __('Are you sure?') }}",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "{{ __('Yes') }}",
+                    cancelButtonText: "{{ __('No') }}"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ url('admin/update') }}",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            data: {
+                                admin_id: admin_id,
+                                status: 0
                             },
                             dataType: 'JSON',
                             success: function(response) {

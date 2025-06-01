@@ -832,9 +832,9 @@ class DatatablesController extends Controller
         $btn = '';
 
         if ($row->status == 1) {
-          $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing delete" title="' . __('Block') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-x-circle"></span></button>';
+          $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing suspend" title="' . __('Block') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-x-circle"></span></button>';
         } else {
-          $btn .= '<button class="btn btn-icon btn-label-success inline-spacing restore" title="' . __('Activate') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-check-circle"></span></button>';
+          $btn .= '<button class="btn btn-icon btn-label-success inline-spacing activate" title="' . __('Activate') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-check-circle"></span></button>';
         }
 
 
