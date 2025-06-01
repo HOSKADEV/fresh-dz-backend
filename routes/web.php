@@ -281,7 +281,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/restore', [ItemController::class, 'restore']);
     });
 
-    Route::prefix('invoice')->middleware('role:0,1,3,4')->group(function () {
+    Route::prefix('invoice')->middleware('role:0,1,3,4,6')->group(function () {
         Route::post('/update', [InvoiceController::class, 'update']);
     });
 
