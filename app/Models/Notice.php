@@ -75,7 +75,7 @@ class Notice extends Model
     ]);
   }
 
-  public static function OrderNotice(int $orderId, string $status): self
+  public static function OrderNotice(string $orderId, string $status): self
   {
     $key = "messages.order.{$status}";
 
