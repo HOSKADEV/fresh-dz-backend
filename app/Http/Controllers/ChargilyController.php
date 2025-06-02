@@ -61,7 +61,7 @@ class ChargilyController extends Controller
         $cart->save();
         $order->save();
 
-        $user->notify(Notice::OrderNotice($order->id,'accepted'));
+        $user->notify(Notice::OrderNotice($order->identifier,'accepted'));
 
         return redirect()->route('chargily-success');
 

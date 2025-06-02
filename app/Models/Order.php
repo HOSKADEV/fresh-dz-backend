@@ -115,7 +115,7 @@ class Order extends Model
         [
           "web" => [
             "notification" => [
-              "title" => trans('messages.order.created.title',['order_id' => $this->id]),
+              "title" => trans('messages.order.created.title',['order_id' => $this->identifier]),
               "body" => trans('messages.order.created.content',['region_name' => $this->region?->name]),
               'deep_link' => url('order/browse'),
             ]
