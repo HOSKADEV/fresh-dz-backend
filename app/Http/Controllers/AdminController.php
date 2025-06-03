@@ -139,8 +139,8 @@ class AdminController extends Controller
     try{
 
       $admin = Admin::findOrFail($request->admin_id);
-
-      $admin->delete();
+      $admin->deliveries()->forceDelete();
+      $admin->forceDelete();
 
       return response()->json([
         'status' => 1,

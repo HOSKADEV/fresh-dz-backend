@@ -236,7 +236,7 @@ class ProductController extends Controller
 
     try{
 
-    $products = Product::orderBy('created_at','DESC');
+    $products = Product::whereNotNull('image')->orderBy('created_at','DESC');
 
     if($request->has('category_id')){
 

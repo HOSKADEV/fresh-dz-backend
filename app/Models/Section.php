@@ -100,7 +100,8 @@ class Section extends Model
     if ($this->type == 'group') {
 
       $group = Group::find($this->element);
-      $products = Product::whereIn('subcategory_id',  $group->subcategories()->pluck('subcategories.id')->toArray())
+      $products = Product::whereNotNull('image')
+      ->whereIn('subcategory_id',  $group->subcategories()->pluck('subcategories.id')->toArray())
       ->inRandomOrder()->take(10)->get();
       return new ProductCollection($products);
 
@@ -111,7 +112,9 @@ class Section extends Model
       if ($this->element == 'popular') {
         $popular_products = Item::select('product_id', DB::raw('COUNT(product_id) as count'))
           ->join('products','products.id','items.product_id')
-          ->where('products.deleted_at',null)->where('items.deleted_at',null)
+          ->whereNotNull('products.image')
+          ->where('products.deleted_at',null)
+          ->where('items.deleted_at',null)
           ->groupBy('product_id')->orderBy('count', 'DESC')
           ->get()->take(10)->pluck('product_id')->toArray();
 
@@ -138,7 +141,8 @@ class Section extends Model
           ->pluck('product_id')->toArray();
           //->inRandomOrder()->limit(10)->get(); */
 
-        $discounted_products = Product::whereIn('subcategory_id', $subcategories)
+        $discounted_products = Product::whereNotNull('image')
+        ->whereIn('subcategory_id', $subcategories)
         ->leftjoin('discounts','products.id','discounts.product_id')
         ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())->where('discounts.deleted_at',null)
         ->select('products.*','discounts.id as discount_id','discounts.amount','discounts.start_date','discounts.end_date')
