@@ -35,10 +35,10 @@ class Invoice extends Model
       'payment_receipt',
     ];
 
-    public function getFileAttribute($value)
+    public function getFileUrlAttribute()
     {
-      return $value && Storage::disk('upload')->exists($value)
-      ? Storage::disk('upload')->url($value)
+      return $this->file && Storage::disk('upload')->exists($this->file)
+      ? Storage::disk('upload')->url($this->file)
       : null;
     }
 
@@ -102,12 +102,15 @@ class Invoice extends Model
         (new OrderResource($order))->toArray(request()),
       );
 
+      if($this->file){
+        Storage::disk('upload')->delete($this->file);
+      }
 
         $this->file = $invoice->generatePdf();
 
         $this->save();
 
-        return $this->file;
+        return $this->file_url;
 
     }
 

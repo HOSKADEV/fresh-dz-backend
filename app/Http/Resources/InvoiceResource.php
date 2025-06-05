@@ -20,7 +20,7 @@ class InvoiceResource extends JsonResource
           'discount_amount' => $this->discount_amount,
           'total_amount' => $this->total_amount,
           'discount_code' => $this->discount_code,
-          'file' => $this->file,
+          'file' => $this->file_url,
           'is_paid' => $this->is_paid,
           'paid_at' => $this->paid_at,
           'payment_method' => $this->payment_method,

@@ -100,7 +100,7 @@ class Order extends Model
       __('order N') . ': ' . $this->id . '%0A' .
       __('Total amount') . ': ' . number_format($this->invoice->total_amount, 2, '.', ',') . '%0A' .
       __('Phone') . ': ' . $this->phone() . '%0A' .
-      __('Invoice') . ': ' . $this->invoice->file . '%0A' .
+      __('Invoice') . ': ' . $this->invoice->file_url . '%0A' .
       __('Location') . ': ' . $this->address();
     }
 

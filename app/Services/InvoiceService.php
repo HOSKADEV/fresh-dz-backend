@@ -79,7 +79,7 @@ class InvoiceService
 
         $mpdf->WriteHTML($html);
 
-        $filename = $this->invoice['order_id'] . '.pdf';
+        $filename = uuid_create() . '.pdf';
 
         $filepath = 'uploads/invoices/'. $filename;
 
