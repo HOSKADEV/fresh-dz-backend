@@ -543,6 +543,8 @@ class DatatablesController extends Controller
 
           if ($row->status == 'ongoing') {
 
+            $btn .= '<button class="btn btn-icon btn-label-warning inline-spacing arrive" title="' . __('Notify') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-bell"></span></button>';
+
             $btn .= '<button class="btn btn-icon btn-label-success inline-spacing deliver" title="' . __('Delivered') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-home-smile"></span></button>';
 
           }

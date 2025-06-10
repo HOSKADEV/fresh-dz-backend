@@ -99,6 +99,7 @@ class NotificationController extends Controller
       return response()->json([
         'status' => true,
         'message' => 'success',
+        'count' => $user->notification_count,
         'data' => $notifications
       ]);
 

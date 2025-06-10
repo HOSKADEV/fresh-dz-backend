@@ -32,13 +32,13 @@ class OrderController extends Controller
 
   public function index()
   {
-    $drivers = Admin::where('role',6)->where('status',1)->get();
+    $drivers = Admin::where('role', 6)->where('status', 1)->get();
     $regions = Region::all();
     //$shipping = Set::where('name', 'shipping')->first();
     return view('content.orders.list')
       ->with('drivers', $drivers)
       ->with('regions', $regions);
-      //->with('shipping', $shipping);
+    //->with('shipping', $shipping);
   }
 
   public function distance(Request $request)
@@ -69,7 +69,7 @@ class OrderController extends Controller
       return response()->json(
         [
           'status' => 1,
-          'data' => number_format(Set::calculateDeliveryPrice($start_point, $end_point),2)
+          'data' => number_format(Set::calculateDeliveryPrice($start_point, $end_point), 2)
 
         ]
       );
@@ -142,7 +142,7 @@ class OrderController extends Controller
         'payment_account' => $request->payment_account,
         'checkout_id' => $request->checkout_id,
       ]);
-      if($request->payment_method == 'chargily'){
+      if ($request->payment_method == 'chargily') {
         $cart->type = 'current';
         $cart->save();
         $order->status = 'chargily';
@@ -163,7 +163,7 @@ class OrderController extends Controller
 
       //$this->send_fcm_multi(__('New order'), __('There is a new order pending'), $admin_tokens);
 
-      $user->notify(Notice::OrderNotice($order->identifier,'pending'), false);
+      $user->notify(Notice::OrderNotice($order->identifier, 'pending'), false);
       $order->notify();
 
       return response()->json([
@@ -218,7 +218,7 @@ class OrderController extends Controller
           $invoice->pdf();
         }
 
-        if ($request->status == 'ongoing' && $request->driver_id){
+        if ($request->status == 'ongoing') {
           Delivery::updateOrCreate([
             'order_id' => $request->order_id,
             'driver_id' => $request->driver_id,
@@ -234,7 +234,7 @@ class OrderController extends Controller
           $delivery->delivered_at = $now;
           $delivery->save();
 
-          if($invoice->is_paid == 'no'){
+          if ($invoice->is_paid == 'no') {
             $invoice->is_paid = 'yes';
             $invoice->paid_at = $now;
             //$invoice->payment_method = $request->payment_method;
@@ -242,24 +242,21 @@ class OrderController extends Controller
           }
         }
 
-
-        //$order->status = $request->status;
-        //$order->save();
-
-        /* $this->send_fcm_device(
-          __('Order status update'),
-          __('Your order is ' . $request->status),
-          $order->user->fcm_token
-        ); */
+        if ($request->status != 'arrived') {
+          $order->update(['status' => $request->status]);
+        }
 
         $user->notify(Notice::OrderNotice($order->identifier, $request->status));
 
       }
 
-      //dd($request->only(['status','note']));
-
-      $order->update($request->only(['status', 'note']));
-
+      if ($request->has('note')) {
+        $order->update([
+          'note' => $request->note
+        ], [
+          'timestamps' => false
+        ]);
+      }
 
       return response()->json([
         'status' => 1,
@@ -390,12 +387,18 @@ class OrderController extends Controller
 
       }
 
-      $orders = $user->orders()->where('status','!=','chargily')->orderBy('updated_at', 'DESC')->paginate(10);
+      $orders = $user->orders()
+        /* ->where('status','!=','chargily') */
+        ->orderBy('updated_at', 'DESC')
+        ->paginate(10);
+
+      $user->update(['last_orders_visit' => now()]);
 
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new PaginatedOrderCollection($orders)
+        'count' => $user->order_count,
+        'data' => new PaginatedOrderCollection($orders),
       ]);
 
     } catch (Exception $e) {

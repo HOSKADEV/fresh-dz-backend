@@ -581,6 +581,55 @@
                 })
             });
 
+            $(document.body).on('click', '.arrive', function() {
+                //document.getElementById('invoice_form').reset();
+                //document.getElementById('invoice_order_id').value = order_id;
+                //$("#invoice_modal").modal('show');
+                var order_id = $(this).attr('table_id');
+
+                Swal.fire({
+                    title: "{{ __('Warning') }}",
+                    text: "{{ __('Are you sure?') }}",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "{{ __('Yes') }}",
+                    cancelButtonText: "{{ __('No') }}"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "{{ url('order/update') }}",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            data: {
+                                order_id: order_id,
+                                status: "arrived"
+                            },
+                            dataType: 'JSON',
+                            success: function(response) {
+                                if (response.status == 1) {
+
+                                    Swal.fire(
+                                        "{{ __('Success') }}",
+                                        "{{ __('success') }}",
+                                        'success'
+                                    ).then((result) => {
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
+                                    });
+                                }
+                            }
+                        });
+
+
+                    }
+                })
+            });
+
 
             $(document.body).on('click', '.ship', function() {
                 document.getElementById('driver_form').reset();

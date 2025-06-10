@@ -100,4 +100,21 @@ class SetController extends Controller
       ],
     ]);
   }
+
+  public function counts(Request $request)
+  {
+
+    $user = auth()->user();
+
+    return response()->json([
+      'status' => 1,
+      'message' => 'success',
+      'data' => [
+        'items' => $user?->item_count,
+        'notifications' => $user?->notification_count,
+        'offers' => $user?->offer_count,
+        'orders' => $user?->order_count,
+      ],
+    ]);
+  }
 }

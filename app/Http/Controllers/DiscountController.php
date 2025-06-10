@@ -31,12 +31,13 @@ class DiscountController extends Controller
       ->with('product', $product);
   }
 
-  public function create(Request $request){
+  public function create(Request $request)
+  {
 
     $product = Product::findOrFail($request->product_id);
 
-    if($request->type == '1'){
-      $request->merge(['amount' => floatval($request->amount)*100/$product->unit_price]);
+    if ($request->type == '1') {
+      $request->merge(['amount' => floatval($request->amount) * 100 / $product->unit_price]);
     }
 
     //dd($request->all());
@@ -52,13 +53,13 @@ class DiscountController extends Controller
 
     if ($validator->fails()) {
       return response()->json([
-        'status'=> 0,
+        'status' => 0,
         'message' => $validator->errors()->first()
       ]);
     }
-    try{
+    try {
 
-      if(is_null($product->discount())){
+      if (is_null($product->discount())) {
         $discount = Discount::create($request->all());
       }
 
@@ -68,22 +69,24 @@ class DiscountController extends Controller
         'data' => new DiscountResource($discount)
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
   }
 
-  public function update(Request $request){
+  public function update(Request $request)
+  {
 
     //dd($request->all());i
-    if($request->has('product_id') && $request->has('type')){
+    if ($request->has('product_id') && $request->has('type')) {
       $product = Product::findOrFail($request->product_id);
-      if($request->type == '1'){
-        $request->merge(['amount' => floatval($request->amount)*100/$product->unit_price]);
+      if ($request->type == '1') {
+        $request->merge(['amount' => floatval($request->amount) * 100 / $product->unit_price]);
       }
     }
 
@@ -97,15 +100,16 @@ class DiscountController extends Controller
       'end_date' => 'required_with:start_date|after:today'
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $discount = Discount::findOrFail($request->discount_id);
 
@@ -118,31 +122,34 @@ class DiscountController extends Controller
         'data' => new DiscountResource($discount)
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function delete(Request $request){
+  public function delete(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'discount_id' => 'required',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $discount = Discount::findOrFail($request->discount_id);
 
@@ -153,31 +160,34 @@ class DiscountController extends Controller
         'message' => 'success',
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function restore(Request $request){
+  public function restore(Request $request)
+  {
 
     $validator = Validator::make($request->all(), [
       'discount_id' => 'required',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
 
       $discount = Discount::withTrashed()->findOrFail($request->discount_id);
 
@@ -189,32 +199,36 @@ class DiscountController extends Controller
         'data' => new DiscountResource($discount)
       ]);
 
-    }catch(Exception $e){
-      return response()->json([
-        'status' => 0,
-        'message' => $e->getMessage()
-      ]
-    );
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
     }
 
   }
 
-  public function get(Request $request){  //paginated
+  public function get(Request $request)
+  {  //paginated
     $validator = Validator::make($request->all(), [
       'category_id' => 'sometimes|exists:categories,id',
     ]);
 
-    if ($validator->fails()){
-      return response()->json([
+    if ($validator->fails()) {
+      return response()->json(
+        [
           'status' => 0,
           'message' => $validator->errors()->first()
         ]
       );
     }
 
-    try{
+    try {
+      $user = auth()->user();
 
-      if($request->has('category_id')){
+      if ($request->has('category_id')) {
 
         $category = Category::findOrFail($request->category_id);
         $products_discounts = $category->discounts()->paginate(10);
@@ -227,31 +241,35 @@ class DiscountController extends Controller
       }
 
 
-    $discounts = DB::table('discounts')
-    ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
-    ->join('products','discounts.product_id','products.id')
-    ->join('subcategories','products.subcategory_id','subcategories.id')
-    ->join('categories','subcategories.category_id','categories.id')
-    ->orderBy('categories.created_at','DESC')->groupBy(DB::raw('categories.id'))
-    ->select('categories.id')->get()->pluck('id')->toArray();
-    //return($discounts);
-    $categories = Category::whereIn('id',$discounts)->paginate(5);
+      $discounts = DB::table('discounts')
+        ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
+        ->join('products', 'discounts.product_id', 'products.id')
+        ->join('subcategories', 'products.subcategory_id', 'subcategories.id')
+        ->join('categories', 'subcategories.category_id', 'categories.id')
+        ->orderBy('categories.created_at', 'DESC')->groupBy(DB::raw('categories.id'))
+        ->select('categories.id')->get()->pluck('id')->toArray();
+      //return($discounts);
+      $categories = Category::whereIn('id', $discounts)->paginate(5);
       //return($categories);
-    $categories_discounts = new PaginatedCategoryDiscountCollection($categories);
+      $categories_discounts = new PaginatedCategoryDiscountCollection($categories);
 
-    return response()->json([
-      'status' => 1,
-      'message' => 'success',
-      'data' => $categories_discounts
-    ]);
+      $user->update(['last_offers_visit' => now()]);
 
-  }catch(Exception $e){
-    return response()->json([
-      'status' => 0,
-      'message' => $e->getMessage()
-    ]
-  );
-  }
+      return response()->json([
+        'status' => 1,
+        'message' => 'success',
+        'count' => $user->offer_count,
+        'data' => $categories_discounts,
+      ]);
+
+    } catch (Exception $e) {
+      return response()->json(
+        [
+          'status' => 0,
+          'message' => $e->getMessage()
+        ]
+      );
+    }
 
   }
 }

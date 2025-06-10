@@ -120,7 +120,8 @@ class CartController extends Controller
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new CartResource($cart)
+        'count' => $user->item_count,
+        'data' => new CartResource($cart),
       ]);
 
     }catch(Exception $e){

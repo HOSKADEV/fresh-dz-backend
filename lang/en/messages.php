@@ -48,6 +48,10 @@ return [
       'title' => 'Order Pickup',
       'content' => 'A driver has been assigned to your order #:order_id.'
     ],
+    'arrived' => [
+      'title' => 'Order Ready for Collection',
+      'content' => 'Your order #:order_id has arrived. Please come outside to collect your order.'
+    ],
     'delivered' => [
       'title' => 'Order Delivered',
       'content' => 'Your order #:order_id has been delivered successfully.'

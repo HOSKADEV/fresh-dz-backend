@@ -32,6 +32,7 @@ Route::group(['middleware' => ['sometimes.auth']], function () {
   Route::get('/v1/about','App\Http\Controllers\DocumentationController@about');
   Route::get('/v1/settings','App\Http\Controllers\SetController@get');
   Route::post('/v1/info','App\Http\Controllers\SetController@info');
+  Route::get('/v1/counts','App\Http\Controllers\SetController@counts');
 
   Route::post('/v1/category/get','App\Http\Controllers\CategoryController@get');
   Route::post('/v1/subcategory/get','App\Http\Controllers\SubcategoryController@get');
