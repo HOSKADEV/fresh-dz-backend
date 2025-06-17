@@ -388,7 +388,7 @@ class OrderController extends Controller
       }
 
       $orders = $user->orders()
-        /* ->where('status','!=','chargily') */
+        ->where('status','!=','chargily')
         ->orderBy('updated_at', 'DESC')
         ->paginate(10);
 

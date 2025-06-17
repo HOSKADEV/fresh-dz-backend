@@ -26,7 +26,7 @@ class AdminController extends Controller
 
     $validator = Validator::make($request->all(), [
       'name' => 'required|string',
-      'phone' => 'sometimes|numeric',
+      'phone' => 'sometimes|numeric|unique:admins,phone',
       'email' => 'required|email|unique:admins,email',
       'password' => 'required|string|min:8',
       'image' => 'sometimes|mimetypes:image/*',
@@ -73,13 +73,12 @@ class AdminController extends Controller
   public function update(Request $request){
 
     $request->mergeIfMissing(['admin_id' => auth()->user()->id]);
-    $admin = Admin::find($request->admin_id);
 
     $validator = Validator::make($request->all(), [
       'admin_id' => 'required|exists:admins,id',
       'name' => 'sometimes|string',
-      'phone' => 'sometimes|numeric',
-      'email' => ['sometimes','email',Rule::unique('admins')->ignore($admin->id)],
+      'phone' => 'sometimes|numeric|unique:admins,phone,except,' . $request->admin_id,
+      'email' => 'sometimes|email|unique:admins,email,except,' . $request->admin_id,
       'image' => 'sometimes|mimetypes:image/*',
       'status' => 'sometimes|in:0,1',
       'role' => 'sometimes|in:0,1,2,3,4,5,6',
@@ -95,7 +94,7 @@ class AdminController extends Controller
     }
 
     try{
-
+      $admin = Admin::find($request->admin_id);
       $admin->update($request->except('image'));
 
       if($request->hasFile('image')){

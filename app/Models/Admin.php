@@ -54,12 +54,11 @@ class Admin extends Authenticatable
       3 => 'Region Manager',
       4 => 'Accountant',
       5 => 'Marketer',
-      6 => 'Driver', // Add driver role
+      6 => 'Driver',
       default => 'Unknown',
     };
   }
 
-  // Add driver-specific methods
   public function deliveries()
   {
     return $this->hasMany(Delivery::class, 'driver_id');
@@ -67,7 +66,12 @@ class Admin extends Authenticatable
 
   public function isDriver()
   {
-    return $this->role === 6;
+    return $this->role == 6;
+  }
+
+  public function isRegionManager()
+  {
+    return $this->role == 3;
   }
 
   public function phone()
