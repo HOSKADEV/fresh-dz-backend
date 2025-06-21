@@ -100,8 +100,9 @@ class Controller extends BaseController
       if($fcm_token){
 
         $message = CloudMessage::withTarget('token', $fcm_token)
-          ->withNotification($notification) // optional
+          //->withNotification($notification) // optional
           ->withAndroidConfig(AndroidConfig::fromArray([
+            'notification' => $notification,
             'channel_id' => 'fresh_dz_channel',
             'sound' => 'default'
             ]))
@@ -130,8 +131,9 @@ class Controller extends BaseController
       ]);
 
       $message = CloudMessage::new()
-        ->withNotification($notification) // optional
+        //->withNotification($notification) // optional
         ->withAndroidConfig(AndroidConfig::fromArray([
+          'notification' => $notification,
           'channel_id' => 'fresh_dz_channel',
           'sound' => 'default'
           ]))
