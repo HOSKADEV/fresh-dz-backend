@@ -94,18 +94,18 @@ class Controller extends BaseController
       $notification = [
         'title' => $title,
         'body' => $content,
+        'channel_id' => 'fresh_dz_channel',
+        'sound' => 'default'
         //'image' => $imageUrl,
       ];
 
-      if($fcm_token){
+      if ($fcm_token) {
 
         $message = CloudMessage::withTarget('token', $fcm_token)
           //->withNotification($notification) // optional
           ->withAndroidConfig(AndroidConfig::fromArray([
             'notification' => $notification,
-            'channel_id' => 'fresh_dz_channel',
-            'sound' => 'default'
-            ]))
+          ]))
           //->withData($data) // optional
         ;
 
@@ -127,6 +127,8 @@ class Controller extends BaseController
       $notification = [
         'title' => $title,
         'body' => $content,
+        'channel_id' => 'fresh_dz_channel',
+        'sound' => 'default'
         //'image' => $imageUrl,
       ];
 
@@ -134,9 +136,7 @@ class Controller extends BaseController
         //->withNotification($notification) // optional
         ->withAndroidConfig(AndroidConfig::fromArray([
           'notification' => $notification,
-          'channel_id' => 'fresh_dz_channel',
-          'sound' => 'default'
-          ]))
+        ]))
         //->withData($data) // optional
       ;
 
