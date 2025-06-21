@@ -91,11 +91,11 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
+      $notification = [
         'title' => $title,
         'body' => $content,
         //'image' => $imageUrl,
-      ]);
+      ];
 
       if($fcm_token){
 
@@ -124,11 +124,11 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
+      $notification = [
         'title' => $title,
         'body' => $content,
         //'image' => $imageUrl,
-      ]);
+      ];
 
       $message = CloudMessage::new()
         //->withNotification($notification) // optional
