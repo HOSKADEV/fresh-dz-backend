@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -100,6 +101,10 @@ class Controller extends BaseController
 
         $message = CloudMessage::withTarget('token', $fcm_token)
           ->withNotification($notification) // optional
+          ->withAndroidConfig(AndroidConfig::fromArray([
+            'channel_id' => 'fresh_dz_channel',
+            'sound' => 'default'
+            ]))
           //->withData($data) // optional
         ;
 
@@ -126,6 +131,10 @@ class Controller extends BaseController
 
       $message = CloudMessage::new()
         ->withNotification($notification) // optional
+        ->withAndroidConfig(AndroidConfig::fromArray([
+          'channel_id' => 'fresh_dz_channel',
+          'sound' => 'default'
+          ]))
         //->withData($data) // optional
       ;
 
