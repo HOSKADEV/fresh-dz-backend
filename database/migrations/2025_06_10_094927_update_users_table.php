@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->timestamp('last_orders_visit')->nullable()->after('deleted_at');
             $table->timestamp('last_offers_visit')->nullable()->after('deleted_at');
+            $table->timestamp('last_notifications_visit')->nullable()->after('deleted_at');
         });
     }
 

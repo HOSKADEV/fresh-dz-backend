@@ -94,6 +94,7 @@ class NotificationController extends Controller
         $notifications = new NotificationCollection($notifications->get());
       } else {
         $notifications = new PaginatedNotificationCollection($notifications->paginate(10));
+        $user->update(['last_notifications_visit' => now()]);
       }
 
       return response()->json([

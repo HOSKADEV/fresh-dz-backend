@@ -31,7 +31,8 @@ class User extends Authenticatable
     'status',
     'fcm_token',
     'last_orders_visit',
-    'last_offers_visit'
+    'last_offers_visit',
+    'last_notifications_visit',
   ];
 
   /**
@@ -145,7 +146,10 @@ class User extends Authenticatable
   }
 
   public function getNotificationCountAttribute(){
-    return $this->notifications()->where('is_read', 0)->count();
+    return $this->notifications()
+    ->where('is_read', 0)
+    ->where('created_at', '>', $this->last_notifications_visit ?? '1970-1-1 0:0:0')
+      ->count();
   }
 
   public function getOrderCountAttribute(){
