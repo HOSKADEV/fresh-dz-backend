@@ -53,7 +53,6 @@ class NotificationController extends Controller
   public function get(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      'is_read' => 'sometimes|in:0,1',
       'type' => 'sometimes|in:0,1,2,3,4',
       'priority' => 'sometimes|in:0,1',
       'all' => 'sometimes',
@@ -74,10 +73,6 @@ class NotificationController extends Controller
 
       $notifications = $user->notifications()->orderBy('created_at', 'DESC');
 
-      if ($request->has('is_read')) {
-        $notifications = $notifications->where('is_read', $request->is_read);
-      }
-
       if ($request->has('type')) {
         $notifications = $notifications->whereHas('notice', function($query) use ($request){
           $query->where('type', $request->type);
@@ -90,7 +85,7 @@ class NotificationController extends Controller
         });
       }
 
-      $notifications->update(['is_read' => 1]);
+      $notifications->where('is_read', 0)->update(['is_read' => 1, 'read_at' => now()]);
 
       if ($request->has('all')) {
         $notifications = new NotificationCollection($notifications->get());
