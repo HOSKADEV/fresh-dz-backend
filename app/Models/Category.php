@@ -42,8 +42,7 @@ class Category extends Model
     }
 
     public function discounts(){
-      $products = Product::whereNotNull('image')
-      ->whereIn('subcategory_id',$this->subcategories()->pluck('id')->toArray())
+      $products = Product::whereIn('subcategory_id',$this->subcategories()->pluck('id')->toArray())
       ->join('discounts','products.id','discounts.product_id')
       ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())->where('discounts.deleted_at',null)
       ->select('products.*','discounts.id as discount_id','discounts.amount','discounts.start_date','discounts.end_date')
