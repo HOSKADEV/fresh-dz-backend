@@ -155,7 +155,9 @@ class User extends Authenticatable
   public function getOrderCountAttribute(){
     return $this->notifications()
       ->where('is_read', 0)
-      ->where('type', 3)
+      ->whereHas('notice', function($query) {
+        $query->where('type', 3);
+      })
       ->where('created_at', '>', $this->last_orders_visit ?? now()->subWeek())
       ->count();
   }
@@ -164,7 +166,9 @@ class User extends Authenticatable
 
     return $this->notifications()
       ->where('is_read', 0)
-      ->where('type', 5)
+      ->whereHas('notice', function($query) {
+        $query->where('type', 5);
+      })
       ->where('created_at', '>', $this->last_orders_visit ?? now()->subWeek())
       ->count();
   }
