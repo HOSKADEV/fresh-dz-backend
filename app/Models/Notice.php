@@ -87,6 +87,7 @@ class Notice extends Model
       'type' => 3,
       'priority' => $status === 'delivered' ? 1 : 0,
       'metadata' => json_encode([
+        'identifier' => $orderId,
         'order_id' => explode('-',$orderId)[2],
         'status' => $status
       ])
@@ -109,6 +110,26 @@ class Notice extends Model
         'product_name' => $productName,
         'image' => $image,
         'status' => $status
+      ])
+    ]);
+  }
+
+  public static function DiscountNotice(int $productId, string $productName, string $image, string $discount): self
+  {
+    $key = "messages.discount.default";
+
+    return self::create([
+      'title_en' => trans("{$key}.title", [], 'en'),
+      'title_ar' => trans("{$key}.title", [], 'ar'),
+      'content_en' => trans("{$key}.content", ['product_name' => $productName, 'discount' => $discount], 'en'),
+      'content_ar' => trans("{$key}.content", ['product_name' => $productName, 'discount' => $discount], 'ar'),
+      'type' => 5,
+      'priority' => 1,
+      'metadata' => json_encode([
+        'product_id' => $productId,
+        'product_name' => $productName,
+        'image' => $image,
+        'discount' => $discount
       ])
     ]);
   }

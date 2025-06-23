@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CategoryDiscountCollection;
-use App\Http\Resources\DiscountCollection;
-use App\Http\Resources\DiscountResource;
-use App\Http\Resources\PaginatedCategoryDiscountCollection;
-use App\Http\Resources\PaginatedProductDiscountCollection;
-use App\Http\Resources\ProductDiscountCollection;
-use App\Http\Resources\ProductDiscountResource;
+use Session;
+use Exception;
+use App\Models\Notice;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\Discount;
-use App\Models\Product;
 use App\Models\Subcategory;
-use Exception;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\DiscountResource;
 use Illuminate\Support\Facades\Validator;
-use Session;
+use App\Http\Resources\DiscountCollection;
+use App\Http\Resources\ProductDiscountResource;
+use App\Http\Resources\ProductDiscountCollection;
+use App\Http\Resources\CategoryDiscountCollection;
+use App\Http\Resources\PaginatedProductDiscountCollection;
+use App\Http\Resources\PaginatedCategoryDiscountCollection;
 
 class DiscountController extends Controller
 {
@@ -59,9 +61,13 @@ class DiscountController extends Controller
     }
     try {
 
-      if (is_null($product->discount())) {
-        $discount = Discount::create($request->all());
+      if ($product->discount()) {
+        throw new Exception('The product already has a discount');
       }
+
+      $discount = Discount::create($request->all());
+
+      $discount->notify();
 
       return response()->json([
         'status' => 1,
@@ -244,10 +250,15 @@ class DiscountController extends Controller
       $discounts = DB::table('discounts')
         ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
         ->join('products', 'discounts.product_id', 'products.id')
+        ->whereNotNull('products.image')
         ->join('subcategories', 'products.subcategory_id', 'subcategories.id')
         ->join('categories', 'subcategories.category_id', 'categories.id')
-        ->orderBy('categories.created_at', 'DESC')->groupBy(DB::raw('categories.id'))
-        ->select('categories.id')->get()->pluck('id')->toArray();
+        ->orderBy('categories.created_at', 'DESC')
+        ->groupBy(DB::raw('categories.id'))
+        ->select('categories.id')
+        ->get()
+        ->pluck('id')
+        ->toArray();
       //return($discounts);
       $categories = Category::whereIn('id', $discounts)->paginate(5);
       //return($categories);

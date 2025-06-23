@@ -67,6 +67,13 @@ return [
       'title' => 'المنتج غير متوفر',
       'content' => ':product_name غير متوفر حالياً في المخزون.'
     ]
-  ]
+    ],
+
+    'discount' => [
+      'default' => [
+        'title' => 'خصم جديد على المنتج',
+        'content' => 'احصل على خصم :discount% على :product_name!'
+      ]
+    ]
 
 ];

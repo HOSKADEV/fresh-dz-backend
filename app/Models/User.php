@@ -153,17 +153,19 @@ class User extends Authenticatable
   }
 
   public function getOrderCountAttribute(){
-    return $this->orders()
-      ->where('status', '!=', 'pending')
-      ->where('created_at', '>=', now()->subWeek())
-      ->where('updated_at', '>', $this->last_orders_visit ?? '1970-1-1 0:0:0')
+    return $this->notifications()
+      ->where('is_read', 0)
+      ->where('type', 3)
+      ->where('created_at', '>', $this->last_orders_visit ?? now()->subWeek())
       ->count();
   }
 
   public function getOfferCountAttribute(){
 
-    return Discount::WhereRaw('? between start_date and end_date', now()->toDateString())
-      ->where('updated_at', '>', $this->last_offers_visit ?? '1970-1-1 0:0:0')
+    return $this->notifications()
+      ->where('is_read', 0)
+      ->where('type', 5)
+      ->where('created_at', '>', $this->last_orders_visit ?? now()->subWeek())
       ->count();
   }
 

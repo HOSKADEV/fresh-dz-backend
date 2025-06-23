@@ -29,4 +29,19 @@ class Discount extends Model
     }
 
 
+    public function notify(){
+
+      if(now()->between($this->start_date, $this->end_date)){
+        $notice = Notice::DiscountNotice(
+          $this->product_id,
+          $this->product->unit_name,
+           $this->product->image,
+            $this->amuount);
+     
+
+        Notification::send($notice);
+
+      }
+    }
+
 }

@@ -66,5 +66,12 @@ return [
       'title' => 'Product Out of Stock',
       'content' => ':product_name is currently out of stock.'
     ]
-  ]
+    ],
+
+    'discount' => [
+      'default' => [
+        'title' => 'New Product Discount',
+        'content' => 'Get :discount% off on :product_name!'
+      ]
+    ]
 ];
