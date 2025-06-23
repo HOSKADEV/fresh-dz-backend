@@ -36,7 +36,7 @@ class Discount extends Model
           $this->product_id,
           $this->product->unit_name,
            $this->product->image,
-            $this->amuount);
+            $this->amount);
      
 
         Notification::send($notice);
