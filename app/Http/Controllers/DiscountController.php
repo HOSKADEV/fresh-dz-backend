@@ -249,11 +249,7 @@ class DiscountController extends Controller
 
       $discounts = DB::table('discounts')
         ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
-        //->join('products', 'discounts.product_id', 'products.id')
-        ->join('products', function ($join) {
-          $join->on('discounts.product_id', '=', 'products.id')
-            ->whereNotNull('products.image');
-        })
+        ->join('products', 'discounts.product_id', 'products.id')
         ->join('subcategories', 'products.subcategory_id', 'subcategories.id')
         ->join('categories', 'subcategories.category_id', 'categories.id')
         ->orderBy('categories.created_at', 'DESC')
