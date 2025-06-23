@@ -252,7 +252,7 @@ class DiscountController extends Controller
         //->join('products', 'discounts.product_id', 'products.id')
         ->join('products', function ($join) {
           $join->on('discounts.product_id', '=', 'products.id')
-            ->whereNotNull('image');
+            ->whereNotNull('products.image');
         })
         ->join('subcategories', 'products.subcategory_id', 'subcategories.id')
         ->join('categories', 'subcategories.category_id', 'categories.id')
