@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -90,16 +91,21 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
+      $notification = [
         'title' => $title,
         'body' => $content,
+        'channel_id' => 'fresh_dz_channel',
+        'sound' => 'default'
         //'image' => $imageUrl,
-      ]);
+      ];
 
-      if($fcm_token){
+      if ($fcm_token) {
 
         $message = CloudMessage::withTarget('token', $fcm_token)
-          ->withNotification($notification) // optional
+          //->withNotification($notification) // optional
+          ->withAndroidConfig(AndroidConfig::fromArray([
+            'notification' => $notification,
+          ]))
           //->withData($data) // optional
         ;
 
@@ -118,14 +124,19 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
+      $notification = [
         'title' => $title,
         'body' => $content,
+        'channel_id' => 'fresh_dz_channel',
+        'sound' => 'default'
         //'image' => $imageUrl,
-      ]);
+      ];
 
       $message = CloudMessage::new()
-        ->withNotification($notification) // optional
+        //->withNotification($notification) // optional
+        ->withAndroidConfig(AndroidConfig::fromArray([
+          'notification' => $notification,
+        ]))
         //->withData($data) // optional
       ;
 

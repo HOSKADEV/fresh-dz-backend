@@ -455,9 +455,9 @@ class DatatablesController extends Controller
 
   public function orders(Request $request)
   {
-    if (auth()->user()->region_id) {
+    /* if (auth()->user()->region_id) {
       $request->merge(['region' => auth()->user()->region_id]);
-    }
+    } */
 
     $orders = Order::where('status', '!=', 'chargily')->orderBy('created_at', 'DESC');
 
@@ -470,8 +470,8 @@ class DatatablesController extends Controller
 
     }
 
-    if ($request->region) {
-      $orders = $orders->where('region_id', $request->region);
+    if ($request->region || auth()->user()->isRegionManager()) {
+      $orders = $orders->where('region_id', $request->region ?? auth()->user()->region_id);
     }
 
     if (auth()->user()->isDriver()) {

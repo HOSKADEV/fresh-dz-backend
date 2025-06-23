@@ -87,7 +87,7 @@ class Notice extends Model
       'type' => 3,
       'priority' => $status === 'delivered' ? 1 : 0,
       'metadata' => json_encode([
-        'order_id' => $orderId,
+        'order_id' => explode('-',$orderId)[2],
         'status' => $status
       ])
     ]);
