@@ -90,6 +90,8 @@ class NotificationController extends Controller
         });
       }
 
+      $notifications->update(['is_read' => 1]);
+
       if ($request->has('all')) {
         $notifications = new NotificationCollection($notifications->get());
       } else {
