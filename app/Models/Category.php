@@ -50,4 +50,14 @@ class Category extends Model
 
       return $products;
     }
+
+    public function products(){
+      return $this->hasManyThrough(Product::class, Subcategory::class, 'category_id', 'subcategory_id');
+    }
+
+    public function discounted_products(){
+      return $this->products()
+      ->whereNotNull('image')
+      ->whereHas('active_discount');
+    }
 }

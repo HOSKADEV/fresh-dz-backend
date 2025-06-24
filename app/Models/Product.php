@@ -85,14 +85,18 @@ class Product extends Model
       return $this->hasManyThrough(User::class, Reminder::class, 'product_id', 'id', 'id', 'user_id');
     }
 
+    public function active_discount(){
+      return $this->discounts()->where([
+        ['start_date', '<=', now()],
+        ['end_date', '>=', now()]
+    ]);
+    }
+
     public function discount(){
       /* return Discount::where('product_id',$this->id)
       ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
       ->first(); */
-      return $this->discounts()->where([
-        ['start_date', '<=', now()],
-        ['end_date', '>=', now()]
-    ])->first();
+      return $this->active_discount()->first();
     }
 
     public function has_pack(){

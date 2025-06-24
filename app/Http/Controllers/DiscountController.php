@@ -247,7 +247,7 @@ class DiscountController extends Controller
       }
 
 
-      $discounts = DB::table('discounts')
+      /* $discounts = DB::table('discounts')
         ->WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
         ->join('products', 'discounts.product_id', 'products.id')
         ->join('subcategories', 'products.subcategory_id', 'subcategories.id')
@@ -259,16 +259,18 @@ class DiscountController extends Controller
         ->pluck('id')
         ->toArray();
       //return($discounts);
-      $categories = Category::whereIn('id', $discounts)->paginate(5);
+      $categories = Category::whereIn('id', $discounts)->paginate(5); */
       //return($categories);
+
+      $categories = Category::whereHas('discounted_products')->paginate(5);
       $categories_discounts = new PaginatedCategoryDiscountCollection($categories);
 
-      $user->update(['last_offers_visit' => now()]);
+      $user?->update(['last_offers_visit' => now()]);
 
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'count' => $user->offer_count,
+        'count' => $user?->offer_count ?? 0,
         'data' => $categories_discounts,
       ]);
 

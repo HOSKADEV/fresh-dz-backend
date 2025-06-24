@@ -40,12 +40,14 @@ class Notification extends Model
     array_walk($users, function (&$value, $key) use ($notice) {
       $value = [
         'user_id' => $value,
-        'notice_id' => $notice->id,
-        'created_at' => now(),
+        //'notice_id' => $notice->id,
+        //'created_at' => now(),
       ];
     });
 
-    self::insert($users);
+    $notice->notifications()->createMany($users);
+
+    //self::insert($users);
 
     $controller = new \App\Http\Controllers\Controller();
 
