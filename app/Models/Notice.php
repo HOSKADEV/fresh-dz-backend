@@ -34,7 +34,7 @@ class Notice extends Model
     return match ($lang) {
       'ar' => $this->title_ar,
       'en' => $this->title_en,
-      default => $this->title_ar,
+      default => $this->title_en,
     };
   }
 

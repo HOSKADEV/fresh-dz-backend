@@ -28,47 +28,48 @@ class Section extends Model
 
   public function name($lang='ar')
   {
-
     if ($this->type == 'ads') {
-      return $lang == 'en' ? 'Ads' : 'اعلانات';
+      return match($lang) {
+          'ar' => 'اعلانات',
+          'fr' => 'Annonces',
+          default => 'Ads'
+      };
     }
+
     if ($this->type == 'solo') {
-      return $lang == 'en' ?  'Categories' : 'فئات منفردة';
+      return match($lang) {
+          'ar' => 'فئات منفردة',
+          'fr' => 'Catégories',
+          default => 'Categories'
+      };
     }
 
     if ($this->type == 'family') {
-
       $family = Family::find($this->element);
-      return $lang == 'en' && !empty($family->name_en) ? $family->name_en : $family->name;
-
+      return $lang == 'ar' ? $family->name : (!empty($family->name_en) ? $family->name_en : $family->name);
     }
 
     if ($this->type == 'group') {
-
       $group = Group::find($this->element);
-      return $lang == 'en' && !empty($group->name_en) ? $group->name_en : $group->name;
-
+      return $lang == 'ar' ? $group->name : (!empty($group->name_en) ? $group->name_en : $group->name);
     }
 
     if ($this->type == 'ad') {
-
       $ad = Ad::find($this->element);
       return $ad->name;
-
     }
 
     if ($this->type == 'offer') {
-
       if ($this->element == 'popular') {
-        return $lang == 'en' ? 'Popular' : 'الأكثر مبيعا';
-
+        return match($lang) {
+            'ar' => 'الأكثر مبيعا',
+            'fr' => 'Les plus populaires',
+            default => 'Popular'
+        };
       } else {
-
         $offer = Offer::find($this->element);
-        return $lang == 'en' && !empty($offer->name_en) ?  $offer->name_en : $offer->name;
-
+        return $lang == 'ar' ? $offer->name : (!empty($offer->name_en) ? $offer->name_en : $offer->name);
       }
-
     }
   }
   public function data()
