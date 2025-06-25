@@ -277,12 +277,12 @@ class DatatablesController extends Controller
   public function products(Request $request)
   {
 
-    $products = Product::orderBy('created_at', 'DESC');
+    $products = Product::whereNotNull('image')->orderBy('created_at', 'DESC');
 
     if (!empty($request->category)) {
-      $category = Category::findOrFail($request->category);
-      $category_subs = $category->subcategories()->pluck('id')->toArray();
-      $products = $products->whereIn('subcategory_id', $category_subs);
+      $products = $products->whereHas('subcategory', function ($query) use ($request) {
+        $query->where('category_id', $request->category);
+      });
     }
 
 
@@ -292,15 +292,11 @@ class DatatablesController extends Controller
 
     if (!empty($request->discount)) {
       if ($request->discount == "1") {
-        $discounts = Discount::WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
-          ->pluck('product_id')->toArray();
-        $products = $products->whereIn('id', $discounts);
+        $products = $products->whereHas('active_discount');
       }
 
       if ($request->discount == "2") {
-        $discounts = Discount::WhereRaw('? between start_date and end_date', Carbon::now()->toDateString())
-          ->pluck('product_id')->toArray();
-        $products = $products->whereNotIn('id', $discounts);
+        $products = $products->whereDoesntHave('active_discount');
       }
 
     }

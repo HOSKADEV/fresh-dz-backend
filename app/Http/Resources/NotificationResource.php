@@ -21,7 +21,7 @@ class NotificationResource extends JsonResource
           'type' => $this->notice->type,
           'priority' => $this->notice->priority,
           'meteadata' => json_decode($this->notice->metadata),
-          'created_at' => $this->created_at,
+          'created_at' => $this->created_at?->format('Y-m-d\TH:i:s.uP'),
           'is_read' => $this->is_read,
           'read_at' => $this->read_at,
         ];

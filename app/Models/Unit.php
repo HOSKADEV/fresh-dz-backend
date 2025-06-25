@@ -25,7 +25,7 @@ class Unit extends Model
     return match ($lang) {
       'ar' => $this->name_ar,
       'en' => $this->name_en,
-      default => $this->name_ar,
+      default => $this->name_en,
     };
   }
 }
