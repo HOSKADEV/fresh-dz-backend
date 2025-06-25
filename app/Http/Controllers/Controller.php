@@ -92,36 +92,18 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = [
+      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
         'title' => $title,
         'body' => $content,
-      ];
+        //'image' => $imageUrl,
+      ]);
 
-      $androidNotification = [
-        'title' => $title,
-        'body' => $content,
-        'channel_id' => 'fresh_dz_channel',
-        'sound' => 'default'
-      ];
+      if($fcm_token){
 
-      if ($fcm_token) {
         $message = CloudMessage::withTarget('token', $fcm_token)
-          ->withNotification($notification) // This works for both iOS and Android
-          ->withAndroidConfig(AndroidConfig::fromArray([
-            'notification' => $androidNotification,
-          ]))
-          ->withApnsConfig(ApnsConfig::fromArray([
-            'payload' => [
-              'aps' => [
-                'alert' => [
-                  'title' => $title,
-                  'body' => $content,
-                ],
-                'sound' => 'default',
-                'badge' => 1,
-              ],
-            ],
-          ]));
+          ->withNotification($notification) // optional
+          //->withData($data) // optional
+        ;
 
         $messaging->send($message);
       }
@@ -130,42 +112,24 @@ class Controller extends BaseController
     } catch (FirebaseException $e) {
       return $e;
     }
-  }
 
+
+  }
   public function send_fcm_multi($title, $content, $fcm_tokens)
   {
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = [
+      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
         'title' => $title,
         'body' => $content,
-      ];
-
-      $androidNotification = [
-        'title' => $title,
-        'body' => $content,
-        'channel_id' => 'fresh_dz_channel',
-        'sound' => 'default'
-      ];
+        //'image' => $imageUrl,
+      ]);
 
       $message = CloudMessage::new()
-        ->withNotification($notification) // This works for both iOS and Android
-        ->withAndroidConfig(AndroidConfig::fromArray([
-          'notification' => $androidNotification,
-        ]))
-        ->withApnsConfig(ApnsConfig::fromArray([
-          'payload' => [
-            'aps' => [
-              'alert' => [
-                'title' => $title,
-                'body' => $content,
-              ],
-              'sound' => 'default',
-              'badge' => 1,
-            ],
-          ],
-        ]));
+        ->withNotification($notification) // optional
+        //->withData($data) // optional
+      ;
 
       $messaging->sendMulticast($message, $fcm_tokens);
 
@@ -173,6 +137,7 @@ class Controller extends BaseController
     } catch (FirebaseException $e) {
       return $e;
     }
+
   }
 
 }
