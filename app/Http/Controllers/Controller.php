@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Set;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
-use Kreait\Firebase\Exception\FirebaseException;
-use Kreait\Firebase\Messaging\AndroidConfig;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\WebPushConfig;
 use Laravel\Sanctum\PersonalAccessToken;
+use Kreait\Firebase\Messaging\ApnsConfig;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\AndroidConfig;
+use Kreait\Firebase\Messaging\WebPushConfig;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Kreait\Firebase\Exception\FirebaseException;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
@@ -94,20 +95,33 @@ class Controller extends BaseController
       $notification = [
         'title' => $title,
         'body' => $content,
+      ];
+
+      $androidNotification = [
+        'title' => $title,
+        'body' => $content,
         'channel_id' => 'fresh_dz_channel',
         'sound' => 'default'
-        //'image' => $imageUrl,
       ];
 
       if ($fcm_token) {
-
         $message = CloudMessage::withTarget('token', $fcm_token)
-          //->withNotification($notification) // optional
+          ->withNotification($notification) // This works for both iOS and Android
           ->withAndroidConfig(AndroidConfig::fromArray([
-            'notification' => $notification,
+            'notification' => $androidNotification,
           ]))
-          //->withData($data) // optional
-        ;
+          ->withApnsConfig(ApnsConfig::fromArray([
+            'payload' => [
+              'aps' => [
+                'alert' => [
+                  'title' => $title,
+                  'body' => $content,
+                ],
+                'sound' => 'default',
+                'badge' => 1,
+              ],
+            ],
+          ]));
 
         $messaging->send($message);
       }
@@ -116,9 +130,8 @@ class Controller extends BaseController
     } catch (FirebaseException $e) {
       return $e;
     }
-
-
   }
+
   public function send_fcm_multi($title, $content, $fcm_tokens)
   {
     try {
@@ -127,18 +140,32 @@ class Controller extends BaseController
       $notification = [
         'title' => $title,
         'body' => $content,
+      ];
+
+      $androidNotification = [
+        'title' => $title,
+        'body' => $content,
         'channel_id' => 'fresh_dz_channel',
         'sound' => 'default'
-        //'image' => $imageUrl,
       ];
 
       $message = CloudMessage::new()
-        //->withNotification($notification) // optional
+        ->withNotification($notification) // This works for both iOS and Android
         ->withAndroidConfig(AndroidConfig::fromArray([
-          'notification' => $notification,
+          'notification' => $androidNotification,
         ]))
-        //->withData($data) // optional
-      ;
+        ->withApnsConfig(ApnsConfig::fromArray([
+          'payload' => [
+            'aps' => [
+              'alert' => [
+                'title' => $title,
+                'body' => $content,
+              ],
+              'sound' => 'default',
+              'badge' => 1,
+            ],
+          ],
+        ]));
 
       $messaging->sendMulticast($message, $fcm_tokens);
 
@@ -146,7 +173,6 @@ class Controller extends BaseController
     } catch (FirebaseException $e) {
       return $e;
     }
-
   }
 
 }
