@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Set;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
-use Kreait\Firebase\Exception\FirebaseException;
-use Kreait\Firebase\Messaging\AndroidConfig;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\WebPushConfig;
 use Laravel\Sanctum\PersonalAccessToken;
+use Kreait\Firebase\Messaging\ApnsConfig;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Messaging\AndroidConfig;
+use Kreait\Firebase\Messaging\WebPushConfig;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Kreait\Firebase\Exception\FirebaseException;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
@@ -124,21 +126,45 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = [
-        'title' => $title,
-        'body' => $content,
+      $notification = Notification::create(
+        $title,
+        $content
+      );
+
+
+      $androidConfig = AndroidConfig::fromArray([
+      'priority' => 'high',
+      'notification' => [
+        'sound' => 'default',
+        'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
         'channel_id' => 'fresh_dz_channel',
-        'sound' => 'default'
-        //'image' => $imageUrl,
-      ];
+      ],
+    ]);
+
+    // iOS (Apns) config (يدوي)
+    $apnsConfig = ApnsConfig::fromArray([
+      'headers' => [
+        'apns-priority' => '10',
+      ],
+      'payload' => [
+        'aps' => [
+          'alert' => [
+            'title' => $title,
+            'body' => $content,
+          ],
+          'sound' => 'default',
+        ],
+      ],
+    ]);
+
+
+
 
       $message = CloudMessage::new()
-        //->withNotification($notification) // optional
-        ->withAndroidConfig(AndroidConfig::fromArray([
-          'notification' => $notification,
-        ]))
-        //->withData($data) // optional
-      ;
+      ->withNotification($notification)
+     // ->withData($data)
+      ->withAndroidConfig($androidConfig)
+      ->withApnsConfig($apnsConfig);
 
       $messaging->sendMulticast($message, $fcm_tokens);
 
