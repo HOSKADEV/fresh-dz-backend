@@ -12,7 +12,10 @@ use Kreait\Firebase\Messaging\WebPushConfig;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Kreait\Firebase\Exception\FirebaseException;
 use Illuminate\Routing\Controller as BaseController;
+use Kreait\Firebase\Exception\FirebaseException;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
@@ -93,21 +96,16 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = [
+      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
         'title' => $title,
         'body' => $content,
-        'channel_id' => 'fresh_dz_channel',
-        'sound' => 'default'
         //'image' => $imageUrl,
-      ];
+      ]);
 
-      if ($fcm_token) {
+      if($fcm_token){
 
         $message = CloudMessage::withTarget('token', $fcm_token)
-          //->withNotification($notification) // optional
-          ->withAndroidConfig(AndroidConfig::fromArray([
-            'notification' => $notification,
-          ]))
+          ->withNotification($notification) // optional
           //->withData($data) // optional
         ;
 
