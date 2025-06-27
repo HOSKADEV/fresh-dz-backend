@@ -93,18 +93,44 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
-        'title' => $title,
-        'body' => $content,
-        //'image' => $imageUrl,
+      $notification = Notification::create(
+        $title,
+        $content
+      );
+
+
+      $androidConfig = AndroidConfig::fromArray([
+        'priority' => 'high',
+        'notification' => [
+          'sound' => 'default',
+          'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+          'channel_id' => 'fresh_dz_channel',
+        ],
       ]);
 
-      if($fcm_token){
+      // iOS (Apns) config (يدوي)
+      $apnsConfig = ApnsConfig::fromArray([
+        'headers' => [
+          'apns-priority' => '10',
+        ],
+        'payload' => [
+          'aps' => [
+            'alert' => [
+              'title' => $title,
+              'body' => $content,
+            ],
+            'sound' => 'default',
+          ],
+        ],
+      ]);
+
+      if ($fcm_token) {
 
         $message = CloudMessage::withTarget('token', $fcm_token)
-          ->withNotification($notification) // optional
-          //->withData($data) // optional
-        ;
+          ->withNotification($notification)
+          // ->withData($data)
+          ->withAndroidConfig($androidConfig)
+          ->withApnsConfig($apnsConfig);
 
         $messaging->send($message);
       }
@@ -128,38 +154,38 @@ class Controller extends BaseController
 
 
       $androidConfig = AndroidConfig::fromArray([
-      'priority' => 'high',
-      'notification' => [
-        'sound' => 'default',
-        'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-        'channel_id' => 'fresh_dz_channel',
-      ],
-    ]);
-
-    // iOS (Apns) config (يدوي)
-    $apnsConfig = ApnsConfig::fromArray([
-      'headers' => [
-        'apns-priority' => '10',
-      ],
-      'payload' => [
-        'aps' => [
-          'alert' => [
-            'title' => $title,
-            'body' => $content,
-          ],
+        'priority' => 'high',
+        'notification' => [
           'sound' => 'default',
+          'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+          'channel_id' => 'fresh_dz_channel',
         ],
-      ],
-    ]);
+      ]);
+
+      // iOS (Apns) config (يدوي)
+      $apnsConfig = ApnsConfig::fromArray([
+        'headers' => [
+          'apns-priority' => '10',
+        ],
+        'payload' => [
+          'aps' => [
+            'alert' => [
+              'title' => $title,
+              'body' => $content,
+            ],
+            'sound' => 'default',
+          ],
+        ],
+      ]);
 
 
 
 
       $message = CloudMessage::new()
-      ->withNotification($notification)
-     // ->withData($data)
-      ->withAndroidConfig($androidConfig)
-      ->withApnsConfig($apnsConfig);
+        ->withNotification($notification)
+        // ->withData($data)
+        ->withAndroidConfig($androidConfig)
+        ->withApnsConfig($apnsConfig);
 
       $messaging->sendMulticast($message, $fcm_tokens);
 
