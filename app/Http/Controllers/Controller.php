@@ -102,7 +102,6 @@ class Controller extends BaseController
       ];
 
       if ($fcm_token) {
-      if ($fcm_token) {
 
         $message = CloudMessage::withTarget('token', $fcm_token)
           //->withNotification($notification) // optional
