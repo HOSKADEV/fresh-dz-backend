@@ -142,6 +142,10 @@ class Controller extends BaseController
               'sound' => 'default'
             ]
           ],
+          "apple" => [
+            "sound" => "default",
+            "badge" => 1
+          ],
           'apns' => [
             'payload' => [
               'aps' => [
