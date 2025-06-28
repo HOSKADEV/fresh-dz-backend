@@ -133,44 +133,9 @@ class Controller extends BaseController
   public function send_fcm_multi($title, $content, $fcm_tokens)
   {
     try {
-      $messaging = app('firebase.messaging');
-
-      $message = new RawMessageFromArray([
-
-          'notification' => [
-            'title' => $title,
-            'body' => $content
-          ],
-          'data' => [
-            'type' => 'test_notification'
-          ],
-          'android' => [
-            'notification' => [
-              'channel_id' => 'clinique_hariri_channel',
-              'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-              'sound' => 'default'
-            ]
-          ],
-          "apple" => [
-            "sound" => "default",
-            "badge" => 1
-          ],
-          'apns' => [
-            'payload' => [
-              'aps' => [
-                'alert' => [
-                  'title' => $title,
-                  'body' => $content
-                ],
-                'sound' => 'default',
-                'mutable-content' => 1
-              ]
-            ]
-          ]
-    ]);
-
-
-      $messaging->sendMulticast($message, $fcm_tokens);
+    foreach ($fcm_tokens as $fcm_token){
+      $this->send_fcm_device($title, $content, $fcm_token);
+    }
 
       return;
     } catch (FirebaseException $e) {
