@@ -93,23 +93,32 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = [
-        'title' => $title,
-        'body' => $content,
-        'channel_id' => 'fresh_dz_channel',
-        'sound' => 'default'
-        //'image' => $imageUrl,
-      ];
-
       if ($fcm_token) {
 
-        $message = CloudMessage::withTarget('token', $fcm_token)
-          //->withNotification($notification) // optional
-          ->withAndroidConfig(AndroidConfig::fromArray([
-            'notification' => $notification,
-          ]))
-          //->withData($data) // optional
-        ;
+        $message = new RawMessageFromArray([
+
+          'message' => [
+            'token' => $fcm_token,
+            'notification' => [
+              'title' => $title,
+              'body' => $content
+            ],
+            'data' => [
+              'type' => 'test_notification'
+            ],
+            'apns' => [
+              'payload' => [
+                'aps' => [
+                  'alert' => [
+                    'title' => $title,
+                    'body' => $content
+                  ],
+                  'mutable-content' => 1
+                ]
+              ]
+            ]
+          ]
+    ]);
 
         $messaging->send($message);
       }
