@@ -125,7 +125,7 @@ class Controller extends BaseController
 
       return;
     } catch (FirebaseException $e) {
-      return $e;
+      dd($e);
     }
 
 
@@ -139,7 +139,7 @@ class Controller extends BaseController
 
       return;
     } catch (FirebaseException $e) {
-      return $e;
+      dd($e);
     }
 
   }
