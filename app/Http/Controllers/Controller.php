@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Set;
 use Laravel\Sanctum\PersonalAccessToken;
-use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Messaging\RawMessageFromArray;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -92,16 +92,21 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
+      $notification = [
         'title' => $title,
         'body' => $content,
+        'channel_id' => 'fresh_dz_channel',
+        'sound' => 'default'
         //'image' => $imageUrl,
-      ]);
+      ];
 
-      if($fcm_token){
+      if ($fcm_token) {
 
         $message = CloudMessage::withTarget('token', $fcm_token)
-          ->withNotification($notification) // optional
+          //->withNotification($notification) // optional
+          ->withAndroidConfig(AndroidConfig::fromArray([
+            'notification' => $notification,
+          ]))
           //->withData($data) // optional
         ;
 
@@ -120,16 +125,36 @@ class Controller extends BaseController
     try {
       $messaging = app('firebase.messaging');
 
-      $notification = \Kreait\Firebase\Messaging\Notification::fromArray([
-        'title' => $title,
-        'body' => $content,
-        //'image' => $imageUrl,
-      ]);
+      $message = new RawMessageFromArray([
 
-      $message = CloudMessage::new()
-        ->withNotification($notification) // optional
-        //->withData($data) // optional
-      ;
+          'notification' => [
+            'title' => $title,
+            'body' => $content
+          ],
+          'data' => [
+            'type' => 'test_notification'
+          ],
+          'android' => [
+            'notification' => [
+              'channel_id' => 'clinique_hariri_channel',
+              'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+              'sound' => 'default'
+            ]
+          ],
+          'apns' => [
+            'payload' => [
+              'aps' => [
+                'alert' => [
+                  'title' => $title,
+                  'body' => $content
+                ],
+                'sound' => 'default',
+                'mutable-content' => 1
+              ]
+            ]
+          ]
+    ]);
+
 
       $messaging->sendMulticast($message, $fcm_tokens);
 
