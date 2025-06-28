@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Set;
 use Laravel\Sanctum\PersonalAccessToken;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\WebPushConfig;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -100,6 +101,7 @@ class Controller extends BaseController
         //'image' => $imageUrl,
       ];
 
+      if ($fcm_token) {
       if ($fcm_token) {
 
         $message = CloudMessage::withTarget('token', $fcm_token)
