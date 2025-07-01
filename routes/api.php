@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use App\Services\InvoiceService;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FcmController;
 use App\Http\Controllers\RegionController;
 
 /*
@@ -20,6 +21,13 @@ $controller_path = 'App\Http\Controllers';
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/send-to-device', [FcmController::class, 'sendToDevice']);
+Route::post('/send-to-multiple', [FcmController::class, 'sendToMultiple']);
+Route::post('/send-to-topic', [FcmController::class, 'sendToTopic']);
+Route::post('/send-to-condition', [FcmController::class, 'sendToCondition']);
+Route::post('/send-data-message', [FcmController::class, 'sendDataMessage']);
+Route::post('/send-custom-message', [FcmController::class, 'sendCustomMessage']);
 
 Route::group(['middleware' => ['sometimes.auth']], function () {
   Route::get('/v1/version','App\Http\Controllers\VersionController@get');

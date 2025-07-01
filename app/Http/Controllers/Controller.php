@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Set;
 use Laravel\Sanctum\PersonalAccessToken;
+use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Messaging\AndroidConfig;
@@ -95,37 +96,50 @@ class Controller extends BaseController
 
       if ($fcm_token) {
 
-        $message = new RawMessageFromArray([
+        $notification = Notification::fromArray([
+          'title' => $title,
+          'body' => $content,
+          //'image' => $imageUrl,
+        ]);
 
-          'message' => [
-            'token' => $fcm_token,
-            'notification' => [
-              'title' => $title,
-              'body' => $content
-            ],
-            'data' => [
-              'type' => 'test_notification'
-            ],
-            'apns' => [
-              'payload' => [
-                'aps' => [
-                  'alert' => [
-                    'title' => $title,
-                    'body' => $content
-                  ],
-                  'mutable-content' => 1
-                ]
-              ]
-            ]
+        $android_config = AndroidConfig::fromArray([
+          'notification' => [
+            'channel_id' => 'fresh_dz_channel',
+            'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+            'sound' => 'default'
           ]
-    ]);
+        ]);
+
+         $apn_config = ApnsConfig::fromArray([
+          'headers' => [
+              'apns-priority' => '10',
+          ],
+          'payload' => [
+              'aps' => [
+                  'alert' => [
+                      'title' => $title,
+                      'body' => $content,
+                  ],
+                  'badge' => 1,
+                  'sound' => 'default',
+              ],
+          ],
+      ]);
+
+        $message = CloudMessage::new()
+          ->withNotification($notification) // optional
+          //->withData($data) // optional
+          ->withAndroidConfig($android_config)
+          ->withApnsConfig($apn_config)
+          ->toToken($fcm_token);
+
 
         $messaging->send($message);
       }
 
       return;
     } catch (FirebaseException $e) {
-      dd($e);
+      return;
     }
 
 
@@ -133,13 +147,13 @@ class Controller extends BaseController
   public function send_fcm_multi($title, $content, $fcm_tokens)
   {
     try {
-    foreach ($fcm_tokens as $fcm_token){
-      $this->send_fcm_device($title, $content, $fcm_token);
-    }
+      foreach ($fcm_tokens as $fcm_token) {
+        $this->send_fcm_device($title, $content, $fcm_token);
+      }
 
       return;
     } catch (FirebaseException $e) {
-      dd($e);
+      return;
     }
 
   }
