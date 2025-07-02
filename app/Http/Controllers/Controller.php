@@ -89,44 +89,44 @@ class Controller extends BaseController
     return $actual_price;
   }
 
+  private function generateFcmMessage($title, $content)
+  {
+    $notification = Notification::fromArray([
+      'title' => $title,
+      'body' => $content,
+      //'image' => $imageUrl,
+    ]);
+
+    $android_config = AndroidConfig::fromArray([
+      'notification' => [
+        'channel_id' => 'fresh_dz_channel',
+        'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+        'sound' => 'default'
+      ]
+    ]);
+
+    $apn_config = ApnsConfig::fromArray([
+      'payload' => [
+        'aps' => [
+          'sound' => 'default',
+          'badge' => 1
+        ]
+      ]
+    ]);
+
+    return CloudMessage::new()
+      ->withNotification($notification)
+      ->withAndroidConfig($android_config)
+      ->withApnsConfig($apn_config);
+  }
+
   public function send_fcm_device($title, $content, $fcm_token)
   {
     try {
       $messaging = app('firebase.messaging');
 
       if ($fcm_token) {
-
-        $notification = Notification::fromArray([
-          'title' => $title,
-          'body' => $content,
-          //'image' => $imageUrl,
-        ]);
-
-        $android_config = AndroidConfig::fromArray([
-          'notification' => [
-            'channel_id' => 'fresh_dz_channel',
-            'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
-            'sound' => 'default'
-          ]
-        ]);
-
-        $apn_config = ApnsConfig::fromArray([
-          'payload' => [
-            'aps' => [
-              'sound' => 'default',
-              'badge' => 1
-            ]
-          ]
-        ]);
-
-        $message = CloudMessage::new()
-          ->withNotification($notification) // optional
-          //->withData($data) // optional
-          ->withAndroidConfig($android_config)
-          ->withApnsConfig($apn_config)
-          ->toToken($fcm_token);
-
-
+        $message = $this->generateFcmMessage($title, $content)->toToken($fcm_token);
         $messaging->send($message);
       }
 
@@ -134,21 +134,21 @@ class Controller extends BaseController
     } catch (FirebaseException $e) {
       return;
     }
-
-
   }
-  public function send_fcm_multi($title, $content, $fcm_tokens)
+
+  public function send_fcm_multi($title, $content, array $fcm_tokens)
   {
     try {
-      foreach ($fcm_tokens as $fcm_token) {
-        $this->send_fcm_device($title, $content, $fcm_token);
+      $messaging = app('firebase.messaging');
+
+      if ($fcm_tokens) {
+        $message = $this->generateFcmMessage($title, $content);
+        $messaging->sendMulticast($message, $fcm_tokens);
       }
 
       return;
     } catch (FirebaseException $e) {
       return;
     }
-
   }
-
 }

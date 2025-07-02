@@ -35,19 +35,17 @@ class Notification extends Model
 
     $users = array_keys($data);
 
-    $fcm_tokens = array_filter($data);
+    $fcm_tokens = array_unique(array_filter($data));
 
     array_walk($users, function (&$value, $key) use ($notice) {
       $value = [
         'user_id' => $value,
-        //'notice_id' => $notice->id,
-        //'created_at' => now(),
+        'notice_id' => $notice->id,
+        'created_at' => now(),
       ];
     });
 
-    $notice->notifications()->createMany($users);
-
-    //self::insert($users);
+    self::insert($users);
 
     $controller = new \App\Http\Controllers\Controller();
 
