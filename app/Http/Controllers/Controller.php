@@ -110,21 +110,14 @@ class Controller extends BaseController
           ]
         ]);
 
-         $apn_config = ApnsConfig::fromArray([
-          'headers' => [
-              'apns-priority' => '10',
-          ],
+        $apn_config = ApnsConfig::fromArray([
           'payload' => [
-              'aps' => [
-                  'alert' => [
-                      'title' => $title,
-                      'body' => $content,
-                  ],
-                  'badge' => 1,
-                  'sound' => 'default',
-              ],
-          ],
-      ]);
+            'aps' => [
+              'sound' => 'default',
+              'badge' => 1
+            ]
+          ]
+        ]);
 
         $message = CloudMessage::new()
           ->withNotification($notification) // optional
