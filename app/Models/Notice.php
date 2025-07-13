@@ -72,8 +72,10 @@ class Notice extends Model
     return self::create([
       'title_en' => trans("{$key}.title", [], 'en'),
       'title_ar' => trans("{$key}.title", [], 'ar'),
+      'title_fr' => trans("{$key}.title", [], 'fr'),
       'content_en' => trans("{$key}.content", [], 'en'),
       'content_ar' => trans("{$key}.content", [], 'ar'),
+      'content_fr' => trans("{$key}.content", [], 'fr'),
       'type' => 1,
       'priority' => 0,
       'metadata' => json_encode([$action => $value])
@@ -85,8 +87,10 @@ class Notice extends Model
     return self::create([
       'title_en' => trans('messages.coupon.title', [], 'en'),
       'title_ar' => trans('messages.coupon.title', [], 'ar'),
+      'title_fr' => trans('messages.coupon.title', [], 'fr'),
       'content_en' => trans('messages.coupon.content', ['discount' => $discount], 'en'),
       'content_ar' => trans('messages.coupon.content', ['discount' => $discount], 'ar'),
+      'content_fr' => trans('messages.coupon.content', ['discount' => $discount], 'fr'),
       'type' => 2,
       'priority' => 0,
       'metadata' => json_encode(['code' => $code])
@@ -100,8 +104,10 @@ class Notice extends Model
     return self::create([
       'title_en' => trans("{$key}.title", [], 'en'),
       'title_ar' => trans("{$key}.title", [], 'ar'),
+      'title_fr' => trans("{$key}.title", [], 'fr'),
       'content_en' => trans("{$key}.content", ['order_id' => $orderId], 'en'),
       'content_ar' => trans("{$key}.content", ['order_id' => $orderId], 'ar'),
+      'content_fr' => trans("{$key}.content", ['order_id' => $orderId], 'fr'),
       'type' => 3,
       'priority' => $status === 'delivered' ? 1 : 0,
       'metadata' => json_encode([
@@ -119,8 +125,10 @@ class Notice extends Model
     return self::create([
       'title_en' => trans("{$key}.title", [], 'en'),
       'title_ar' => trans("{$key}.title", [], 'ar'),
+      'title_fr' => trans("{$key}.title", [], 'fr'),
       'content_en' => trans("{$key}.content", ['product_name' => $productName], 'en'),
       'content_ar' => trans("{$key}.content", ['product_name' => $productName], 'ar'),
+      'content_fr' => trans("{$key}.content", ['product_name' => $productName], 'fr'),
       'type' => 4,
       'priority' => 1,
       'metadata' => json_encode([
@@ -139,8 +147,10 @@ class Notice extends Model
     return self::create([
       'title_en' => trans("{$key}.title", [], 'en'),
       'title_ar' => trans("{$key}.title", [], 'ar'),
+      'title_fr' => trans("{$key}.title", [], 'fr'),
       'content_en' => trans("{$key}.content", ['product_name' => $productName, 'discount' => $discount], 'en'),
       'content_ar' => trans("{$key}.content", ['product_name' => $productName, 'discount' => $discount], 'ar'),
+      'content_fr' => trans("{$key}.content", ['product_name' => $productName, 'discount' => $discount], 'fr'),
       'type' => 5,
       'priority' => 1,
       'metadata' => json_encode([
