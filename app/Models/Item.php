@@ -63,8 +63,32 @@ class Item extends Model
         return $this->name();
     }
 
+    public function unit_price(){
+      if($this->cart->type == 'order'){
+        return $this->unit_price;
+      }else{
+        return $this->product?->unit_price;
+      }
+    }
+
+    public function pack_price(){
+      if($this->cart->type == 'order'){
+        return $this->pack_price;
+      }else{
+        return $this->product?->pack_price;
+      }
+    }
+
+    public function pack_units(){
+      if($this->cart->type = 'order'){
+        return $this->pack_units;
+      }else{
+        return $this->product?->pack_units;
+      }
+    }
+
     public function price(){
-      return $this->type == 'unit' ? $this->unit_price : $this->pack_price;
+      return $this->type == 'unit' ? $this->unit_price() : $this->pack_price();
     }
 
     public function amount(){
