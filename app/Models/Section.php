@@ -26,8 +26,10 @@ class Section extends Model
   ];
 
 
-  public function name($lang='ar')
+  public function name($lang = null)
   {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
     if ($this->type == 'ads') {
       return match($lang) {
           'ar' => 'اعلانات',
@@ -46,12 +48,12 @@ class Section extends Model
 
     if ($this->type == 'family') {
       $family = Family::find($this->element);
-      return $lang == 'ar' ? $family->name : (!empty($family->name_en) ? $family->name_en : $family->name);
+      return $family->name;
     }
 
     if ($this->type == 'group') {
       $group = Group::find($this->element);
-      return $lang == 'ar' ? $group->name : (!empty($group->name_en) ? $group->name_en : $group->name);
+      return $group->name;
     }
 
     if ($this->type == 'ad') {
@@ -68,7 +70,7 @@ class Section extends Model
         };
       } else {
         $offer = Offer::find($this->element);
-        return $lang == 'ar' ? $offer->name : (!empty($offer->name_en) ? $offer->name_en : $offer->name);
+        return $offer->name;
       }
     }
   }

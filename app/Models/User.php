@@ -169,7 +169,7 @@ class User extends Authenticatable
       ->whereHas('notice', function($query) {
         $query->where('type', 5);
       })
-      ->where('created_at', '>', $this->last_orders_visit ?? now()->subWeek())
+      ->where('created_at', '>', $this->last_offers_visit ?? now()->subWeek())
       ->count();
   }
 

@@ -81,13 +81,12 @@ class DocumentationController extends Controller
     public function privacy_policy(Request $request){
       try{
 
-       $lang = $request->header('Accept-language','ar');
         $privacy_policy = Documentation::privacy_policy();
 
         return response()->json([
           'status' => 1,
           'message' => 'success',
-          'data' => ['content' => $privacy_policy->content($lang)]
+          'data' => ['content' => $privacy_policy->content]
         ]);
 
       }catch(Exception $e){
@@ -102,13 +101,12 @@ class DocumentationController extends Controller
     public function about(Request $request){
       try{
 
-       $lang = $request->header('Accept-language','ar');
         $about = Documentation::about();
 
         return response()->json([
           'status' => 1,
           'message' => 'success',
-          'data' => ['content' => $about->content($lang)]
+          'data' => ['content' => $about->content]
         ]);
 
       }catch(Exception $e){

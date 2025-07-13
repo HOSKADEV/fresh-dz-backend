@@ -13,15 +13,33 @@ class Subcategory extends Model
 
     protected $fillable = [
       'category_id',
-      'name',
+      'name_ar',
+      'name_en',
+      'name_fr',
     ];
 
     protected $casts = [
       'category_id' => 'integer',
-  ];
+    ];
 
     protected $softCascade = ['products'];
 
+  public function name($lang = null)
+  {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
+        return match($lang) {
+            'en' => $this->name_en ?? $this->name_ar,
+            'fr' => $this->name_fr ?? $this->name_ar,
+            'ar' => $this->name_ar,
+            default => $this->name_ar
+        };
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->name();
+    }
 
     public function category(){
       return $this->belongsTo(Category::class);

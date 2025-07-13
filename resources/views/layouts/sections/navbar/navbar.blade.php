@@ -64,14 +64,14 @@
                         <span class="align-middle">English</span>
                     </a>
                 </li>
-                {{-- <li>
+                <li>
                 <a class="dropdown-item " href="{{url('lang/fr')}}" data-language="fr">
                   <span class="align-middle">French</span>
                 </a>
               </li>
-              <li> --}}
+              <li>
                 <a class="dropdown-item {{ Session::get('locale') == 'ar' ? 'active' : '' }}"
-                    href="{{ url('lang/ar') }}" data-language="de">
+                    href="{{ url('lang/ar') }}" data-language="ar">
                     <span class="align-middle">Arabic</span>
                 </a>
         </li>

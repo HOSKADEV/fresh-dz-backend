@@ -9,9 +9,9 @@
             <span class="text-muted fw-light">{{ __('Products') }} /</span> {{ __('Browse products') }}
         </div>
         @if (in_array(auth()->user()->role, [0, 1, 2, 5]))
-          <div class="col-md-auto">
-              <button type="button" class="btn btn-primary" id="create">{{ __('Add Product') }}</button>
-          </div>
+            <div class="col-md-auto">
+                <button type="button" class="btn btn-primary" id="create">{{ __('Add product') }}</button>
+            </div>
         @endif
     </h4>
 
@@ -66,196 +66,145 @@
         </div>
     </div>
 
-    {{-- product modal --}}
-    <div class="modal fade" id="modal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="fw-bold py-1 mb-1">{{ __('Add product') }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="form_type" hidden />
-                    <input type="text" class="form-control" id="id" name="id" hidden />
-                    <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
-                        enctype="multipart/form-data" id="form">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                        <div hidden><img src="{{ asset('assets/img/icons/file-not-found.jpg') }}"
-                                                alt="image" class="d-block rounded" height="100" width="100"
-                                                id="old-image" /> </div>
-                                        <img src="{{ asset('assets/img/icons/file-not-found.jpg') }}" alt="image"
-                                            class="d-block rounded" height="100" width="100" id="uploaded-image" />
-                                        <div class="button-wrapper">
-                                            <label for="image" class="btn btn-primary" tabindex="0">
-                                                <span class="d-none d-sm-block">{{ __('New image') }}</span>
-                                                <i class="bx bx-upload d-block d-sm-none"></i>
-                                                <input class="image-input" type="file" id="image" name="image"
-                                                    hidden accept="image/png, image/jpeg" />
-                                            </label>
-                                            <button type="button" class="btn btn-outline-secondary image-reset">
-                                                <i class="bx bx-reset d-block d-sm-none"></i>
-                                                <span class="d-none d-sm-block">{{ __('Reset') }}</span>
-                                            </button>
-                                            {{-- <small class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</small> --}}
-                                        </div>
+{{-- product modal --}}
+<div class="modal fade" id="modal" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="fw-bold py-1 mb-1">{{ __('Add product') }}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="form_type" hidden />
+                <input type="text" class="form-control" id="id" name="id" hidden />
+                <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
+                    enctype="multipart/form-data" id="form">
+                    <div class="row">
+                        {{-- First Column: Required Fields --}}
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                    <div hidden><img src="{{ asset('assets/img/icons/file-not-found.jpg') }}"
+                                            alt="image" class="d-block rounded" height="100" width="100"
+                                            id="old-image" /> </div>
+                                    <img src="{{ asset('assets/img/icons/file-not-found.jpg') }}" alt="image"
+                                        class="d-block rounded" height="100" width="100" id="uploaded-image" />
+                                    <div class="button-wrapper">
+                                        <label for="image" class="btn btn-primary" tabindex="0">
+                                            <span class="d-none d-sm-block">{{ __('New image') }}</span>
+                                            <i class="bx bx-upload d-block d-sm-none"></i>
+                                            <input class="image-input" type="file" id="image" name="image"
+                                                hidden accept="image/png, image/jpeg" />
+                                        </label>
+                                        <button type="button" class="btn btn-outline-secondary image-reset">
+                                            <i class="bx bx-reset d-block d-sm-none"></i>
+                                            <span class="d-none d-sm-block">{{ __('Reset') }}</span>
+                                        </button>
+                                        {{-- <small class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</small> --}}
                                     </div>
                                 </div>
-                                <hr class="my-0">
+                            </div>
+                            <hr class="my-0">
 
-                                <div class="row  justify-content-between p-2">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="name_ar">{{ __('Name in Arabic') }}</label>
+                                    <input type="text" class="form-control" id="name_ar" name="name_ar"
+                                        placeholder="{{ __('Name in Arabic') }}" />
+                                </div>
 
-                                  <div class="form-group col-md-6">
-                                    <label class="form-label" for="unit_name">{{ __('Name') }}</label>
-                                    <input type="text" class="form-control" id="unit_name" name="unit_name"
-                                    placeholder="{{ __('Unit name') }}" />
-                                  </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="name_en">{{ __('Name in English') }}</label>
+                                    <input type="text" class="form-control" id="name_en" name="name_en"
+                                        placeholder="{{ __('Name in English') }}" />
+                                </div>
 
-                                  <div class="form-group col-md-6">
-                                    <label class="form-label" for="unit_price">{{ __('Price') }}</label>
-                                    <input type="text" class="form-control" id="unit_price" name="unit_price"
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" for="name_fr">{{ __('Name in French') }}</label>
+                                    <input type="text" class="form-control" id="name_fr" name="name_fr"
+                                        placeholder="{{ __('Name in French') }}" />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="unit_price">{{ __('Price') }}</label>
+                                <input type="text" class="form-control" id="unit_price" name="unit_price"
                                     placeholder="{{ __('Unit price') }}" />
-                                  </div>
-
-                                </div>
-
-                                <div class="row  justify-content-between p-2">
-
-                                  <div class="form-group col-md-6">
-                                    <label class="form-label" for="category_id">{{ __('Category') }}</label>
-                                    <select class="form-select" id="category_id">
-                                      <option value=""> {{ __('Select category') }}</option>
-                                      @foreach ($categories as $category)
-                                          <option value="{{ $category->id }}"> {{ $category->name }} </option>
-                                      @endforeach
-                                  </select>
-                                  </div>
-
-                                  <div class="form-group col-md-6">
-                                    <label class="form-label" for="subcategory_id">{{ __('Subcategory') }}</label>
-                                    <select class="form-select" id="subcategory_id" name="subcategory_id">
-                                      <option value=""> {{ __('Select category first') }} </option>
-                                  </select>
-                                  </div>
-
-                                </div>
-
-                                <div class="row  justify-content-between p-2">
-
-                                  <div class="form-group col-md-6">
-                                    <label class="form-label" for="unit_id">{{ __('Unit type') }}</label>
-                                    <select class="form-select" id="unit_id" name="unit_id">
-                                      <option value=""> {{ __('Select category') }}</option>
-                                      @foreach ($units as $unit)
-                                          <option value="{{ $unit->id }}"> {{ $unit->name(session('locale')) }} </option>
-                                      @endforeach
-                                        {{-- <option value="1"> {{ __('Piece') }}</option>
-                                        <option value="2"> {{ __('100 gram') }}</option>
-                                        <option value="3"> {{ __('1 kilogram') }}</option> --}}
-                                    </select>
-                                  </div>
-
-                                  <div class="form-group col-md-6">
-                                    <label class="form-label" for="status">{{ __('Status') }}</label>
-                                    <select class="form-select" id="status" name="status">
-                                        <option value="1"> {{ __('Available') }}</option>
-                                        <option value="2"> {{ __('Unavailable') }}</option>
-                                    </select>
-                                  </div>
-
-                                </div>
-
-                                {{-- <div class="mb-3">
-                                    <label class="form-label" for="name">{{ __('Name') }}</label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="text" class="form-control" id="unit_name" name="unit_name"
-                                            placeholder="{{ __('Unit name') }}" />
-                                        <input type="text" class="form-control" id="pack_name" name="pack_name"
-                                            placeholder="{{ __('Pack name') }}" />
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label" for="name">{{ __('Price') }}</label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="text" class="form-control" id="unit_price" name="unit_price"
-                                            placeholder="{{ __('Unit price') }}" />
-                                        <input type="text" class="form-control" id="pack_price" name="pack_price"
-                                            placeholder="{{ __('Pack price') }}" />
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label" for="name">{{ __('Subcategory') }}</label>
-                                    <div class="input-group input-group-merge">
-                                        <select class="form-select" id="category_id">
-                                            <option value=""> {{ __('Select category') }}</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}"> {{ $category->name }} </option>
-                                            @endforeach
-                                        </select>
-                                        <select class="form-select" id="subcategory_id" name="subcategory_id">
-                                            <option value=""> {{ __('Select category first') }} </option>
-                                        </select>
-                                    </div>
-                                </div> --}}
-
-                            </div>
-                            <div class="col-md-6">
-
-                                <div class="mb-3">
-                                    <label class="form-label" for="pack_name">{{ __('Pack name') }}</label>
-                                    <input type="text" class="form-control" id="pack_name" name="pack_name" />
-                                </div>
-
-                                <div class="mb-3">
-                                  <label class="form-label" for="pack_price">{{ __('Pack price') }}</label>
-                                  <input type="number" class="form-control" id="pack_price" name="pack_price" />
-                              </div>
-
-                              <div class="mb-3">
-                                <label class="form-label" for="pack_units">{{ __('Pack units') }}</label>
-                                <input type="number" class="form-control" id="pack_units" name="pack_units" />
                             </div>
 
-                                {{-- <div class="mb-3">
-                                    <label class="form-label" for="unit_id">{{ __('Unit type') }}</label>
-                                    <select class="form-select" id="unit_id" name="unit_id">
-                                        <option value="1"> {{ __('Piece') }}</option>
-                                        <option value="2"> {{ __('100 gram') }}</option>
-                                        <option value="3"> {{ __('1 kilogram') }}</option>
-                                    </select>
-                                </div>
+                            <div class="row">
 
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="category_id">{{ __('Category') }}</label>
+                                <select class="form-select" id="category_id">
+                                    <option value=""> {{ __('Select category') }}</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"> {{ $category->name }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label" for="name">{{ __('Status') }}</label>
-                                    <select class="form-select" id="status" name="status">
-                                        <option value="1"> {{ __('Available') }}</option>
-                                        <option value="2"> {{ __('Unavailable') }}</option>
-                                    </select>
-                                </div> --}}
-
-                                <div class="mb-3">
-                                    <label for="" class="form-label">{{ __('Description') }}</label>
-                                    <textarea name="description" id="description" class="form-control" rows="4"></textarea>
-                                </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="subcategory_id">{{ __('Subcategory') }}</label>
+                                <select class="form-select" id="subcategory_id" name="subcategory_id">
+                                    <option value=""> {{ __('Select category first') }} </option>
+                                </select>
+                            </div>
                             </div>
                         </div>
 
+                        {{-- Second Column: Optional Fields --}}
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="pack_price">{{ __('Pack price') }}</label>
+                                    <input type="number" class="form-control" id="pack_price" name="pack_price"
+                                        placeholder="{{ __('Pack price') }}" />
+                                </div>
 
-                        <div class="mb-3" style="text-align: center">
-                            <button type="submit" id="submit" name="submit"
-                                class="btn btn-primary">{{ __('Send') }}</button>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="pack_units">{{ __('Pack units') }}</label>
+                                    <input type="number" class="form-control" id="pack_units" name="pack_units"
+                                        placeholder="{{ __('Pack units') }}" />
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="unit_id">{{ __('Unit type') }}</label>
+                                <select class="form-select" id="unit_id" name="unit_id">
+                                    {{-- <option value=""> {{ __('Select category') }}</option> --}}
+                                    @foreach ($units as $unit)
+                                        <option value="{{ $unit->id }}"> {{ $unit->name(session('locale')) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="status">{{ __('Status') }}</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="1"> {{ __('Available') }}</option>
+                                    <option value="2"> {{ __('Unavailable') }}</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="" class="form-label">{{ __('Description') }}</label>
+                                <textarea name="description" id="description" class="form-control" rows="4"></textarea>
+                            </div>
                         </div>
+                    </div>
 
-                    </form>
-                </div>
+                    {{-- Submit Button --}}
+                    <div class="mb-3" style="text-align: center">
+                        <button type="submit" id="submit" name="submit"
+                            class="btn btn-primary">{{ __('Send') }}</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
 @endsection
 
@@ -430,18 +379,18 @@
 
             });
 
-            $('#unit_name').on('blur', function() {
+            /* $('#unit_name').on('blur', function() {
 
                 var unit_name = document.getElementById('unit_name').value;
 
-                if(unit_name){
-                  document.getElementById('pack_name').value = unit_name + " ({{__('pack')}}) ";
+                if (unit_name) {
+                    document.getElementById('pack_name').value = unit_name + " ({{ __('pack') }}) ";
                 }
 
 
 
 
-            });
+            }); */
 
 
             $('#create').on('click', function() {
@@ -474,10 +423,9 @@
                     success: function(response) {
                         if (response.status == 1) {
 
-                            document.getElementById('unit_name').value = response.data
-                                .unit_name;
-                            document.getElementById('pack_name').value = response.data
-                                .pack_name;
+                            document.getElementById('name_en').value = response.data.name_en;
+                            document.getElementById('name_fr').value = response.data.name_fr;
+                            document.getElementById('name_ar').value = response.data.name_ar;
                             document.getElementById('unit_price').value = response.data
                                 .unit_price;
                             document.getElementById('pack_price').value = response.data
@@ -656,7 +604,8 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        $('#laravel_datatable').DataTable().ajax.reload();
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
                                     });
                                 }
                             }
@@ -678,6 +627,15 @@
                 const fileInput = document.querySelector('.image-input');
                 fileInput.value = '';
                 document.getElementById('uploaded-image').src = document.getElementById('old-image').src;
+            });
+            $('#modal').on('show.bs.modal', function() {
+                var formType = $(this).find('#form_type').val();
+                var headerH4 = $(this).find('.modal-header h4');
+                if (formType === 'create') {
+                    headerH4.text("{{ __('Add product') }}");
+                } else if (formType === 'update') {
+                    headerH4.text("{{ __('Edit product') }}");
+                }
             });
         });
     </script>

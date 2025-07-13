@@ -26,8 +26,10 @@ class FamilyController extends Controller
   public function create(Request $request){
 
     $validator = Validator::make($request->all(), [
-      'name' => 'required|string',
-      'name_en' => 'sometimes|string',
+      //'name' => 'required|string',
+      'name_ar' => 'required|string',
+      'name_en' => 'sometimes|nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'categories' => ['required', 'array', new SizeIn([4,6])],
       'categories.*' => 'distinct'
     ]);
@@ -72,8 +74,10 @@ class FamilyController extends Controller
 
     $validator = Validator::make($request->all(), [
       'family_id' => 'required',
-      'name' => 'sometimes|string',
-      'name_en' => 'sometimes|string',
+      //'name' => 'sometimes|string',
+      'name_ar' => 'sometimes|string',
+      'name_en' => 'sometimes||nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'categories' => ['sometimes', 'array', new SizeIn([4,6])],
       'categories.*' => 'distinct'
     ]);
@@ -92,7 +96,7 @@ class FamilyController extends Controller
 
       DB::beginTransaction();
 
-        $family->update($request->except('family_id' ));
+        $family->update($request->except('family_id' , 'categories'));
 
         if ($request->has('categories')) {
           $family->members()->forceDelete();
@@ -112,7 +116,7 @@ class FamilyController extends Controller
       return response()->json([
         'status' => 1,
         'message' => 'success',
-        'data' => new FamilyResource($family)
+        'data' => $family
       ]);
 
     }catch(Exception $e){

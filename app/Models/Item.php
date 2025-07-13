@@ -15,6 +15,9 @@ class Item extends Model
       'product_id',
       'unit_name',
       'pack_name',
+      'name_ar',
+      'name_en',
+      'name_fr',
       'unit_price',
       'pack_price',
       'pack_units',
@@ -43,8 +46,21 @@ class Item extends Model
       return $this->belongsTo(Product::class);
     }
 
-    public function name(){
-      return $this->type == 'unit' ? $this->unit_name : $this->pack_name;
+  public function name($lang = null)
+  {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
+        return match($lang) {
+            'en' => $this->name_en ?? $this->name_ar,
+            'fr' => $this->name_fr ?? $this->name_ar,
+            'ar' => $this->name_ar,
+            default => $this->name_ar
+        };
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->name();
     }
 
     public function price(){

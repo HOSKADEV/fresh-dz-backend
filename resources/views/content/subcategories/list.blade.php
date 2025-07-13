@@ -9,24 +9,24 @@
             <span class="text-muted fw-light">{{ __('Subcategories') }} /</span> {{ __('Browse subcategories') }}
         </div>
         <div class="col-md-auto">
-            <button type="button" class="btn btn-primary" id="create">{{ __('Add Subcategory') }}</button>
+            <button type="button" class="btn btn-primary" id="create">{{ __('Add subcategory') }}</button>
         </div>
     </h4>
 
     <!-- Basic Bootstrap Table -->
     <div class="card">
         <div class="table-responsive text-nowrap">
-          <div class="table-header row justify-content-between">
-            <h5 class="col-md-auto">{{ __('Subcategories table') }}</h5>
-            <div class="col-md-auto">
-                <select class="form-select filter-select" id="category" name="category">
-                    <option value=""> {{ __('Category filter') }}</option>
-                    @foreach ($categories as $category)
-                        <option value="{{ $category->id }}"> {{ $category->name }} </option>
-                    @endforeach
-                </select>
+            <div class="table-header row justify-content-between">
+                <h5 class="col-md-auto">{{ __('Subcategories table') }}</h5>
+                <div class="col-md-auto">
+                    <select class="form-select filter-select" id="category" name="category">
+                        <option value=""> {{ __('Category filter') }}</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}"> {{ $category->name }} </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-          </div>
             <table class="table" id="laravel_datatable">
                 <thead>
                     <tr>
@@ -47,7 +47,7 @@
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="fw-bold py-1 mb-1">{{ __('Add subcategory') }}</h4>
+                    <h4 class="fw-bold py-1 mb-1"></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -56,9 +56,21 @@
                     <form class="form-horizontal" onsubmit="event.preventDefault()" action="#"
                         enctype="multipart/form-data" id="form">
 
-                        <div class="mb-3">
+{{--                         <div class="mb-3">
                             <label class="form-label" for="name">{{ __('Name') }}</label>
                             <input type="text" class="form-control" id="name" name="name" />
+                        </div> --}}
+                        <div class="mb-3">
+                            <label class="form-label" for="name_ar">{{ __('Name in Arabic') }}</label>
+                            <input type="text" class="form-control" id="name_ar" name="name_ar" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name_en">{{ __('Name in English') }}</label>
+                            <input type="text" class="form-control" id="name_en" name="name_en" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name_fr">{{ __('Name in French') }}</label>
+                            <input type="text" class="form-control" id="name_fr" name="name_fr" />
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="category_id">{{ __('Category') }}</label>
@@ -90,7 +102,7 @@
             function load_data(category = null) {
                 //$.fn.dataTable.moment( 'YYYY-M-D' );
                 var table = $('#laravel_datatable').DataTable({
-                  language:  {!! file_get_contents(base_path('lang/'.session('locale','en').'/datatable.json')) !!},
+                    language: {!! file_get_contents(base_path('lang/' . session('locale', 'en') . '/datatable.json')) !!},
                     responsive: true,
                     processing: true,
                     serverSide: true,
@@ -179,7 +191,10 @@
                         if (response.status == 1) {
 
                             //console.log(response.data);
-                            document.getElementById('name').value = response.data.name;
+                            /* document.getElementById('name').value = response.data.name; */
+                            document.getElementById('name_ar').value = response.data.name_ar;
+                            document.getElementById('name_en').value = response.data.name_en;
+                            document.getElementById('name_fr').value = response.data.name_fr;
                             document.getElementById('category_id').value = response.data
                                 .category_id;
 
@@ -218,6 +233,7 @@
                     processData: false,
                     success: function(response) {
                         if (response.status == 1) {
+
                             Swal.fire({
                                 title: "{{ __('Success') }}",
                                 text: "{{ __('success') }}",
@@ -282,7 +298,8 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        $('#laravel_datatable').DataTable().ajax.reload();
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
                                     });
                                 }
                             }
@@ -291,6 +308,16 @@
 
                     }
                 })
+            });
+
+            $('#modal').on('show.bs.modal', function() {
+                var formType = $(this).find('#form_type').val();
+                var headerH4 = $(this).find('.modal-header h4');
+                if (formType === 'create') {
+                    headerH4.text("{{ __('Add subcategory') }}");
+                } else if (formType === 'update') {
+                    headerH4.text("{{ __('Edit subcategory') }}");
+                }
             });
         });
     </script>

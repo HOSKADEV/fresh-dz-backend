@@ -23,8 +23,10 @@ class OfferController extends Controller
   }
   public function create(Request $request){
     $validator = Validator::make($request->all(), [
-      'name' => 'required|string',
-      'name_en' => 'sometimes|string',
+      //'name' => 'sometimes|string',
+      'name_ar' => 'required|string',
+      'name_en' => 'sometimes||nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'categories' => 'required|array',
       'categories.*' => 'distinct'
     ]);
@@ -69,8 +71,10 @@ class OfferController extends Controller
 
     $validator = Validator::make($request->all(), [
       'offer_id' => 'required',
-      'name' => 'sometimes|string',
-      'name_en' => 'sometimes|string',
+      //'name' => 'sometimes|string',
+      'name_ar' => 'sometimes|string',
+      'name_en' => 'sometimes||nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'categories' => 'sometimes|array',
       'categories.*' => 'distinct'
     ]);
@@ -89,7 +93,7 @@ class OfferController extends Controller
 
       DB::beginTransaction();
 
-        $offer->update($request->except('offer_id' ));
+        $offer->update($request->except('offer_id' , 'categories'));
 
         if($request->has('categories')){
           foreach($offer->category_offers as $category_offer){

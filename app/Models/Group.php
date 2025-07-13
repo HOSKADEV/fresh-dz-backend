@@ -12,10 +12,27 @@ class Group extends Model
   use HasFactory,SoftDeletes;
 
   protected $fillable = [
-    'name',
+    'name_ar',
     'name_en',
-    //'image',
+    'name_fr',
   ];
+
+  public function name($lang = null)
+  {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
+        return match($lang) {
+            'en' => $this->name_en ?? $this->name_ar,
+            'fr' => $this->name_fr ?? $this->name_ar,
+            'ar' => $this->name_ar,
+            default => $this->name_ar
+        };
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->name();
+    }
 
   public function elements(){
     return $this->hasMany(Element::class);

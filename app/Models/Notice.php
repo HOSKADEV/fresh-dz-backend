@@ -14,8 +14,10 @@ class Notice extends Model
   protected $fillable = [
     'title_ar',
     'title_en',
+    'title_fr',
     'content_ar',
     'content_en',
+    'content_fr',
     'type',
     'priority',
     'metadata'
@@ -29,22 +31,38 @@ class Notice extends Model
     return $this->hasMany(Notification::class);
   }
 
-  public function title($lang = 'ar')
+    public function title($lang = null)
   {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
     return match ($lang) {
+      'en' => $this->title_en ?? $this->title_ar,
+      'fr' => $this->title_fr ?? $this->title_ar,
       'ar' => $this->title_ar,
-      'en' => $this->title_en,
-      default => $this->title_en,
+      default => $this->title_ar
     };
   }
 
-  public function content($lang = 'ar')
+  public function getTitleAttribute()
   {
+    return $this->title();
+  }
+
+  public function content($lang = null)
+  {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
     return match ($lang) {
+      'en' => $this->content_en ?? $this->content_ar,
+      'fr' => $this->content_fr ?? $this->content_ar,
       'ar' => $this->content_ar,
-      'en' => $this->content_en,
-      default => $this->content_ar,
+      default => $this->content_ar
     };
+  }
+
+  public function getContentAttribute()
+  {
+    return $this->content();
   }
 
   public static function ProfileNotice(string $action, string $value): self

@@ -459,7 +459,7 @@
                             for (var i = 0; i < response.data.length; i++) {
                                 var option = document.createElement('option');
                                 option.value = response.data[i].id;
-                                option.innerHTML = response.data[i].unit_name;
+                                option.innerHTML = response.data[i].name;
                                 products.appendChild(option);
                             }
 

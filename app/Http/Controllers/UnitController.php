@@ -17,6 +17,7 @@ class UnitController extends Controller
     $validator = Validator::make($request->all(), [
       'name_ar' => 'required|string',
       'name_en' => 'required|string',
+      'name_fr' => 'required|string',
     ]);
 
     if ($validator->fails()) {
@@ -51,6 +52,7 @@ class UnitController extends Controller
       'unit_id' => 'required',
       'name_ar' => 'sometimes|string',
       'name_en' => 'sometimes|string',
+      'name_fr' => 'sometimes|string',
     ]);
 
     if ($validator->fails()){

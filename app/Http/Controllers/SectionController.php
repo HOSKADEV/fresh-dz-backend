@@ -315,8 +315,6 @@ class SectionController extends Controller
 
       $sections = Section::orderBy('rank','Asc')->paginate(5);
 
-      Session::put('lang', $request->header('Accept-language','ar'));
-
       return response()->json([
         'status' => 1,
         'message' => 'success',

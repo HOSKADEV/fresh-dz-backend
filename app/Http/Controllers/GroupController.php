@@ -25,8 +25,10 @@ class GroupController extends Controller
   {
 
     $validator = Validator::make($request->all(), [
-      'name' => 'required|string',
-      'name_en' => 'sometimes|string',
+      ////'name' => 'required|string',
+      'name_ar' => 'required|string',
+      'name_en' => 'sometimes|nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'subcategories' => ['required', 'array'],
       'subcategories.*' => 'distinct'
     ]);
@@ -73,8 +75,10 @@ class GroupController extends Controller
 
     $validator = Validator::make($request->all(), [
       'group_id' => 'required',
-      'name' => 'sometimes|string',
-      'name_en' => 'sometimes|string',
+      ////'name' => 'required|string',
+      'name_ar' => 'sometimes|string',
+      'name_en' => 'sometimes|nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'subcategories' => ['sometimes', 'array'],
       'subcategories.*' => 'distinct'
     ]);
@@ -94,7 +98,7 @@ class GroupController extends Controller
 
       DB::beginTransaction();
 
-      $group->update($request->except('group_id'));
+      $group->update($request->except('group_id', 'subcategories'));
 
       if ($request->has('subcategories')) {
         $group->elements()->delete();

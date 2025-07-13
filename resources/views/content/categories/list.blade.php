@@ -38,7 +38,7 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="fw-bold py-1 mb-1">{{ __('Add category') }}</h4>
+                    <h4 class="fw-bold py-1 mb-1"></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -69,9 +69,21 @@
                             </div>
                         </div>
                         <hr class="my-0">
-                        <div class="mb-3">
+{{--                         <div class="mb-3">
                             <label class="form-label" for="name">{{ __('Name') }}</label>
                             <input type="text" class="form-control" id="name" name="name" />
+                        </div> --}}
+                        <div class="mb-3">
+                            <label class="form-label" for="name_ar">{{ __('Name in Arabic') }}</label>
+                            <input type="text" class="form-control" id="name_ar" name="name_ar" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name_en">{{ __('Name in English') }}</label>
+                            <input type="text" class="form-control" id="name_en" name="name_en" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="name_fr">{{ __('Name in French') }}</label>
+                            <input type="text" class="form-control" id="name_fr" name="name_fr" />
                         </div>
 
 
@@ -170,8 +182,11 @@
                     dataType: 'JSON',
                     success: function(response) {
                         if (response.status == 1) {
-
-                            document.getElementById('name').value = response.data.name;
+                            document.getElementById('id').value = response.data.id;
+                            document.getElementById('name_ar').value = response.data.name_ar;
+                            document.getElementById('name_en').value = response.data.name_en;
+                            document.getElementById('name_fr').value = response.data.name_fr;
+/*                             document.getElementById('name').value = response.data.name; */
                             console.log(response.data.image);
 
                             var image = response.data.image == null ?
@@ -308,6 +323,16 @@
                 const fileInput = document.querySelector('.image-input');
                 fileInput.value = '';
                 document.getElementById('uploaded-image').src = document.getElementById('old-image').src;
+            });
+
+            $('#modal').on('show.bs.modal', function() {
+                var formType = $(this).find('#form_type').val();
+                var headerH4 = $(this).find('.modal-header h4');
+                if (formType === 'create') {
+                    headerH4.text("{{ __('Add category') }}");
+                } else if (formType === 'update') {
+                    headerH4.text("{{ __('Edit category') }}");
+                }
             });
         });
     </script>

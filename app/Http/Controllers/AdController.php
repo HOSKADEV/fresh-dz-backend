@@ -16,13 +16,16 @@ class AdController extends Controller
 {
 
   public function index(){
-    $products = Product::pluck('unit_name','id');
+    $products = Product::all()->pluck('name','id')->toArray();
     return view('content.ads.list')->with('products',$products);
   }
 
   public function create(Request $request){
     $validator = Validator::make($request->all(), [
-      'name' => 'required|string',
+      ////'name' => 'required|string',
+      'name_ar' => 'required|string',
+      'name_en' => 'sometimes|nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'image' => 'sometimes|mimetypes:image/*',
       'type' => 'required|in:url,product,static',
       'url' => 'required_if:type,url|nullable|string',
@@ -75,7 +78,10 @@ class AdController extends Controller
 
     $validator = Validator::make($request->all(), [
       'ad_id' => 'required',
-      'name' => 'sometimes|string',
+      ////'name' => 'sometimes|string',
+      'name_ar' => 'sometimes|string',
+      'name_en' => 'sometimes|nullable|string',
+      'name_fr' => 'sometimes|nullable|string',
       'image' => 'sometimes|mimetypes:image/*',
       'type' => 'sometimes|in:url,product,static',
       'url' => 'required_if:type,url|nullable|string',
@@ -94,7 +100,7 @@ class AdController extends Controller
 
       $ad = Ad::findOrFail($request->ad_id);
 
-      $ad->update($request->only('name','type'));
+      $ad->update($request->only('name_ar','name_en','name_fr','type'));
 
       if($request->type == 'product'){
         $ad->url = null;

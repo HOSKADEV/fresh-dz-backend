@@ -16,6 +16,9 @@ class AdResource extends JsonResource
     {
         return [
           'name' => $this->name,
+          'name_ar' => $this->name_ar,
+          'name_en' => $this->name_en,
+          'name_fr' => $this->name_fr,
           'type' => $this->type,
           'url' => $this->url,
           'image' => $this->image,

@@ -12,20 +12,31 @@ class Unit extends Model
 
   protected $fillable = [
     'name_ar',
-    'name_en'
+    'name_en',
+    'name_fr'
   ];
 
 
-  public function products(){
+  public function products()
+  {
     return $this->hasMany(Product::class);
   }
 
-  public function name($lang = 'ar')
+  public function name($lang = null)
   {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
     return match ($lang) {
+      'en' => $this->name_en ?? $this->name_ar,
+      'fr' => $this->name_fr ?? $this->name_ar,
       'ar' => $this->name_ar,
-      'en' => $this->name_en,
-      default => $this->name_en,
+      default => $this->name_ar
     };
   }
+
+  public function getNameAttribute()
+  {
+    return $this->name();
+  }
+
 }

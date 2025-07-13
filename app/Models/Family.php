@@ -12,12 +12,30 @@ class Family extends Model
   use HasFactory,SoftDeletes,SoftCascadeTrait;
 
     protected $fillable = [
-      'name',
+      //'name'
+      'name_ar',
       'name_en',
-      //'image',
+      'name_fr',
     ];
 
     protected $softCascade = ['members'];
+
+      public function name($lang = null)
+  {
+    $lang = $lang ?? session('locale', app()->getLocale());
+
+        return match($lang) {
+            'en' => $this->name_en ?? $this->name_ar,
+            'fr' => $this->name_fr ?? $this->name_ar,
+            'ar' => $this->name_ar,
+            default => $this->name_ar
+        };
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->name();
+    }
 
     public function members(){
       return $this->hasMany(Member::class);

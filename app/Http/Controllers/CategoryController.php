@@ -19,7 +19,9 @@ class CategoryController extends Controller
     }
     public function create(Request $request){
       $validator = Validator::make($request->all(), [
-        'name' => 'required|string',
+        'name_ar' => 'required|string',
+        'name_en' => 'sometimes|nullable|string',
+        'name_fr' => 'sometimes|nullable|string',
         'image' => 'sometimes|mimetypes:image/*'
       ]);
 
@@ -69,7 +71,9 @@ class CategoryController extends Controller
 
       $validator = Validator::make($request->all(), [
         'category_id' => 'required',
-        'name' => 'sometimes|string',
+        'name_ar' => 'sometimes|string',
+        'name_en' => 'sometimes|nullable|string',
+        'name_fr' => 'sometimes|nullable|string',
         'image' => 'sometimes|mimetypes:image/*'
       ]);
 

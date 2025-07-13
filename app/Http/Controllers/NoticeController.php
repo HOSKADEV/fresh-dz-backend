@@ -20,8 +20,10 @@ class NoticeController extends Controller
       $validator = Validator::make($request->all(), [
         'title_ar' => 'required|string',
         'title_en' => 'required|string',
+        'title_fr' => 'sometimes|string',
         'content_ar' => 'required|string',
         'content_en' => 'required|string',
+        'content_fr' => 'sometimes|string',
         'priority' => 'required|in:0,1'
       ]);
 
@@ -58,8 +60,10 @@ class NoticeController extends Controller
         'notice_id' => 'required|exists:notices,id',
         'title_ar' => 'sometimes|string',
         'title_en' => 'sometimes|string',
+        'title_fr' => 'sometimes|string',
         'content_ar' => 'sometimes|string',
         'content_en' => 'sometimes|string',
+        'content_fr' => 'sometimes|string',
         'type' => 'sometimes|in:0,1,2'
       ]);
 

@@ -47,13 +47,20 @@
                         enctype="multipart/form-data" id="add_form">
                         {{-- <div class="card mb-4">
           <div class="card-body"> --}}
-                        <div class="mb-3">
+
+                        <div class="mb-3 row">
                             <label class="form-label" for="title_ar">{{ __('Title') }}</label>
-                            <div class="input-group input-group-merge">
+                            <div class="d-flex gap-2">
+
                                 <input type="text" class="form-control" name="title_ar"
                                     placeholder="{{ __('Title in arabic') }}" />
+
                                 <input type="text" class="form-control" name="title_en"
                                     placeholder="{{ __('Title in english') }}" />
+
+                                <input type="text" class="form-control" name="title_fr"
+                                    placeholder="{{ __('Title in french') }}" />
+
                             </div>
                         </div>
 
@@ -65,6 +72,11 @@
                         <div class="mb-3">
                             <label class="form-label" for="notice_content">{{ __('Content in english') }}</label>
                             <textarea class="form-control" name="content_en" rows="3" style="height: 75px;"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="notice_content">{{ __('Content in french') }}</label>
+                            <textarea class="form-control" name="content_fr" rows="3" style="height: 75px;"></textarea>
                         </div>
 
                         <div class="mb-3">
@@ -92,7 +104,7 @@
 
     {{-- view modal --}}
     <div class="modal fade" id="view_modal" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="fw-bold py-1 mb-1">{{ __('Notice content') }}</h4>
@@ -100,11 +112,12 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="mb-3">
+                    <div class="mb-3 row">
                         <label class="form-label" for="title">{{ __('Title') }}</label>
-                        <div class="input-group input-group-merge">
+                        <div class="d-flex gap-2">
                             <input type="text" class="form-control" id="title_ar" disabled />
                             <input type="text" class="form-control" id="title_en" disabled />
+                            <input type="text" class="form-control" id="title_fr" disabled />
                         </div>
                     </div>
 
@@ -116,6 +129,11 @@
                     <div class="mb-3">
                         <label class="form-label" for="notice_content">{{ __('Content in english') }}</label>
                         <textarea class="form-control" id="content_en" rows="5" style="height: 125px;" disabled></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="notice_content">{{ __('Content in french') }}</label>
+                        <textarea class="form-control" id="content_fr" rows="5" style="height: 125px;" disabled></textarea>
                     </div>
 
                     {{-- </div> --}}
@@ -271,8 +289,10 @@
                             //console.log(response.data)
                             $("#title_ar").val(response.data.title_ar);
                             $("#title_en").val(response.data.title_en);
+                            $("#title_fr").val(response.data.title_fr);
                             $("#content_ar").val(response.data.content_ar);
                             $("#content_en").val(response.data.content_en);
+                            $("#content_fr").val(response.data.content_fr);
                             $("#view_modal").modal("show");
                         }
                     }

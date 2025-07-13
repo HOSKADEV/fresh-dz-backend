@@ -6,7 +6,7 @@
 
     <h4 class="fw-bold py-3 mb-3 row justify-content-between">
         <div class="col-md-auto">
-            <span class="text-muted fw-light">{{ __('Discounts of') }} /</span> {{ $product->unit_name }}
+            <span class="text-muted fw-light">{{ __('Discounts of') }} /</span> {{ $product->name(session('locale')) }}
         </div>
 
         <div class="col-md-auto">

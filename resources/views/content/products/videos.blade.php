@@ -15,7 +15,7 @@
 
     <h4 class="fw-bold py-3 mb-3 row justify-content-between">
         <div class="col-md-auto">
-            <span class="text-muted fw-light">{{ __('Videos of') }} /</span> {{ $product->unit_name }}
+            <span class="text-muted fw-light">{{ __('Videos of') }} /</span> {{ $product->name }}
         </div>
 
         <div class="col-md-auto">

@@ -48,6 +48,12 @@ class DatatablesController extends Controller
         return $btn;
       })
 
+      ->addColumn('name', function ($row) {
+
+        return $row->name;
+
+      })
+
       ->addColumn('subcategories', function ($row) {
 
         return number_format($row->subcategories()->count());
@@ -87,6 +93,10 @@ class DatatablesController extends Controller
         $btn .= '<button class="btn btn-icon btn-label-danger inline-spacing delete" title="' . __('Delete') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-trash"></span></button>';
 
         return $btn;
+      })
+
+      ->addColumn('name', function($row){
+        return $row->name;
       })
 
       ->addColumn('category', function ($row) {
@@ -139,6 +149,12 @@ class DatatablesController extends Controller
         }
 
         return $btn;
+      })
+
+      ->addColumn('name', function ($row) {
+
+        return $row->name;
+
       })
 
       ->addColumn('categories', function ($row) {
@@ -195,6 +211,12 @@ class DatatablesController extends Controller
         return $btn;
       })
 
+      ->addColumn('name', function ($row) {
+
+        return $row->name;
+
+      })
+
       ->addColumn('categories', function ($row) {
 
         return $row->categories()->count();
@@ -247,6 +269,12 @@ class DatatablesController extends Controller
         }
 
         return $btn;
+      })
+
+      ->addColumn('name', function ($row) {
+
+        return $row->name;
+
       })
 
       ->addColumn('subcategories', function ($row) {
@@ -335,7 +363,7 @@ class DatatablesController extends Controller
 
       ->addColumn('name', function ($row) {
 
-        return $row->unit_name;
+        return $row->name(session('locale'));
 
       })
 
@@ -501,7 +529,7 @@ class DatatablesController extends Controller
 
         if ($row->status == 'delivered' && $row->review) {
 
-          $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing review" title="' . __('Delivered') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-star"></span></button>';
+          $btn .= '<button class="btn btn-icon btn-label-primary inline-spacing review" title="' . __('Review') . '" table_id="' . $row->id . '"><span class="tf-icons bx bx-star"></span></button>';
 
         }
 
@@ -669,7 +697,7 @@ class DatatablesController extends Controller
 
       ->addColumn('product', function ($row) {
 
-        return $row->name();
+        return $row->name;
 
       })
 

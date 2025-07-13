@@ -17,7 +17,7 @@ class SectionResource extends JsonResource
     {
         return [
           'type' => $this->type,
-          'name' => $this->name(Session::get('lang')),
+          'name' => $this->name(),
           'data' => $this->data()
         ];
     }
