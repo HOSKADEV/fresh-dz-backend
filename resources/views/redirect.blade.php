@@ -8,9 +8,9 @@
         if (/android/i.test(userAgent)) {
             window.location.href = "https://play.google.com/store/apps/details?id=com.fresh.dz&hl=en";
         } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-            window.location.href = "https://apps.apple.com/app/id123456789";
+            window.location.href = "https://apps.apple.com/dz/app/fresh-dz-%D9%81%D8%B1%D8%A7%D8%B4-%D8%AF%D9%8A%D8%B2%D8%A7%D8%AF/id6744602129?l=ar";
         } else {
-            window.location.href = "https://hoskadev.com"; // رابط افتراضي
+            window.location.href = "{{ url('/') }}"; // رابط افتراضي
         }
     </script>
 </head>
