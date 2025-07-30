@@ -280,7 +280,7 @@ class ProductController extends Controller
         return response()->json([
           'status' => 1,
           'message' => 'success',
-          'data' => $products
+          'data' => new ProductCollection($products)
         ]);
 
       }
