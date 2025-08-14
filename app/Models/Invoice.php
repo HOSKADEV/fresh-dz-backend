@@ -85,6 +85,7 @@ class Invoice extends Model
 
 
     public function pdf(){
+      $this->total();
       $order = $this->order;
       $user = $order->user;
       $driver = $order->delivery?->driver;

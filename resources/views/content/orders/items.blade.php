@@ -9,11 +9,13 @@
             <span class="text-muted fw-light">{{ __('Order') }} /</span> {{ __('Items') }}
         </div>
 
-          @if ($order->status == 'pending' && (in_array(auth()->user()->role, [0, 1]) || auth()->user()->region_id == $order->region_id))
-              <div class="col-md-auto">
-                  <button type="button" class="btn btn-primary" id="create" style="float:right">{{ __('Add item') }}</button>
-              </div>
-          @endif
+        @if (
+            $order->status == 'pending' &&
+                (in_array(auth()->user()->role, [0, 1]) || auth()->user()->region_id == $order->region_id))
+            <div class="col-md-auto">
+                <button type="button" class="btn btn-primary" id="create" style="float:right">{{ __('Add item') }}</button>
+            </div>
+        @endif
 
 
     </h4>
@@ -155,7 +157,7 @@
                 //$.fn.dataTable.moment( 'YYYY-M-D' );
                 var table = $('#laravel_datatable').DataTable({
 
-                    language:  {!! file_get_contents(base_path('lang/'.session('locale','en').'/datatable.json')) !!},
+                    language: {!! file_get_contents(base_path('lang/' . session('locale', 'en') . '/datatable.json')) !!},
                     responsive: true,
                     processing: true,
                     serverSide: true,
@@ -212,9 +214,9 @@
 
 
                         {
-                          data: 'action',
-                          name: 'action',
-                          searchable: false
+                            data: 'action',
+                            name: 'action',
+                            searchable: false
                         }
 
                     ],
@@ -382,6 +384,7 @@
                             },
                             type: 'POST',
                             data: {
+                                order_id: "{{ $order->id }}",
                                 item_id: item_id
                             },
                             dataType: 'JSON',
@@ -393,7 +396,8 @@
                                         "{{ __('success') }}",
                                         'success'
                                     ).then((result) => {
-                                        $('#laravel_datatable').DataTable().ajax.reload();
+                                        $('#laravel_datatable').DataTable().ajax
+                                            .reload();
                                     });
                                 }
                             }

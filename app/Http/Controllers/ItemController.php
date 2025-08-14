@@ -179,6 +179,9 @@ class ItemController extends Controller
     public function delete(Request $request){
 
       $validator = Validator::make($request->all(), [
+        'order_id' => ['required', Rule::exists('orders','id')->where(function (Builder $query) {
+          return $query->where('status', 'pending');
+          }),],
         'item_id' => 'required',
       ]);
 
@@ -192,9 +195,15 @@ class ItemController extends Controller
 
       try{
 
+        $order = Order::findOrFail($request->order_id);
+
         $item = Item::findOrFail($request->item_id);
 
         $item->delete();
+
+
+        $invoice = $order->invoice;
+        $invoice->total();
 
         return response()->json([
           'status' => 1,
@@ -214,6 +223,9 @@ class ItemController extends Controller
     public function restore(Request $request){
 
       $validator = Validator::make($request->all(), [
+        'order_id' => ['required', Rule::exists('orders','id')->where(function (Builder $query) {
+          return $query->where('status', 'pending');
+          }),],
         'item_id' => 'required',
       ]);
 
@@ -227,9 +239,14 @@ class ItemController extends Controller
 
       try{
 
+        $order = Order::findOrFail($request->order_id);
+
         $item = Item::findOrFail($request->item_id);
 
         $item->restore();
+
+        $invoice = $order->invoice;
+        $invoice->total();
 
         return response()->json([
           'status' => 1,
